@@ -1,19 +1,15 @@
 /* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Chat } from './Chat';
-
 import './App.scss';
+import { Chat } from './Chat';
+import { APP_ID } from './types/const';
 
 ReactDOM.render(
   <React.StrictMode>
     <div className="container">
-      <Chat
-        apiToken={process.env.REACT_APP_API_TOKEN}
-        username={process.env.REACT_APP_USERNAME}
-        channelId={Number(process.env.REACT_APP_CHANNEL_ID)}
-      />
+      <Chat />
     </div>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById(APP_ID)
 );

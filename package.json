@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-app-rewired build",
     "dist": "rm -rf dist&&rollup -c",
     "publish": "npm publish",
     "test": "react-scripts test",

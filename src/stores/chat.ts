@@ -1,7 +1,5 @@
 import { action, makeAutoObservable, observable } from 'mobx';
-
 import { TUser } from 'types/users';
-
 import { RootStore } from './root';
 
 class ChatStore {
@@ -26,7 +24,7 @@ class ChatStore {
 
     this.users = [];
     this.apiToken = '';
-    this.apiBaseUrl = '';
+    this.apiBaseUrl = process.env.REACT_APP_API_BASEURL || 'http://localhost:3001/api';
     this.username = '';
     this.channelId = null;
     this.route = '';
