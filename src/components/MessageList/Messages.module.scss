@@ -1,0 +1,11 @@
+.messages {
+  flex: 1;
+
+  .scrollbars {
+
+    &> div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

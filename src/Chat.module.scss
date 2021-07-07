@@ -1,0 +1,10 @@
+.app {
+  background: var(--color-background-app);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 0px auto;
+  overflow: hidden;
+  position: relative;
+}

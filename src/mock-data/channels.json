@@ -1,0 +1,65 @@
+{
+  "channels": {
+    "channels": [
+      {
+        "id": 0,
+        "title": "Stark Industries",
+        "access": "private",
+        "messageCount": 12
+      },
+      {
+        "id": 1,
+        "title": "Yo",
+        "access": "private",
+        "messageCount": 1
+      },
+      {
+        "id": 2,
+        "title": "Test",
+        "access": "public",
+        "messageCount": 3334
+      }
+    ],
+    "direct": [
+      {
+        "id": 0,
+        "avatar": "",
+        "username": "Batman",
+        "about": "Non ac adipiscing eget nunc lobortis.",
+        "online": true
+      }
+    ],
+    "users": [
+      {
+        "id": 0,
+        "channelId": 0,
+        "username": "Clark Kent",
+        "avatar": ""
+      },
+      {
+        "id": 1,
+        "channelId": 0,
+        "username": "Batman",
+        "avatar": ""
+      }
+    ],
+    "messages": [
+      {
+        "id": 0,
+        "channelId": 0,
+        "userId": 0,
+        "name": "Clark Kent",
+        "text": "Hello",
+        "date": 1621910118179
+      },
+      {
+        "id": 0,
+        "channelId": 0,
+        "userId": 1,
+        "name": "Batman",
+        "text": "Wassup",
+        "date": 1621910118179
+      }
+    ]
+  }
+}

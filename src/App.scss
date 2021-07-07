@@ -1,0 +1,38 @@
+@import "ui-kit/assets/fonts/PT-Root-UI_Bold.css";
+@import "ui-kit/assets/fonts/PT-Root-UI_Light.css";
+@import "ui-kit/assets/fonts/PT-Root-UI_Medium.css";
+@import "ui-kit/assets/fonts/PT-Root-UI_Regular.css";
+
+html {
+  height: 100%;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  background-color: #aaa;
+  color: #fff;
+  font: 14px/18px PTRootUIWebRegular;
+  height: 100%;
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  box-sizing: border-box;
+  height: 100%;
+  color: var(--tablet);
+
+  @media (min-width: 480px) {
+    padding: 100px 0;
+  }
+}
+
+.container {
+  max-width: 540px;
+  height: 100%;
+  padding: 30px 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}

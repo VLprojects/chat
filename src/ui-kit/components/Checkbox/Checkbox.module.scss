@@ -1,0 +1,29 @@
+.checkbox {
+
+  label {
+
+    div {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #C5C5C5;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+  }
+
+  input {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+
+    &:checked {
+      &+ div {
+        background-image: url(/ui-kit/assets/icons/icon-checkbox.svg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: 0;
+      }
+    }
+  }
+}

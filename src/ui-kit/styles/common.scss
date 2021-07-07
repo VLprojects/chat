@@ -1,0 +1,26 @@
+@import "./colors.scss";
+@import "./text.scss";
+@import "./shadows.scss";
+
+a, a:visited {
+  color: var(--color-white);
+}
+
+button, input, textarea {
+  // font-family: arial;
+}
+
+button {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+h2 {
+  font-weight: 400;
+  margin: 0 0 40px;
+}

@@ -1,0 +1,37 @@
+.header {
+  display: flex;
+  background: #353A41;
+  box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.4);
+  height: 67px;
+  min-height: 67px;
+  box-sizing: border-box;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    width: 66px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &.buttonClose {
+      font-size: 18px;
+      color: #fff;
+    }
+  }
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.icon {
+  
+}
