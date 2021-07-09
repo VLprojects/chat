@@ -1,9 +1,9 @@
 {
-  "name": "@vlprojects/lsd-chat-react",
-  "author": "Team Chat",
-  "version": "0.0.1-development",
-  "description": "LsdChat",
-  "license": "",
+  "name": "@vlprojects-chat/chat",
+  "author": "vlprojects",
+  "version": "0.0.1",
+  "description": "chat",
+  "license": "ISC",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "files": [
@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git@github.com:VLprojects/lsd-chat-react.git"
+    "url": "git+ssh://git@github.com/VLprojects/chat.git"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -106,5 +106,12 @@
   },
   "peerDependencies": {
     "react": "^17.0.2"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/VLprojects/chat/issues"
+  },
+  "homepage": "https://github.com/VLprojects/chat#readme",
+  "keywords": [
+    "chat"
+  ]
 }
