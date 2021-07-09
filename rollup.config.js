@@ -1,5 +1,4 @@
-const path = require('path');
-
+import path from 'path';
 import external from 'rollup-plugin-peer-deps-external';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
@@ -14,8 +13,8 @@ import alias from '@rollup/plugin-alias';
 import copy from 'rollup-plugin-copy';
 import analyze from 'rollup-plugin-analyzer';
 
-export default {
-  input: './src/index.tsx',
+const config = {
+  input: './src/entry.tsx',
   output: [
     {
       file: pkg.module,
@@ -72,3 +71,5 @@ export default {
     analyze(),
   ],
 };
+
+export default config;
