@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 import { Button, Image } from 'ui-kit';
 import IconLock from 'ui-kit/assets/icons/icon-lock.svg';

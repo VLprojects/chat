@@ -5,7 +5,7 @@ import React, {
   useRef,
 } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 import { TMessage } from 'types/messages';
 import { TUser } from 'types/users';

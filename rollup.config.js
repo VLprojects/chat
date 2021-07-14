@@ -14,7 +14,7 @@ import copy from 'rollup-plugin-copy';
 import analyze from 'rollup-plugin-analyzer';
 
 const config = {
-  input: './src/entry.tsx',
+  input: './src/lib/index.tsx',
   output: [
     {
       file: pkg.module,
@@ -25,13 +25,7 @@ const config = {
       format: 'cjs',
       exports: 'default',
     },
-    {
-      file: 'dist/bundle.js',
-      format: 'umd',
-      name: 'lsdChat',
-    },
   ],
-  external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
   watch: {
     include: ['dist/**'],
   },
