@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { FC, KeyboardEvent, useCallback, useState } from 'react';
+import React, { FC, KeyboardEvent, useState } from 'react';
 import useStores from 'stores/rootStore';
 import { Button, Flex, FormErrorMessage, Input } from 'ui-kit';
 import styles from './MessageInput.module.scss';
@@ -15,10 +15,12 @@ const MessageInput: FC<IMessageInput> = observer((props) => {
   const { messagesStore } = useStores();
   const [message, setMessage] = useState('');
 
-  const onMessageSubmit = useCallback(() => {
-    messagesStore.sendMessage(channelId, message);
-    setMessage('');
-  }, [message]);
+  const onMessageSubmit = () => {
+    if (message.length) {
+      messagesStore.sendMessage(channelId, message);
+      setMessage('');
+    }
+  };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' || e.key === '13') {
@@ -36,7 +38,7 @@ const MessageInput: FC<IMessageInput> = observer((props) => {
           onChange={setMessage}
           onKeyDown={onKeyDown}
         />
-        <Button variant="submit" disabled={message.trim() === ''} onClick={onMessageSubmit}>
+        <Button variant="submit" onClick={onMessageSubmit}>
           Send
         </Button>
       </Flex>

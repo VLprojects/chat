@@ -1,3 +1,8 @@
+import { IUser } from '../stores/profileStore/types';
+
+export const getChannelUsers = (usersIds: number[], usersList: IUser[]): IUser[] =>
+  usersList.filter((userItem: IUser) => usersIds.includes(userItem.id));
+
 export const usernameGenerator = () => {
   const adjs = [
     'autumn',

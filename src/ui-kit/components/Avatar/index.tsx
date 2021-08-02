@@ -1,22 +1,24 @@
+import cls from 'classnames';
 import React, { FC } from 'react';
-
+import { Image } from 'ui-kit';
+import UserIcon from 'ui-kit/assets/icons/user.svg';
 import styles from './Avatar.module.scss';
 
-interface IAvatar {
-  username?: string;
+interface IProps {
+  counter?: number;
   url?: string;
+  size?: 'large';
 }
 
-const Avatar: FC<IAvatar> = (props) => {
-  const { username, url } = props;
+const Avatar: FC<IProps> = (props) => {
+  const { url, counter, size = '' } = props;
+  const classes = cls(styles.avatar, { [styles[size]]: size });
 
-  const avatarLetter = username ? username[0] : '';
+  if (counter) return <div className={classes}>{counter}</div>;
 
   return (
-    <div className={styles.avatar}>
-      {url && url.length > 0
-        ? <img src={url} alt={username} />
-        : avatarLetter}
+    <div className={classes}>
+      <Image src={url || UserIcon} alt="avatar" />
     </div>
   );
 };

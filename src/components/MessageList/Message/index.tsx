@@ -1,55 +1,41 @@
-import { observer } from 'mobx-react-lite';
-import { format, formatDistanceToNow } from 'date-fns';
-import React, { FC, useEffect, useState } from 'react';
-import useStores from 'stores/rootStore';
+import cls from 'classnames';
+import { format } from 'date-fns';
+import React, { FC } from 'react';
 import { Avatar } from 'ui-kit';
 import { IUser } from '../../../stores/profileStore/types';
 import styles from './Message.module.scss';
 
 interface MessageProps {
   own?: boolean;
-  userId: number;
+  user?: IUser;
   message: string;
   date?: string;
   isNew?: boolean;
   type?: 'system';
+  short?: boolean;
 }
 
-const Message: FC<MessageProps> = ({ own = false, userId, message = '', date = '', isNew = false, type = '' }) => {
-  const [timeDistance, setTimeDistance] = useState(formatDistanceToNow(new Date(date), { addSuffix: true }));
-  const [user, setUser] = useState<IUser>();
-  const { chatStore } = useStores();
-  let interval: any;
-
-  useEffect(() => {
-    setUser(chatStore.getUsers([userId])[0]);
-    interval = setInterval(() => {
-      const f = formatDistanceToNow(new Date(date), { addSuffix: true });
-      setTimeDistance(f);
-    }, 60000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+const Message: FC<MessageProps> = (props) => {
+  const { own = false, user, message = '', date = '', isNew = false, type = '', short = false } = props;
 
   return (
-    <div className={[styles.message, own ? styles.own : '', isNew ? styles.isNew : '', styles[type]].join(' ')}>
-      <div className={styles.avatar}>
-        <Avatar username={user?.displayName} url={user?.avatarUrl} />
-      </div>
-      <div className={styles.wrapper}>
-        <div className={styles.name}>
-          <div className={styles.username}>{user?.displayName}</div>
-          {timeDistance && (
-            <span className={styles.time} title={format(new Date(date), 'MM/dd/yyyy, HH:mm')}>
-              {timeDistance}
-            </span>
-          )}
+    <>
+      {!short && (
+        <div className={cls(styles.messageInfo, { [styles.messageInfoOwn]: own })}>
+          <Avatar url={user?.avatarUrl} size="large" />
+          <span className={styles.displayName}>{user?.displayName}</span>
+
+          <span className={styles.time} title={format(new Date(date), 'MM/dd/yyyy, HH:mm')}>
+            {format(new Date(date), 'HH:mm')}
+          </span>
         </div>
-        <div className={styles.text}>{message}</div>
+      )}
+
+      <div style={{ display: 'flex' }}>
+        <div className={cls(styles.message, styles.userMessage)}>{message}</div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default observer(Message);
+export default Message;

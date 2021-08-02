@@ -9,10 +9,8 @@ ReactDOM.render(
     <div className="container">
       <Chat
         apiToken={process.env.REACT_APP_API_TOKEN}
-        // userToken={process.env.REACT_APP_USER_TOKEN}
-        // channelId={process.env.REACT_APP_CHANNEL_ID}
-        userToken={undefined}
-        channelId={undefined}
+        userToken={process.env.REACT_APP_USER_TOKEN}
+        channelId={process.env.REACT_APP_CHANNEL_ID}
       />
     </div>
   </React.StrictMode>,

@@ -25,7 +25,7 @@ const PageDirectId = observer(() => {
       <SubHeader onBack={() => history.push('/direct')}>
         <div>{currentDirect?.username}</div>
       </SubHeader>
-      {/* <MessageList messages={[]} /> */}
+      <MessageList messages={[]} />
       <ChatFooter>
         <MessageInput channelId={Number(directId)} type="direct" />
       </ChatFooter>

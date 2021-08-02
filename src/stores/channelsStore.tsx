@@ -2,6 +2,7 @@ import { action, computed, makeAutoObservable, observable } from 'mobx';
 import Routes from 'routes';
 import api from '../api';
 import { IChannel, IChannelMessage, IChannelPublic } from './chatStore/types';
+import { IUser } from './profileStore/types';
 import { RootStore } from './rootStore';
 
 export enum ChannelTypeEnum {
@@ -17,6 +18,8 @@ class ChannelsStore {
   @observable publics: IChannelPublic[];
 
   @observable direct: [];
+
+  @observable users: IUser[];
 
   @observable messages: [];
 
@@ -34,6 +37,7 @@ class ChannelsStore {
     this.channels = [];
     this.publics = [];
     this.direct = [];
+    this.users = [];
     this.messages = [];
     this.channelsError = '';
     this.isChannelCreated = null;
@@ -68,6 +72,10 @@ class ChannelsStore {
     this.channels = [...this.channels, newChannel];
   }
 
+  @action setUsers(users: IUser[]): void {
+    this.users = users;
+  }
+
   @action setPublics(publics: IChannelPublic[]): void {
     this.publics = publics;
   }
@@ -77,10 +85,10 @@ class ChannelsStore {
   }
 
   @action.bound async joinChannel(id: number): Promise<void> {
-    const response = (await api.post(`channels/join`, { id })) as IChannel;
-    this.setPublics(this.publics.filter((item: IChannelPublic) => item.id !== response.id));
-    this.setChannels([...this.channels, response]);
-    this.rootStore.chatStore.setRoute(`${Routes.Channels}/${response.id}`);
+      const response = (await api.post(`channels/join`, { id })) as IChannel;
+      this.setPublics(this.publics.filter((item: IChannelPublic) => item.id !== response.id));
+      this.setChannels([...this.channels, response]);
+      this.rootStore.chatStore.setRoute(`${Routes.Channels}/${response.id}`);
   }
 
   // todo refactor both join actions

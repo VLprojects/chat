@@ -1,3 +1,5 @@
+import commonStyles from 'Chat.module.scss';
+import cls from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import Routes from 'routes';
@@ -34,37 +36,48 @@ const Login = observer(() => {
   return (
     <>
       <div className={styles.container}>
-        <h2>Chat login</h2>
+        <h1 className={styles.header}>
+          Enter
+          <br /> the chat
+        </h1>
         <div className={styles.field}>
+          <div className={cls(commonStyles.regular14, styles.fieldLabel)}>Name</div>
           <Input
             size="large"
             variant="outlined"
             fullWidth
-            placeholder="User name"
+            placeholder="Enter your name"
             onChange={setUsername}
             value={username}
           />
         </div>
         <div className={styles.field}>
+          <div className={cls(commonStyles.regular14, styles.fieldLabel)}>Password</div>
           <Input
             size="large"
             variant="outlined"
             fullWidth
             type="password"
-            placeholder="Password"
+            placeholder="Enter password"
             onChange={setPassword}
             value={password}
           />
         </div>
         <FormErrorMessage message={authStore.authError} />
-        <div className={styles.submit}>
-          <Button variant="submit" fullWidth size="large" onClick={onLogin}>
-            Let&lsquo;s go
-          </Button>
-        </div>
         <div className={styles.footer}>
-          <Button onClick={onSignup}>Signup</Button>
-          <Button onClick={onGuestEnter}>Guest</Button>
+          <Button variant="submit" fullWidth size="large" onClick={onLogin}>
+            Sign In
+          </Button>
+
+          <Button variant="outlined" fullWidth size="large" onClick={onGuestEnter}>
+            Log in as a guest
+          </Button>
+          <div>
+            <span className={cls(commonStyles.regular14)}>Don&apos;t have an account ? </span>
+            <a href="#" onClick={onSignup}>
+              Sign up
+            </a>
+          </div>
         </div>
       </div>
     </>

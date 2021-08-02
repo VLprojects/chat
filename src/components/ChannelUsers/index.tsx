@@ -39,9 +39,9 @@ const ChannelUsers: FC<IChannelUsers> = (props) => {
               </div>
               <div className={styles.wrapper}>
                 <div className={styles.avatar}>
-                  <Avatar username={item.username} url={item.avatarUrl} />
+                  <Avatar url={item.avatarUrl} />
                 </div>
-                <div className={styles.username}>{item.displayName}</div>
+                <div className={styles.username}>{item.username}</div>
               </div>
             </div>
           ))}

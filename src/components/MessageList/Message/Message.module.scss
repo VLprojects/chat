@@ -1,122 +1,50 @@
 .message {
-  display: flex;
-  padding: 10px 15px;
-
-  &:first-child {
-    margin-top: auto;
-  }
+  padding: 6px 12px;
+  font-family: PTRootUIWebRegular;
+  color: #fff;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  background-color: #353a41;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 
   &.system {
-    margin: 4px auto;
-    background-color: #748194;
-    border-radius: 8px;
-    padding: 4px 12px;
-
-    .text {
-      font-style: italic;
-      color: #ccc;
-      padding: 0 12px;
-    }
-  }
-
-  // &.isNew {
-  //   animation-duration: .2s;
-  //   animation-name: showMessage;
-  // }
-
-  &.own {
-    text-align: right;
-    flex-direction: row-reverse;
-
-    .avatar {
-      
-    }
-
-    .wrapper {
-      margin-right: 8px;
-      text-align: right;
-    }
-
-    .name {
-      justify-content: flex-end;
-    }
-
-    .text {
-      border-radius: 10px 0 10px 10px;
-      margin-right: 0;
-    }
-
+    border-radius: 5px;
+    letter-spacing: 0.01em;
+    text-align: center;
+    width: 100%;
   }
 }
-
-.avatar {
-  width: 32px;
-  min-width: 32px;
-  height: 32px;
-}
-
-.wrapper {
-  margin-left: 8px;
-  max-width: 400px;
-}
-
-.name {
+.messageInfo {
   display: flex;
   align-items: center;
+}
+.messageInfoOwn {
+  flex-direction: row-reverse;
+}
+.displayName {
+  color: #fff;
+  font-weight: normal;
   font-size: 14px;
   line-height: 18px;
-
-  .username {
-    white-space: nowrap;
-    overflow: hidden;
-    width: 50%;
-    text-overflow: ellipsis;
-
-    @media (min-width: 480px) {
-      width: auto;
-    }
-  }
-
+  letter-spacing: 0.01em;
+  margin-left: 8px;
+  margin-right: 12px;
 }
 
 .time {
+  font-weight: normal;
   font-size: 14px;
   line-height: 18px;
-  margin-left: 12px;
-  color: #BFC4CB;
-  white-space: nowrap;
+  letter-spacing: 0.01em;
+  color: #bfc4cb;
 }
 
-.text {
-  background: #353A41;
-  border-radius: 0 10px 10px 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 6px 12px;
-  font-size: 16px;
-  line-height: 20px;
-  display: inline-block;
-  margin-top: 4px;
-  word-wrap: break-word;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin-right: 10px;
-}
-
-@keyframes showMessage {
-  from {
-    opacity: 0;
-  }
-
-  50% {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-
-  to {
-    transform: translateY(0px);
-    opacity: 1;
-  }
+.userMessage {
+  margin-left: 24px;
+  max-width: 80%;
 }

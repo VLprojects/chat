@@ -2,10 +2,14 @@
   flex: 1;
 
   .scrollbars {
-
-    &> div {
+    & > div {
       display: flex;
       flex-direction: column;
     }
   }
+}
+
+.messagesListWrapper {
+  width: 100%;
+  padding: 0 12px;
 }

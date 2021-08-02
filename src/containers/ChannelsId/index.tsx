@@ -2,59 +2,59 @@ import ChatFooter from 'components/Footer';
 import ChatHeader from 'components/Header';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
-import SubHeader from 'components/SubHeader';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import Routes from 'routes';
 import useStores from 'stores/rootStore';
-import { Avatar } from 'ui-kit';
+import { Avatar, Image } from 'ui-kit';
+import ChevronLeftIcon from 'ui-kit/assets/icons/chevron-left.svg';
+import { getChannelUsers } from 'utils/users';
+import { IChannel } from '../../stores/chatStore/types';
 import styles from './ChannelsId.module.scss';
 
 const MAX_USERS_ON_PREVIEW = 2;
 
 const PageChannelsId: FC = observer(() => {
   const { channelsStore, chatStore } = useStores();
-  // todo causes console warning
   const channelId = Number(chatStore.params.id);
 
   if (channelId === null) {
     return null;
   }
 
-  const currentChannel = channelsStore.getChannel(channelId);
+  const currentChannel: IChannel | null = channelsStore.getChannel(channelId) || null;
+  const channelMessages = channelsStore.getSortedMessages(channelId);
+  const channelUsersIds = currentChannel?.userIds || [];
+
+  const users = getChannelUsers(channelUsersIds, chatStore.users);
+
+  const onAvatarsClick = () => {
+    chatStore.setRoute(Routes.Users);
+  };
+  const backClickHandler = () => {
+    chatStore.setRoute(Routes.Channels);
+  };
+
   if (!currentChannel) {
     return null;
   }
 
-  const channelMessages = channelsStore.getSortedMessages(channelId);
-  // const users = chatStore.getUsers(currentChannel.userIds);
-
-  const onClick = () => {
-    chatStore.setRoute(`${Routes.Users}/${currentChannel.id}`);
-  };
-
   return (
     <>
       <ChatHeader title="Chat" />
-      {/* <SubHeader
-        rightButton={
-          // eslint-disable-next-line react/jsx-wrap-multilines
-          <>
-            <button className={styles.userList} type="button" onClick={onClick}>
-              {users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
-                <div key={item.id}>
-                  <Avatar username={item?.username || ''} url={item?.avatarUrl || ''} />
-                </div>
-              ))}
-              {users.length > MAX_USERS_ON_PREVIEW && (
-                <div className={styles.circle}>{users.length - MAX_USERS_ON_PREVIEW}</div>
-              )}
-            </button>
-          </>
-        }
-      >
-        <div>{currentChannel?.name}</div>
-      </SubHeader> */}
+      <div className={styles.subHeaderWrapper}>
+        <div className={styles.subHeaderBack} onClick={backClickHandler}>
+          <Image src={ChevronLeftIcon} alt="route icon" />
+        </div>
+        <div className={styles.chatNameTitle}>{currentChannel?.name}</div>
+        <div className={styles.avatarWrapper} onClick={onAvatarsClick}>
+          {users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
+            <Avatar key={item.id} url={item?.avatarUrl} />
+          ))}
+          {users.length > MAX_USERS_ON_PREVIEW && <Avatar counter={users.length - MAX_USERS_ON_PREVIEW} />}
+        </div>
+      </div>
+
       <MessageList messages={channelMessages} />
       <ChatFooter>
         <MessageInput channelId={Number(channelId)} type="channel" />

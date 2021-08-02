@@ -27,8 +27,11 @@ export const Chat: FC<IChatProps> = observer((props) => {
 
   useEffect(() => {
     const { apiTokenFromAttr, channelIdFromAttr } = findAppInitialData();
-    authStore.setApiToken(apiToken || apiTokenFromAttr || null);
-    chatStore.setChannelId(channelId || channelIdFromAttr || null);
+    authStore.setApiToken(apiTokenFromAttr || apiToken || null);
+    console.log(channelIdFromAttr, channelId);
+    if (channelIdFromAttr || channelId) {
+      chatStore.setChannelId(channelIdFromAttr || channelId || null);
+    }
 
     const token = userToken || getStoredAccessToken();
     if (token) {
@@ -47,7 +50,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
           <Router route={Routes.Profile}>
             <Profile />
           </Router>
-          <Router route={`${Routes.Users}/:id`}>
+          <Router route={Routes.Users}>
             <PageUsersList />
           </Router>
           <Router route={Routes.Channels}>

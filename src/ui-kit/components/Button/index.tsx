@@ -1,5 +1,4 @@
 import React, { FC, ReactNode } from 'react';
-
 import styles from './Button.module.scss';
 
 interface ButtonProps {
@@ -7,7 +6,7 @@ interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   fullWidth?: boolean;
   disabled?: boolean;
-  variant?: 'contained' | 'text' | 'submit';
+  variant?: 'contained' | 'text' | 'submit' | 'outlined';
   size?: 'large' | 'medium' | 'small';
   className?: string;
 }
@@ -36,12 +35,7 @@ const Button: FC<ButtonProps> = ({
   }
 
   return (
-    <button
-      type="button"
-      disabled={disabled}
-      onClick={onClick}
-      className={cn.join(' ')}
-    >
+    <button type="button" disabled={disabled} onClick={onClick} className={cn.join(' ')}>
       {children}
     </button>
   );

@@ -17,24 +17,18 @@ const ChatHeader: FC<IChatHeader> = (props) => {
 
   return (
     <div className={styles.header}>
-      <button
-        type="button"
-        className={styles.icon}
-        onClick={() => {
-          console.debug(chatStore.users);
-        }}
-      >
+      <div className={styles.icon} onClick={() => chatStore.setRoute(Routes.Channels)}>
         <Image src={ChatMinimize} alt="" />
-      </button>
+      </div>
       <div className={styles.title}>{title}</div>
       {chatStore.route === '/profile' ? (
         <button type="button" onClick={() => chatStore.setRoute('')} className={styles.buttonClose}>
           ✕
         </button>
       ) : (
-        <button type="button" onClick={() => chatStore.setRoute(Routes.Profile)}>
+        <div className={styles.profileIcon} onClick={() => chatStore.setRoute(Routes.Profile)}>
           <Image src={ChatUsers} alt="" />
-        </button>
+        </div>
       )}
     </div>
   );

@@ -1,19 +1,15 @@
-import React, { FC, ReactNode } from 'react';
-
+import React, { FC } from 'react';
 import { Image } from 'ui-kit';
-
 import IconBack from 'ui-kit/assets/icons/icon-back.svg';
-
 import styles from './SubHeader.module.scss';
 
 interface ISubHeader {
-  children: ReactNode;
   onBack?: () => void;
   rightButton?: any;
 }
 
 const SubHeader: FC<ISubHeader> = (props) => {
-  const { children, onBack, rightButton = (<></>) } = props;
+  const { children, onBack, rightButton = <></> } = props;
 
   return (
     <div className={styles.subHeader}>
@@ -22,9 +18,7 @@ const SubHeader: FC<ISubHeader> = (props) => {
           <Image src={IconBack} alt="" />
         </button>
       )}
-      <div className={styles.title}>
-        {children}
-      </div>
+      <div className={styles.title}>{children}</div>
       {rightButton}
     </div>
   );

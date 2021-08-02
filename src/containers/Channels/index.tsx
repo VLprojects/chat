@@ -59,14 +59,13 @@ const PageChannels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }
         <SubHeader>
           <div className={styles.subheader}>
             {tabs.map((item: ITab) => (
-              <button
+              <div
                 key={item.id}
                 className={[styles.btn, item.id === tab ? styles.active : ''].join(' ')}
-                type="button"
                 onClick={onTabClick(item.id)}
               >
                 {item.title}
-              </button>
+              </div>
             ))}
           </div>
         </SubHeader>

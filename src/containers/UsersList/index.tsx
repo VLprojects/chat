@@ -4,21 +4,23 @@ import SubHeader from 'components/SubHeader';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import useStores from 'stores/rootStore';
+import { getChannelUsers } from 'utils/users';
+
+interface ParamTypes {
+  id: string;
+}
 
 const PageUsersList = () => {
   const { channelsStore, chatStore } = useStores();
-  const channelId = Number(chatStore.params.id);
+  const { channelId } = chatStore;
 
-  const currentChannel = channelsStore.getChannel(channelId);
-  if (!currentChannel) {
-    return null;
-  }
+  const channelUsersIds: number[] =
+    channelsStore.channels.find((item: any) => item.id === Number(channelId))?.userIds || [];
 
-  // const users = chatStore.getUsers(currentChannel.userIds);
+  const users = getChannelUsers(channelUsersIds, chatStore.users);
 
   const onBack = () => {
-    // todo implement history
-    chatStore.redirectToInitial();
+    chatStore.setRoute('');
   };
 
   return (
@@ -27,7 +29,7 @@ const PageUsersList = () => {
       <SubHeader onBack={onBack}>
         <div>Users list</div>
       </SubHeader>
-      {/* <ChannelUsers list={users} /> */}
+      <ChannelUsers list={users} />
     </>
   );
 };

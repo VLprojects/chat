@@ -3,6 +3,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import useStores from 'stores/rootStore';
 import { IChannelMessage } from '../../stores/chatStore/types';
+import { IUser } from '../../stores/profileStore/types';
 import Message from './Message';
 import SystemMessage from './Message/SystemMessage';
 import styles from './Messages.module.scss';
@@ -23,19 +24,13 @@ const MessageList: FC<MessageListProps> = (props) => {
     scrollbarRef.current?.scrollToBottom();
   };
 
-  
-
   useEffect(() => {
-    console.log('effect', messages);
+    scrollToBottom();
   }, []);
 
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, []);
-
-  // useEffect(() => {
-  //   scrollToBottom();
-  // }, [messages]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const onScrollStart = () => {
     // const maxPages: number = messages ? messages.length % onpage : 0;
@@ -49,32 +44,36 @@ const MessageList: FC<MessageListProps> = (props) => {
   return (
     <div className={styles.messages}>
       <Scrollbars autoHide ref={scrollbarRef} className={styles.scrollbars} onScroll={onScrollStart}>
-        {/* {messages && messages.slice(pageStart < 0 ? 0 : pageStart, messages.length).map((item: any) => { */}
-        {messages &&
-          messages.map((item: any) => {
-            if (item.type === 'system') {
+        <div className={styles.messagesListWrapper}>
+          {messages &&
+            messages.map((item: any, index: number) => {
+              if (item.type === 'system') {
+                return (
+                  <SystemMessage
+                    key={item.id}
+                    message={item.text}
+                    date={item.createdAt}
+                    isNew={item.isNew}
+                    type="system"
+                  />
+                );
+              }
+
+              const user = chatStore.users.find((userItem: IUser) => userItem.id === item.userId);
+
               return (
-                <SystemMessage
+                <Message
+                  short={item.userId === messages[index - 1].userId}
                   key={item.id}
+                  own={item.userId === profileStore.user?.id}
+                  user={user}
                   message={item.text}
                   date={item.createdAt}
                   isNew={item.isNew}
-                  type="system"
                 />
               );
-            }
-
-            return (
-              <Message
-                key={item.id}
-                own={item.userId === profileStore.user?.id}
-                userId={item.userId}
-                message={item.text}
-                date={item.createdAt}
-                isNew={item.isNew}
-              />
-            );
-          })}
+            })}
+        </div>
       </Scrollbars>
     </div>
   );
