@@ -1,17 +1,15 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-import { useParams, useHistory } from 'react-router-dom';
-
-import ChatHeader from 'components/Header';
-import SubHeader from 'components/SubHeader';
 import ChatFooter from 'components/Footer';
+import ChatHeader from 'components/Header';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
-
-import useStores from 'stores/root';
+import SubHeader from 'components/SubHeader';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import useStores from 'stores/rootStore';
 
 interface ParamTypes {
-  id: string
+  id: string;
 }
 
 const PageDirectId = observer(() => {
@@ -27,7 +25,7 @@ const PageDirectId = observer(() => {
       <SubHeader onBack={() => history.push('/direct')}>
         <div>{currentDirect?.username}</div>
       </SubHeader>
-      <MessageList messages={[]} />
+      {/* <MessageList messages={[]} /> */}
       <ChatFooter>
         <MessageInput channelId={Number(directId)} type="direct" />
       </ChatFooter>

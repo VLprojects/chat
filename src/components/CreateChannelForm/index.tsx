@@ -1,15 +1,7 @@
-import React, {
-  FC,
-  useState,
-  useCallback,
-  useEffect,
-} from 'react';
 import { observer } from 'mobx-react-lite';
-
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import useStores from 'stores/rootStore';
 import { Button, FormErrorMessage, Input } from 'ui-kit';
-
-import useStores from 'stores/root';
-
 import styles from './CreateChannelForm.module.scss';
 
 interface ICreateChannelForm {
@@ -38,11 +30,7 @@ const CreateChannelForm: FC<ICreateChannelForm> = observer((props) => {
   return (
     <div className={styles.createChannelForm}>
       <div className={styles.wrapper}>
-        <button
-          type="button"
-          className={styles.closeButton}
-          onClick={onClose}
-        >
+        <button type="button" className={styles.closeButton} onClick={onClose}>
           ✕
         </button>
         <div className={styles.container}>
@@ -52,7 +40,9 @@ const CreateChannelForm: FC<ICreateChannelForm> = observer((props) => {
           </div>
           <FormErrorMessage message={channelsStore.channelCreatedError} />
           <div className={styles.submit}>
-            <Button fullWidth variant="submit" onClick={onCreateChannel}>Create</Button>
+            <Button fullWidth variant="submit" onClick={onCreateChannel}>
+              Create
+            </Button>
           </div>
         </div>
       </div>

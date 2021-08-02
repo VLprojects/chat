@@ -1,10 +1,9 @@
+import SocketLayout from 'containers/SocketLayout';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { Redirect, Route, RouteComponentProps } from 'react-router-dom';
-
-import SocketLayout from 'containers/SocketLayout';
 import Routes from 'routes';
-import useStores from 'stores/root';
+import useStores from 'stores/rootStore';
 
 interface IProps {
   exact?: boolean;

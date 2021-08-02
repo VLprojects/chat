@@ -1,14 +1,9 @@
 import React, { FC } from 'react';
-
+import Routes from 'routes';
+import useStores from 'stores/rootStore';
 import { Image } from 'ui-kit';
-
 import ChatMinimize from 'ui-kit/assets/icons/chat-minimize.svg';
 import ChatUsers from 'ui-kit/assets/icons/chat-users.svg';
-
-import useStores from 'stores/root';
-
-import Routes from 'routes';
-
 import styles from './Header.module.scss';
 
 interface IChatHeader {
@@ -17,10 +12,7 @@ interface IChatHeader {
 }
 
 const ChatHeader: FC<IChatHeader> = (props) => {
-  const {
-    title,
-    showProfile = true,
-  } = props;
+  const { title, showProfile = true } = props;
   const { chatStore } = useStores();
 
   return (
@@ -28,26 +20,19 @@ const ChatHeader: FC<IChatHeader> = (props) => {
       <button
         type="button"
         className={styles.icon}
-        onClick={() => { }}
+        onClick={() => {
+          console.debug(chatStore.users);
+        }}
       >
         <Image src={ChatMinimize} alt="" />
       </button>
-      <div className={styles.title}>
-        {title}
-      </div>
+      <div className={styles.title}>{title}</div>
       {chatStore.route === '/profile' ? (
-        <button
-          type="button"
-          onClick={() => chatStore.setRoute('')}
-          className={styles.buttonClose}
-        >
+        <button type="button" onClick={() => chatStore.setRoute('')} className={styles.buttonClose}>
           ✕
         </button>
       ) : (
-        <button
-          type="button"
-          onClick={() => chatStore.setRoute(Routes.Profile)}
-        >
+        <button type="button" onClick={() => chatStore.setRoute(Routes.Profile)}>
           <Image src={ChatUsers} alt="" />
         </button>
       )}

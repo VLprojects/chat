@@ -1,3 +1,6 @@
+import { Router } from 'components/Router';
+import AuthLayout from 'containers/AuthLayout';
+import Channels from 'containers/Channels';
 import PageChannelsId from 'containers/ChannelsId';
 import Profile from 'containers/Profile';
 import SocketLayout from 'containers/SocketLayout';
@@ -5,63 +8,56 @@ import PageUsersList from 'containers/UsersList';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react';
 import Routes from 'routes';
-import useStores from 'stores/root';
+import useStores from 'stores/rootStore';
 import 'ui-kit/styles/common.scss';
 import styles from './Chat.module.scss';
+import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
 
 export interface IChatProps {
-  username?: string;
   apiToken?: string;
-  apiBaseUrl?: string;
-  channelId?: number;
-  route?: string;
+  channelId?: string;
+  userToken?: string;
 }
 
 export const Chat: FC<IChatProps> = observer((props) => {
-  let { apiToken, channelId } = props;
-  const { username } = props;
-  const { chatStore, authStore, channelsStore, socketStore } = useStores();
+  const { apiToken, channelId, userToken } = props;
 
-  if (!apiToken || !channelId) {
+  const { chatStore, authStore } = useStores();
+
+  useEffect(() => {
     const { apiTokenFromAttr, channelIdFromAttr } = findAppInitialData();
+    authStore.setApiToken(apiToken || apiTokenFromAttr || null);
+    chatStore.setChannelId(channelId || channelIdFromAttr || null);
 
-    if (!apiTokenFromAttr || !channelIdFromAttr) {
-      return <div>Can&apos;t initialize app.</div>;
+    const token = userToken || getStoredAccessToken();
+    if (token) {
+      authStore.setToken(token);
     }
-    apiToken = apiTokenFromAttr;
-    channelId = Number(channelIdFromAttr);
-  }
+  });
 
-  chatStore.setApiToken(apiToken);
-
-  useEffect(() => {
-    if (username && !authStore.isAuthorized) {
-      authStore.signup(username);
-    }
-  }, [username]);
-
-  useEffect(() => {
-    const joinChannel = async () => {
-      if (channelId && socketStore.inited) {
-        await channelsStore.joinChannel(channelId);
-        chatStore.setChannelId(channelId);
-      }
-    };
-    joinChannel();
-  }, [socketStore.inited]);
-
-  if (!authStore.isAuthorized) {
-    return <div>Not authorized</div>;
+  if (!authStore.apiToken) {
+    return <div>Can&apos;t initialize app.</div>;
   }
 
   return (
     <div className={styles.app}>
-      <SocketLayout>
-        {chatStore.route === Routes.Users && <PageUsersList />}
-        {chatStore.route === Routes.Profile && <Profile />}
-        {chatStore.route === '' && <PageChannelsId id={+channelId} />}
-      </SocketLayout>
+      <AuthLayout>
+        <SocketLayout>
+          <Router route={Routes.Profile}>
+            <Profile />
+          </Router>
+          <Router route={`${Routes.Users}/:id`}>
+            <PageUsersList />
+          </Router>
+          <Router route={Routes.Channels}>
+            <Channels channelTabType={Routes.Channels} />
+          </Router>
+          <Router route={`${Routes.Channels}/:id`}>
+            <PageChannelsId />
+          </Router>
+        </SocketLayout>
+      </AuthLayout>
     </div>
   );
 });

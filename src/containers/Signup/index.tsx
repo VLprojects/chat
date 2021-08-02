@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useHistory } from 'react-router-dom';
-
-import { Button, FormErrorMessage, Input } from 'ui-kit';
-
+import React, { useEffect, useState } from 'react';
 import Routes from 'routes';
-import useStores from 'stores/root';
+import useStores from 'stores/rootStore';
+import { Button, FormErrorMessage, Input } from 'ui-kit';
+import styles from './Signup.module.scss';
 
-import styles from './SignUp.module.scss';
-
-const SignUp = observer(() => {
-  const history = useHistory();
-
-  const { authStore } = useStores();
+const Signup = observer(() => {
+  const { authStore, chatStore } = useStores();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +19,7 @@ const SignUp = observer(() => {
 
   useEffect(() => {
     if (authStore.isAuthorized) {
-      history.push(`/${Routes.Channels}`);
+      chatStore.setRoute(Routes.Channels);
     }
   }, [authStore.isAuthorized]);
 
@@ -61,11 +55,11 @@ const SignUp = observer(() => {
           </Button>
         </div>
         <div className={styles.footer}>
-          <Button onClick={() => history.push(`${Routes.Login}`)}>Login</Button>
+          <Button onClick={() => chatStore.setRoute(Routes.Login)}>Login</Button>
         </div>
       </div>
     </>
   );
 });
 
-export default SignUp;
+export default Signup;

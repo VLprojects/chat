@@ -1,15 +1,12 @@
+import ChannelsList from 'components/ChannelList';
+import CreateChannelForm from 'components/CreateChannelForm';
+import DirectList from 'components/DirectList';
+import ChatHeader from 'components/Header';
+import SubHeader from 'components/SubHeader';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
-import { RouteComponentProps, useHistory } from 'react-router-dom';
-
-import DirectList from 'components/DirectList';
-import ChannelsList from 'components/ChannelList';
-import ChatHeader from 'components/Header';
-import CreateChannelForm from 'components/CreateChannelForm';
-import SubHeader from 'components/SubHeader';
-
 import Routes from 'routes';
-import useStores from 'stores/root';
+import useStores from 'stores/rootStore';
 import styles from './Channels.module.scss';
 
 interface ITab {
@@ -28,24 +25,20 @@ const tabs: ITab[] = [
   },
 ];
 
-const PageChannels: React.FC<RouteComponentProps<{ channelTabType: Routes.Channels | Routes.Direct }>> = (props) => {
-  const {
-    match: { params },
-  } = props;
-  const { channelTabType = Routes.Channels } = params;
-  const history = useHistory();
+const PageChannels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = (props) => {
+  const { channelTabType } = props;
 
-  const { channelsStore } = useStores();
+  const { channelsStore, chatStore } = useStores();
 
   const [tab, setTab] = useState<string>(channelTabType);
   const [isShowCreateChannel, setIsShowCreateChannel] = useState(false);
 
   const onSelectedChannel = (id: number) => {
-    history.push(`/${Routes.Channels}/${id}`);
+    chatStore.setRoute(`${Routes.Channels}/${id}`);
   };
 
   const onSelectedDirect = (id: number) => {
-    history.push(`/${Routes.Direct}/${id}`);
+    chatStore.setRoute(`${Routes.Direct}/${id}`);
   };
 
   const onJoinedChannel = (id: number) => {
@@ -53,7 +46,7 @@ const PageChannels: React.FC<RouteComponentProps<{ channelTabType: Routes.Channe
   };
 
   const onTabClick = (tabId: Routes) => () => {
-    history.push(`/${tabId}`);
+    chatStore.setRoute(`${tabId}`);
     setTab(tabId);
   };
 
@@ -62,27 +55,31 @@ const PageChannels: React.FC<RouteComponentProps<{ channelTabType: Routes.Channe
   return (
     <>
       <ChatHeader title="Chat" />
-      <SubHeader>
-        <div className={styles.subheader}>
-          {tabs.map((item: ITab) => (
-            <button
-              key={item.id}
-              className={[styles.btn, item.id === tab ? styles.active : ''].join(' ')}
-              type="button"
-              onClick={onTabClick(item.id)}
-            >
-              {item.title}
-            </button>
-          ))}
-        </div>
-      </SubHeader>
+      {chatStore.isDirectAllowed && (
+        <SubHeader>
+          <div className={styles.subheader}>
+            {tabs.map((item: ITab) => (
+              <button
+                key={item.id}
+                className={[styles.btn, item.id === tab ? styles.active : ''].join(' ')}
+                type="button"
+                onClick={onTabClick(item.id)}
+              >
+                {item.title}
+              </button>
+            ))}
+          </div>
+        </SubHeader>
+      )}
 
       {tab === Routes.Channels && (
         <>
           <ChannelsList list={channelsList} onSelected={onSelectedChannel} onJoined={onJoinedChannel} />
-          <button className={styles.btnCreate} type="button" onClick={() => setIsShowCreateChannel(true)}>
-            Create a new channel
-          </button>
+          {chatStore.isCreateChannelAllowed && (
+            <button className={styles.btnCreate} type="button" onClick={() => setIsShowCreateChannel(true)}>
+              Create a new channel
+            </button>
+          )}
 
           {isShowCreateChannel && <CreateChannelForm onClose={() => setIsShowCreateChannel(false)} />}
         </>

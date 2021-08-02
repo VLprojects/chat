@@ -1,9 +1,7 @@
-import React, { FC, KeyboardEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-
+import React, { FC, KeyboardEvent, useCallback, useState } from 'react';
+import useStores from 'stores/rootStore';
 import { Button, Flex, FormErrorMessage, Input } from 'ui-kit';
-
-import useStores from 'stores/root';
 import styles from './MessageInput.module.scss';
 
 interface IMessageInput {

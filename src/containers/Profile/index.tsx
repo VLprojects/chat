@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { observer } from 'mobx-react-lite';
-
 import ChatHeader from 'components/Header';
-import { Input, Button } from 'ui-kit';
-
-import useStores from 'stores/root';
-
+import { observer } from 'mobx-react-lite';
+import React, { useEffect, useState } from 'react';
+import useStores from 'stores/rootStore';
+import { Button, Input } from 'ui-kit';
 import styles from './Profile.module.scss';
 
 const Profile = observer(() => {
@@ -55,16 +52,9 @@ const Profile = observer(() => {
             onChange={setAvatar}
           />
         </div>
-        {profileStore.profileError && (
-          <div className={styles.error}>{profileStore.profileError}</div>
-        )}
+        {profileStore.profileError && <div className={styles.error}>{profileStore.profileError}</div>}
         <div className={styles.submit}>
-          <Button
-            fullWidth
-            size="large"
-            variant="submit"
-            onClick={onSaveProfile}
-          >
+          <Button fullWidth size="large" variant="submit" onClick={onSaveProfile}>
             Save
           </Button>
         </div>

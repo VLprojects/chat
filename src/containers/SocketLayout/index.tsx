@@ -1,9 +1,8 @@
-import React, { ReactNode, useEffect } from 'react';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
-
+import React, { ReactNode, useEffect } from 'react';
+import useStores from 'stores/rootStore';
 import { WineLoader } from 'ui-kit';
-import useStores from 'stores/root';
 
 interface Props {
   children: ReactNode;

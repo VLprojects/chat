@@ -1,20 +1,12 @@
 import React, { FC } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-
-import {
-  Checkbox,
-  Input,
-  Image,
-  Avatar,
-} from 'ui-kit';
+import { Avatar, Checkbox, Image, Input } from 'ui-kit';
 import IconSearch from 'ui-kit/assets/icons/icon-search.svg';
-
-import { TUser } from 'types/users';
-
+import { IUser } from '../../stores/profileStore/types';
 import styles from './ChannelsUsers.module.scss';
 
 interface IChannelUsers {
-  list: TUser[];
+  list: IUser[];
 }
 
 const ChannelUsers: FC<IChannelUsers> = (props) => {
@@ -49,7 +41,7 @@ const ChannelUsers: FC<IChannelUsers> = (props) => {
                 <div className={styles.avatar}>
                   <Avatar username={item.username} url={item.avatarUrl} />
                 </div>
-                <div className={styles.username}>{item.username}</div>
+                <div className={styles.username}>{item.displayName}</div>
               </div>
             </div>
           ))}

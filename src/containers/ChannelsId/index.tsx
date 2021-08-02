@@ -1,57 +1,42 @@
-import React, { FC } from 'react';
-import { observer } from 'mobx-react-lite';
-import { Link, useHistory, useParams } from 'react-router-dom';
-
-import MessageInput from 'components/MessageInput';
-import MessageList from 'components/MessageList';
 import ChatFooter from 'components/Footer';
 import ChatHeader from 'components/Header';
+import MessageInput from 'components/MessageInput';
+import MessageList from 'components/MessageList';
 import SubHeader from 'components/SubHeader';
-import { Avatar } from 'ui-kit';
-
-import { TChannel } from 'types/channels';
-import { TMessage } from 'types/messages';
-
-import useStores from 'stores/root';
-
+import { observer } from 'mobx-react-lite';
+import React, { FC } from 'react';
 import Routes from 'routes';
-
-import { getChannelUsers } from 'utils/users';
-
+import useStores from 'stores/rootStore';
+import { Avatar } from 'ui-kit';
 import styles from './ChannelsId.module.scss';
 
 const MAX_USERS_ON_PREVIEW = 2;
 
-interface ParamTypes {
-  id: number | null;
-}
-
-const PageChannelsId: FC<ParamTypes> = observer((props) => {
-  const { id: channelId } = props;
+const PageChannelsId: FC = observer(() => {
   const { channelsStore, chatStore } = useStores();
+  // todo causes console warning
+  const channelId = Number(chatStore.params.id);
 
   if (channelId === null) {
     return null;
   }
 
-  const currentChannel: TChannel | null = channelsStore.getChannel(channelId) || null;
-  const channelMessages: TMessage[] = channelsStore.getSortedMessages(channelId);
-  const channelUsersIds = currentChannel?.userIds || [];
-
-  const users = getChannelUsers(channelUsersIds, chatStore.users);
-
-  const onClick = () => {
-    chatStore.setRoute(Routes.Users);
-  };
-
+  const currentChannel = channelsStore.getChannel(channelId);
   if (!currentChannel) {
     return null;
   }
 
+  const channelMessages = channelsStore.getSortedMessages(channelId);
+  // const users = chatStore.getUsers(currentChannel.userIds);
+
+  const onClick = () => {
+    chatStore.setRoute(`${Routes.Users}/${currentChannel.id}`);
+  };
+
   return (
     <>
       <ChatHeader title="Chat" />
-      <SubHeader
+      {/* <SubHeader
         rightButton={
           // eslint-disable-next-line react/jsx-wrap-multilines
           <>
@@ -69,7 +54,7 @@ const PageChannelsId: FC<ParamTypes> = observer((props) => {
         }
       >
         <div>{currentChannel?.name}</div>
-      </SubHeader>
+      </SubHeader> */}
       <MessageList messages={channelMessages} />
       <ChatFooter>
         <MessageInput channelId={Number(channelId)} type="channel" />

@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useHistory } from 'react-router-dom';
-// import UsernameGenerator from 'username-generator';
-
-import { Button, FormErrorMessage, Input } from 'ui-kit';
-
-import { usernameGenerator } from 'utils/users';
-
+import React, { useEffect, useState } from 'react';
 import Routes from 'routes';
-import useStores from 'stores/root';
+import useStores from 'stores/rootStore';
+import { Button, FormErrorMessage, Input } from 'ui-kit';
+import { usernameGenerator } from 'utils/users';
 import styles from './Login.module.scss';
 
 const Login = observer(() => {
-  const history = useHistory();
-
-  const { authStore } = useStores();
+  const { authStore, chatStore } = useStores();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -25,15 +18,16 @@ const Login = observer(() => {
     }
   };
 
+  const onSignup = () => chatStore.setRoute(Routes.Signup);
+
   const onGuestEnter = () => {
     const generatedUsername = usernameGenerator();
-
     authStore.signup(generatedUsername);
   };
 
   useEffect(() => {
     if (authStore.isAuthorized) {
-      history.push(`/${Routes.Channels}`);
+      chatStore.setRoute(Routes.Channels);
     }
   }, [authStore.isAuthorized]);
 
@@ -69,7 +63,7 @@ const Login = observer(() => {
           </Button>
         </div>
         <div className={styles.footer}>
-          <Button onClick={() => history.push(`/${Routes.Signup}`)}>Sign Up</Button>
+          <Button onClick={onSignup}>Signup</Button>
           <Button onClick={onGuestEnter}>Guest</Button>
         </div>
       </div>

@@ -1,5 +1,10 @@
 import { action, makeAutoObservable, observable } from 'mobx';
-import { RootStore } from './root';
+import api from '../api';
+import { RootStore } from './rootStore';
+
+export enum MessageTypeEnum {
+  System = 'system',
+}
 
 class MessagesStore {
   rootStore: RootStore;
@@ -16,21 +21,10 @@ class MessagesStore {
   }
 
   @action async sendMessage(channelId: number, text?: string): Promise<void> {
-    const { apiBaseUrl } = this.rootStore.chatStore;
     this.messageSendError = '';
-    const accessToken = this.rootStore.authStore.accessToken || '';
+
     try {
-      await fetch(
-        `${apiBaseUrl}/messages/send`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({ channelId, text }),
-        },
-      );
+      await api.post(`messages/send`, { channelId, text });
     } catch (e) {
       this.messageSendError = JSON.stringify(e);
     }

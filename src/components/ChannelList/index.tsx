@@ -1,15 +1,12 @@
 import React, { FC } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-
 import { Button, Image } from 'ui-kit';
 import IconLock from 'ui-kit/assets/icons/icon-lock.svg';
-
-import { TChannel } from 'types/channels';
-
+import { IChannel } from '../../stores/chatStore/types';
 import styles from './ChannelsList.module.scss';
 
 interface IChannelList {
-  list: TChannel[];
+  list: IChannel[];
   onSelected: (id: number) => void;
   onJoined: (id: number) => void;
 }
@@ -22,12 +19,10 @@ const ChannelList: FC<IChannelList> = (props) => {
       <Scrollbars>
         {list && (
           <ul>
-            {list.map((item: TChannel) => {
+            {list.map((item: IChannel) => {
               if (!item.type) {
                 return (
-                  <li
-                    key={item.id}
-                  >
+                  <li key={item.id}>
                     <div className={styles.wrapper}>
                       <div className={styles.title}>
                         {item.name}
@@ -48,12 +43,7 @@ const ChannelList: FC<IChannelList> = (props) => {
               }
 
               return (
-                <li
-                  className={styles.channelId}
-                  aria-hidden="true"
-                  onClick={() => onSelected(item.id)}
-                  key={item.id}
-                >
+                <li className={styles.channelId} aria-hidden="true" onClick={() => onSelected(item.id)} key={item.id}>
                   <div className={styles.wrapper}>
                     <div className={styles.title}>{item.name}</div>
                     {item.type && (

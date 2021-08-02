@@ -1,10 +1,10 @@
 import React from 'react';
-import AuthStore from './auth';
-import ChannelsStore from './channels';
-import ChatStore from './chat';
-import MessagesStore from './messages';
-import ProfileStore from './profile';
-import SocketStore from './socket';
+import AuthStore from './authStore';
+import ChannelsStore from './channelsStore';
+import ChatStore from './chatStore';
+import MessagesStore from './messagesStore';
+import ProfileStore from './profileStore';
+import SocketStore from './socketStore';
 
 type TRootStore = {
   authStore: AuthStore;
@@ -29,8 +29,8 @@ export class RootStore {
   socketStore: SocketStore;
 
   constructor() {
-    this.authStore = new AuthStore(this);
     this.chatStore = new ChatStore(this);
+    this.authStore = new AuthStore(this);
     this.profileStore = new ProfileStore(this);
     this.channelsStore = new ChannelsStore(this);
     this.messagesStore = new MessagesStore(this);
