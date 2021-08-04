@@ -1,4 +1,3 @@
-import commonStyles from 'Chat.module.scss';
 import cls from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import useStores from 'stores/rootStore';
 import { Button, FormErrorMessage, Input } from 'ui-kit';
 import { usernameGenerator } from 'utils/users';
 import styles from './Login.module.scss';
+import commonStyles from '../../Chat.module.scss';
 
 const Login = observer(() => {
   const { authStore, chatStore } = useStores();
