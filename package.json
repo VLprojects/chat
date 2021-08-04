@@ -1,7 +1,7 @@
 {
   "name": "@vlprojects-chat/chat",
   "author": "vlprojects",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "chat",
   "license": "ISC",
   "main": "dist/index.js",
@@ -95,6 +95,7 @@
     "rollup": "^2.51.0",
     "rollup-plugin-analyzer": "^4.0.0",
     "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-dotenv": "^0.3.0",
     "rollup-plugin-font": "^1.1.2",
     "rollup-plugin-image-files": "^1.4.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",

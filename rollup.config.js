@@ -12,6 +12,7 @@ import url from '@rollup/plugin-url';
 import alias from '@rollup/plugin-alias';
 import copy from 'rollup-plugin-copy';
 import analyze from 'rollup-plugin-analyzer';
+import dotenv from 'rollup-plugin-dotenv';
 
 const config = {
   input: './src/lib/index.tsx',
@@ -38,6 +39,7 @@ const config = {
     external(),
     url(),
     svgr(),
+    dotenv(),
     postcss({
       plugins: [autoprefixer()],
       modules: true,
