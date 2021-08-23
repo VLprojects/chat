@@ -1,0 +1,9 @@
+export enum MessageTypeEnum {
+  System = 'system',
+  User = 'user',
+}
+
+export enum ChannelTypeEnum {
+  Public = 'public',
+  Private = 'private',
+}

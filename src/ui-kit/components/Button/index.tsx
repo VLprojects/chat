@@ -1,5 +1,6 @@
+import cls from 'classnames';
 import React, { FC, ReactNode } from 'react';
-import styles from './Button.module.scss';
+import useStyles from './styles';
 
 interface ButtonProps {
   children: ReactNode;
@@ -20,22 +21,12 @@ const Button: FC<ButtonProps> = ({
   size = 'medium',
   className,
 }) => {
-  const cn = [styles.button, className];
+  const classes = useStyles();
 
-  if (fullWidth) {
-    cn.push(styles.fullWidth);
-  }
-
-  if (variant) {
-    cn.push(styles[variant]);
-  }
-
-  if (size) {
-    cn.push(styles[size]);
-  }
+  const classList = cls(classes.button, className, classes[variant], classes[size], { [classes.fullWidth]: fullWidth });
 
   return (
-    <button type="button" disabled={disabled} onClick={onClick} className={cn.join(' ')}>
+    <button type="button" disabled={disabled} onClick={onClick} className={classList}>
       {children}
     </button>
   );

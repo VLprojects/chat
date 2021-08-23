@@ -1,24 +1,25 @@
 import React, { FC } from 'react';
 import { Image } from 'ui-kit';
 import IconBack from 'ui-kit/assets/icons/icon-back.svg';
-import styles from './SubHeader.module.scss';
+import useStyles from './styles';
 
 interface ISubHeader {
   onBack?: () => void;
-  rightButton?: any;
+  rightButton?: JSX.Element;
 }
 
 const SubHeader: FC<ISubHeader> = (props) => {
   const { children, onBack, rightButton = <></> } = props;
+  const classes = useStyles();
 
   return (
-    <div className={styles.subHeader}>
+    <div className={classes.subHeader}>
       {onBack && (
-        <button className={styles.btnBack} type="button" onClick={onBack}>
+        <button className={classes.btnBack} type="button" onClick={onBack}>
           <Image src={IconBack} alt="" />
         </button>
       )}
-      <div className={styles.title}>{children}</div>
+      <div className={classes.title}>{children}</div>
       {rightButton}
     </div>
   );

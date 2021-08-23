@@ -2,7 +2,7 @@ import cls from 'classnames';
 import React, { FC } from 'react';
 import { Image } from 'ui-kit';
 import UserIcon from 'ui-kit/assets/icons/user.svg';
-import styles from './Avatar.module.scss';
+import useStyles from './styles';
 
 interface IProps {
   counter?: number;
@@ -11,13 +11,14 @@ interface IProps {
 }
 
 const Avatar: FC<IProps> = (props) => {
-  const { url, counter, size = '' } = props;
-  const classes = cls(styles.avatar, { [styles[size]]: size });
+  const { url, counter, size } = props;
+  const classes = useStyles();
+  const classList = cls(classes.avatar, { [classes.large]: size });
 
-  if (counter) return <div className={classes}>{counter}</div>;
+  if (counter) return <div className={classList}>{counter}</div>;
 
   return (
-    <div className={classes}>
+    <div className={classList}>
       <Image src={url || UserIcon} alt="avatar" />
     </div>
   );

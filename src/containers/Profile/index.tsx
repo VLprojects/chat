@@ -1,34 +1,37 @@
 import ChatHeader from 'components/Header';
+import useKeystone from 'keystone';
+import { saveProfile } from 'keystone/service';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import useStores from 'stores/rootStore';
 import { Button, Input } from 'ui-kit';
-import styles from './Profile.module.scss';
+import useStyles from './styles';
 
 const Profile = observer(() => {
-  const { profileStore } = useStores();
+  const classes = useStyles();
+  const { auth, ui } = useKeystone();
+  const root = useKeystone();
 
   const [username, setUsername] = useState('');
   const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
-    profileStore.clearError();
+    ui.setProfileError('');
   }, []);
 
   useEffect(() => {
-    setUsername(profileStore.user?.username || '');
-    setAvatar(profileStore.user?.avatarUrl || '');
-  }, [profileStore.user]);
+    setUsername(auth.me.username);
+    setAvatar(auth.me.avatarUrl);
+  }, [auth.me]);
 
   const onSaveProfile = () => {
-    profileStore.saveProfile(username, avatar);
+    saveProfile(root, username, avatar);
   };
 
   return (
     <>
       <ChatHeader title="Profile" />
-      <div className={styles.container}>
-        <div className={styles.field}>
+      <div className={classes.container}>
+        <div className={classes.field}>
           <label htmlFor="username">Username:</label>
           <Input
             id="username"
@@ -40,7 +43,7 @@ const Profile = observer(() => {
             onChange={setUsername}
           />
         </div>
-        <div className={styles.field}>
+        <div className={classes.field}>
           <label htmlFor="avatar">Avatar:</label>
           <Input
             id="avatar"
@@ -52,8 +55,8 @@ const Profile = observer(() => {
             onChange={setAvatar}
           />
         </div>
-        {profileStore.profileError && <div className={styles.error}>{profileStore.profileError}</div>}
-        <div className={styles.submit}>
+        {ui.profileError && <div className={classes.error}>{ui.profileError}</div>}
+        <div>
           <Button fullWidth size="large" variant="submit" onClick={onSaveProfile}>
             Save
           </Button>

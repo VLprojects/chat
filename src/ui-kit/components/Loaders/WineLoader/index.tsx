@@ -1,21 +1,25 @@
+import cls from 'classnames';
 import React, { FC } from 'react';
+import useStyles from './styles';
 
-import styles from './WineLoader.module.scss';
+const WineLoader: FC = () => {
+  const classes = useStyles();
 
-const WineLoader: FC = () => (
-  <div className={styles.wineLoader}>
-    <ul>
-      <li />
-      <li />
-      <li />
-    </ul>
-    <div className={[styles.wineglass, styles.left].join(' ')}>
-      <div className={styles.top} />
+  return (
+    <div className={classes.wineLoader}>
+      <ul>
+        <li />
+        <li />
+        <li />
+      </ul>
+      <div className={cls(classes.wineglass, classes.left)}>
+        <div className={classes.top} />
+      </div>
+      <div className={cls(classes.wineglass, classes.right)}>
+        <div className={classes.top} />
+      </div>
     </div>
-    <div className={[styles.wineglass, styles.right].join(' ')}>
-      <div className={styles.top} />
-    </div>
-  </div>
-);
+  );
+};
 
 export default WineLoader;

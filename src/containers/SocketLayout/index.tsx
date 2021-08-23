@@ -1,25 +1,43 @@
-import { autorun } from 'mobx';
+import { autorun, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { ReactNode, useEffect } from 'react';
-import useStores from 'stores/rootStore';
 import { WineLoader } from 'ui-kit';
+import api from '../../api';
+import { IRGetNode } from '../../types/serverResponses';
+import useKeystone from '../../keystone';
+import { getInitialData } from '../../keystone/service';
 
 interface Props {
   children: ReactNode;
 }
 
 const SocketLayout = observer(({ children }: Props): JSX.Element => {
-  const { socketStore } = useStores();
+  const { socket, auth } = useKeystone();
+  const root = useKeystone();
 
-  const autoRunFn = () => {
-    if (!socketStore.isSocketConnected) {
-      socketStore.connectToSocketServer();
-    }
-  };
+  useEffect(() =>
+    autorun(async () => {
+      if (!socket.isSocketConnected) {
+        const response = (await api.get(`get-node`)) as IRGetNode;
+        if (response.uri) {
+          socket.connect(response.uri, auth.accessToken);
+        }
+      }
+    }),
+  );
 
-  useEffect(() => autorun(autoRunFn));
+  useEffect(() =>
+    reaction(
+      () => socket.isSocketConnected,
+      (isSocketConnected) => {
+        if (isSocketConnected) {
+          getInitialData(root);
+        }
+      },
+    ),
+  );
 
-  if (!socketStore.isSocketConnected) {
+  if (!socket.isSocketConnected) {
     return (
       <>
         <WineLoader />

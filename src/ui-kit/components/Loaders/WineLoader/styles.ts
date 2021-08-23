@@ -1,0 +1,100 @@
+import { makeStyles } from '@material-ui/core';
+
+export default makeStyles(
+  {
+    wineLoader: {
+      margin: 'auto',
+    },
+    wineglass: {
+      height: 36,
+      position: 'relative',
+      '&:after': {
+        content: "''",
+        position: 'absolute',
+        top: '47px',
+        left: '5px',
+        width: '20px',
+        height: '5px',
+        background: 'rgb(65, 56, 56)',
+        boxShadow: '0 0 1px white',
+      },
+    },
+    top: {
+      background: 'white',
+      width: 30,
+      height: 36,
+      borderRadius: '0 0 36px 36px',
+      boxShadow: '0 0 1px white',
+      '&:before': {
+        animation: 'rotate2 2s linear infinite',
+        content: "''",
+        position: 'absolute',
+        left: 4,
+        bottom: 4,
+        width: 22,
+        height: 22,
+        borderRadius: '50%',
+        background: 'linear-gradient(transparent 50%, #F36E3E 50%)',
+      },
+      '&:after': {
+        content: "''",
+        position: 'absolute',
+        top: '35px',
+        left: '12px',
+        width: '6px',
+        height: '13px',
+        background: 'white',
+        boxShadow: '0 0 1px white',
+      },
+    },
+    left: {
+      display: 'inline-block',
+      marginRight: 10,
+      animation: 'rotate1 2s cubic-bezier(.39,1.52,.46,.92) infinite',
+    },
+    right: {
+      display: 'inline-block',
+      animation: 'rotate2 2s cubic-bezier(.39,1.52,.46,.92) infinite',
+    },
+    ul: {
+      listStyle: 'none',
+      margin: 0,
+      padding: 0,
+      width: 70,
+      height: 25,
+      position: 'relative',
+      opacity: 0,
+      animation: '2s fadeInUp infinite linear 2s',
+    },
+    li: {
+      width: 6,
+      height: 15,
+      background: 'white',
+      position: 'absolute',
+      boxShadow: '0 0 1px white',
+      transformOrigin: 'bottom',
+      '&:nth-child(1)': {
+        left: '26px',
+        bottom: '5px',
+        transform: 'rotate(-35deg)',
+      },
+      '&:nth-child(2)': { left: 34, bottom: 8 },
+      '&:nth-child(3)': { left: 42, bottom: 5, transform: 'rotate(35deg)' },
+    },
+    '@keyframes rotate1': {
+      '0%': { transform: 'rotate(0deg)' },
+      '50%': { transform: 'rotate(22deg)' },
+    },
+    '@keyframes rotate2': {
+      '0%': { transform: 'rotate(0deg)' },
+      '50%': { transform: 'rotate(-22deg)' },
+    },
+    '@keyframes fadeInUp': {
+      '0%': { opacity: 0, transform: 'scaleY(1)' },
+      '33%': { opacity: 1, transform: 'scaleY(1.4)' },
+      '64%': { opacity: 0.1, transform: 'scaleY(1)' },
+      '100%': { opacity: 0, transform: 'scaleY(.3)' },
+    },
+  },
+  { name: 'WineLoader' },
+);

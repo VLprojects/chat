@@ -1,8 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import useStores from 'stores/rootStore';
+import React, { FC, useCallback, useState } from 'react';
 import { Button, FormErrorMessage, Input } from 'ui-kit';
-import styles from './CreateChannelForm.module.scss';
+import useStyles from './styles';
 
 interface ICreateChannelForm {
   onClose: () => void;
@@ -10,36 +9,25 @@ interface ICreateChannelForm {
 
 const CreateChannelForm: FC<ICreateChannelForm> = observer((props) => {
   const { onClose } = props;
+  const classes = useStyles();
 
-  const { channelsStore } = useStores();
   const [channelName, setChannelName] = useState('');
 
-  const onCreateChannel = useCallback(() => {
-    if (channelName.length > 0) {
-      channelsStore.createChannel(channelName);
-    }
-  }, [channelName, setChannelName]);
-
-  useEffect(() => {
-    if (channelsStore.isChannelCreated) {
-      channelsStore.clearChannelCreated();
-      onClose();
-    }
-  }, [channelsStore.isChannelCreated]);
+  const onCreateChannel = useCallback(() => {}, [channelName, setChannelName]);
 
   return (
-    <div className={styles.createChannelForm}>
-      <div className={styles.wrapper}>
-        <button type="button" className={styles.closeButton} onClick={onClose}>
+    <div className={classes.createChannelForm}>
+      <div className={classes.wrapper}>
+        <button type="button" className={classes.closeButton} onClick={onClose}>
           ✕
         </button>
-        <div className={styles.container}>
+        <div>
           <h2>New channel</h2>
-          <div className={styles.field}>
+          <div className={classes.field}>
             <Input fullWidth placeholder="Channel name" onChange={setChannelName} value={channelName} />
           </div>
-          <FormErrorMessage message={channelsStore.channelCreatedError} />
-          <div className={styles.submit}>
+          <FormErrorMessage message="" />
+          <div>
             <Button fullWidth variant="submit" onClick={onCreateChannel}>
               Create
             </Button>

@@ -1,5 +1,6 @@
+import cls from 'classnames';
 import React, { KeyboardEvent, SyntheticEvent } from 'react';
-import styles from './Input.module.scss';
+import useStyles from './styles';
 
 interface IProps {
   placeholder?: string;
@@ -9,8 +10,8 @@ interface IProps {
   type?: string;
   value?: string;
   id?: string;
-  variant?: 'contained' | 'text' | 'outlined';
-  size?: 'large' | 'medium' | 'small';
+  variant?: 'text' | 'outlined';
+  size?: 'medium' | 'large';
   fullWidth?: boolean;
 }
 
@@ -27,20 +28,8 @@ const Input: React.FC<IProps> = (props) => {
     size = 'medium',
     fullWidth = false,
   } = props;
-
-  const cn = [styles.input, className];
-
-  if (fullWidth) {
-    cn.push(styles.fullWidth);
-  }
-
-  if (variant) {
-    cn.push(styles[variant]);
-  }
-
-  if (size) {
-    cn.push(styles[size]);
-  }
+  const classes = useStyles();
+  const classList = cls(classes.input, className, classes[variant], classes[size], { [classes.fullWidth]: fullWidth });
 
   const changeHandler = (e: SyntheticEvent<HTMLInputElement> & { target: HTMLInputElement }) => {
     if (onChange) onChange(e.target.value);
@@ -54,7 +43,7 @@ const Input: React.FC<IProps> = (props) => {
     <input
       id={id}
       type={type}
-      className={cn.join(' ')}
+      className={classList}
       placeholder={placeholder}
       onChange={changeHandler}
       onKeyDown={keyDownHandler}

@@ -2,7 +2,7 @@ import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { FC, useEffect, useState } from 'react';
 import Route from 'route-parser';
-import useStores from 'stores/rootStore';
+import useKeystone from '../../keystone';
 
 export interface IRouterProps {
   route: string;
@@ -10,15 +10,15 @@ export interface IRouterProps {
 }
 
 export const Router: FC<IRouterProps> = observer(({ route, children }) => {
-  const { chatStore } = useStores();
+  const { ui } = useKeystone();
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() =>
     autorun(() => {
-      const params = new Route(route).match(chatStore.route);
+      const params = new Route(route).match(ui.route);
 
       if (params) {
-        chatStore.setParams(params);
+        ui.setParams(params);
         setIsSuccess(true);
       } else {
         setIsSuccess(false);

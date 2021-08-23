@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { FC } from 'react';
+import useStyles from './styles';
 
-import styles from './Checkbox.module.scss';
-
-const Checkbox = () => (
-  <div className={styles.checkbox}>
-    <label>
-      <input type="checkbox" name="checkbox" value="" />
-      <div />
-    </label>
-  </div>
-);
+const Checkbox: FC = () => {
+  const classes = useStyles();
+  return (
+    <div className={classes.checkbox}>
+      <label>
+        <input className={classes.input} type="checkbox" name="checkbox" value="" />
+        <div className={classes.checkbox} />
+      </label>
+    </div>
+  );
+};
 
 export default Checkbox;

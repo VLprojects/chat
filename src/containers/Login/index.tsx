@@ -1,47 +1,54 @@
-import cls from 'classnames';
+import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
-import Routes from 'routes';
-import useStores from 'stores/rootStore';
+import { reaction } from 'mobx';
 import { Button, FormErrorMessage, Input } from 'ui-kit';
-import { usernameGenerator } from 'utils/users';
-import styles from './Login.module.scss';
-import commonStyles from '../../Chat.module.scss';
+import { usernameGenerator } from '../../utils/users';
+import Routes from '../../routes';
+import useKeystone from '../../keystone';
+import { login, signup, redirectToInitial } from '../../keystone/service';
+import useStyles from './styles';
 
 const Login = observer(() => {
-  const { authStore, chatStore } = useStores();
+  const classes = useStyles();
+  const root = useKeystone();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const onLogin = () => {
     if (username.length > 0) {
-      authStore.login(username, password);
+      login(root, username, password);
     }
   };
 
-  const onSignup = () => chatStore.setRoute(Routes.Signup);
+  const onSignup = () => root.ui.setRoute(Routes.Signup);
 
   const onGuestEnter = () => {
     const generatedUsername = usernameGenerator();
-    authStore.signup(generatedUsername);
+    signup(root, generatedUsername);
   };
 
-  useEffect(() => {
-    if (authStore.isAuthorized) {
-      chatStore.setRoute(Routes.Channels);
-    }
-  }, [authStore.isAuthorized]);
+  useEffect(() =>
+    reaction(
+      () => root.auth.isAuthorized,
+      (isAuthorized) => {
+        if (isAuthorized) {
+          redirectToInitial(root);
+        }
+      },
+    ),
+  );
 
   return (
     <>
-      <div className={styles.container}>
-        <h1 className={styles.header}>
+      <div className={classes.container}>
+        <Typography variant="h1" classes={{ root: classes.header }}>
           Enter
           <br /> the chat
-        </h1>
-        <div className={styles.field}>
-          <div className={cls(commonStyles.regular14, styles.fieldLabel)}>Name</div>
+        </Typography>
+        <div className={classes.field}>
+          <div className={classes.fieldLabel}>Name</div>
           <Input
             size="large"
             variant="outlined"
@@ -51,8 +58,8 @@ const Login = observer(() => {
             value={username}
           />
         </div>
-        <div className={styles.field}>
-          <div className={cls(commonStyles.regular14, styles.fieldLabel)}>Password</div>
+        <div className={classes.field}>
+          <div className={classes.fieldLabel}>Password</div>
           <Input
             size="large"
             variant="outlined"
@@ -63,8 +70,8 @@ const Login = observer(() => {
             value={password}
           />
         </div>
-        <FormErrorMessage message={authStore.authError} />
-        <div className={styles.footer}>
+        <FormErrorMessage message={root.ui.authError} />
+        <div className={classes.footer}>
           <Button variant="submit" fullWidth size="large" onClick={onLogin}>
             Sign In
           </Button>
@@ -73,8 +80,8 @@ const Login = observer(() => {
             Log in as a guest
           </Button>
           <div>
-            <span className={cls(commonStyles.regular14)}>Don&apos;t have an account ? </span>
-            <a href="#" onClick={onSignup}>
+            <span className={classes.fontRegular14LineHeight18}>Don&apos;t have an account ? </span>
+            <a href="#" onClick={onSignup} className={classes.fontRegular14LineHeight18}>
               Sign up
             </a>
           </div>

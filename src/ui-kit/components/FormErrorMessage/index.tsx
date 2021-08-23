@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
-
-import styles from './FormErrorMessage.module.scss';
+import useStyles from './styles';
 
 interface IFormErrorMessae {
   message: string;
 }
 
 const FormErrorMessage: FC<IFormErrorMessae> = ({ message }) => {
+  const classes = useStyles();
   if (message === '') return null;
 
   return (
-    <div className={styles.error}>
+    <div className={classes.error}>
       <div>{message}</div>
     </div>
   );

@@ -1,11 +1,12 @@
 import { Router } from 'components/Router';
 import Login from 'containers/Login';
 import Signup from 'containers/Signup';
+import useKeystone from 'keystone';
+import { signup, redirectToInitial } from 'keystone/service';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import Routes from 'routes';
-import useStores from 'stores/rootStore';
 import { WineLoader } from 'ui-kit';
 import { usernameGenerator } from 'utils/users';
 
@@ -14,28 +15,29 @@ interface Props {
 }
 
 const AuthLayout = observer(({ children }: Props): JSX.Element => {
-  const { authStore, chatStore } = useStores();
+  const root = useKeystone();
 
   useEffect(
     () =>
-      autorun(() => {
-        if (!authStore.isAuthorized) {
-          if (chatStore.isAnonymousAllowed) {
+      autorun(async () => {
+        if (!root.auth.isAuthorized) {
+          if (root.auth.isAnonymousAllowed) {
             const generatedUsername = usernameGenerator();
-            authStore.signup(generatedUsername);
+            await signup(root, generatedUsername);
+            redirectToInitial(root);
           } else {
-            chatStore.setRoute(Routes.Login);
+            root.ui.setRoute(Routes.Login);
           }
         }
       }),
     [],
   );
 
-  if (authStore.isAuthorized) {
+  if (root.auth.isAuthorized) {
     return children;
   }
 
-  if (chatStore.isAnonymousAllowed) {
+  if (root.auth.isAnonymousAllowed) {
     return <WineLoader />;
   }
 
