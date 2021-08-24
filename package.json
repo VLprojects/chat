@@ -1,7 +1,7 @@
 {
   "name": "@vlprojects-chat/chat",
   "author": "vlprojects",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "chat",
   "license": "ISC",
   "main": "dist/index.js",
@@ -53,6 +53,7 @@
     "mobx-react": "^7.1.0",
     "mobx-react-lite": "^3.2.0",
     "mobx-utils": "^6.0.4",
+    "notistack": "^1.0.10",
     "qs": "^6.10.1",
     "react-custom-scrollbars-2": "^4.4.0",
     "route-parser": "^0.0.5",

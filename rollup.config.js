@@ -37,7 +37,7 @@ const config = {
       },
     }),
     external(),
-    url(),
+    url({ include: ['**/*.woff', '**/*.woff2'] }),
     svgr(),
     dotenv(),
     postcss({

@@ -2,29 +2,40 @@ import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { reaction } from 'mobx';
-import { Button, FormErrorMessage, Input } from 'ui-kit';
+import { Button, Input } from 'ui-kit';
+import { useSnackbar } from 'notistack';
+import { getErrorMessage } from '../../utils/errors';
 import { usernameGenerator } from '../../utils/users';
 import Routes from '../../routes';
 import useKeystone from '../../keystone';
-import { login, signup, redirectToInitial } from '../../keystone/service';
+import { signup, redirectToInitial } from '../../keystone/service';
 import useStyles from './styles';
 
 const Signup = observer(() => {
   const classes = useStyles();
   const root = useKeystone();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const onLogin = () => {
+  const onSignup = async () => {
     if (username.length > 0) {
-      login(root, username, password);
+      try {
+        await signup(root, username, password);
+      } catch (error) {
+        enqueueSnackbar(getErrorMessage(error));
+      }
     }
   };
 
-  const onGuestEnter = () => {
+  const onGuestEnter = async () => {
     const generatedUsername = usernameGenerator();
-    signup(root, generatedUsername);
+    try {
+      await signup(root, generatedUsername);
+    } catch (error) {
+      enqueueSnackbar(getErrorMessage(error));
+    }
   };
 
   useEffect(() =>
@@ -68,9 +79,8 @@ const Signup = observer(() => {
             value={password}
           />
         </div>
-        <FormErrorMessage message={root.ui.authError} />
         <div className={classes.footer}>
-          <Button variant="submit" fullWidth size="large" onClick={onLogin}>
+          <Button variant="submit" fullWidth size="large" onClick={onSignup}>
             Create account
           </Button>
 

@@ -30,9 +30,8 @@ class Api {
     params: AxiosRequestConfig | FormData | Record<string, unknown> = {},
     config: AxiosRequestConfig = {},
   ): Promise<{ data: unknown }> {
-    return this.api[method](address, params, config).catch((e) => {
-      throw e;
-    });
+    const response = await this.api[method](address, params, config);
+    return response;
   }
 
   public async get(

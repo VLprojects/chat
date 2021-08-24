@@ -2,7 +2,6 @@ import cls from 'classnames';
 import ChannelsList from 'components/ChannelList';
 import CreateChannelForm from 'components/CreateChannelForm';
 import DirectList from 'components/DirectList';
-import ChatHeader from 'components/Header';
 import SubHeader from 'components/SubHeader';
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
@@ -40,7 +39,6 @@ const PageChannels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }
 
   return (
     <>
-      <ChatHeader title="Chat" />
       {settings.displayDirect && (
         <SubHeader>
           <div className={classes.subheader}>

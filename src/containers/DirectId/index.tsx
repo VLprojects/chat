@@ -1,5 +1,4 @@
 import ChatFooter from 'components/Footer';
-import ChatHeader from 'components/Header';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
 import SubHeader from 'components/SubHeader';
@@ -19,7 +18,6 @@ const PageDirectId = observer(() => {
 
   return (
     <>
-      <ChatHeader title="Chat" />
       <SubHeader onBack={() => history.push('/direct')}>
         <div>Participant name</div>
       </SubHeader>

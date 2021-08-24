@@ -1,4 +1,6 @@
-import { makeStyles } from '@material-ui/core';
+import theme from 'theme/theme';
+import { SnackbarProvider } from 'notistack';
+import { CssBaseline, ThemeProvider, makeStyles } from '@material-ui/core';
 import { Router } from 'components/Router';
 import AuthLayout from 'containers/AuthLayout';
 import ChannelPage from 'containers/ChannelPage';
@@ -18,13 +20,16 @@ import { findAppInitialData } from './utils/common';
 const useStyles = makeStyles(
   {
     container: {
-      maxWidth: 350,
+      width: '100%',
       height: '100%',
       background: COLOURS.MAIN_BG,
       overflow: 'auto',
       position: 'relative',
       minHeight: 400,
     },
+    snackbar: {
+      maxWidth: 310,
+    }
   },
   { name: 'Chat' },
 );
@@ -54,34 +59,35 @@ export const Chat: FC<IChatProps> = observer((props) => {
     }
   });
 
-  if (!root.auth.apiToken) {
-    return <div>Can&apos;t initialize app.</div>;
-  }
-
   return (
-    <div className={classes.container}>
-      <AuthLayout>
-        <SocketLayout>
-          <Router route={Routes.Profile}>
-            <Profile />
-          </Router>
-          <Router route={`${Routes.Users}/:id`}>
-            <UsersListPage />
-          </Router>
-          <Router route={Routes.Users}>
-            <UsersListPage />
-          </Router>
-          <Router route={Routes.Channels}>
-            <Channels channelTabType={Routes.Channels} />
-          </Router>
-          <Router route={Routes.Direct}>
-            <Channels channelTabType={Routes.Direct} />
-          </Router>
-          <Router route={`${Routes.Channels}/:id`}>
-            <ChannelPage />
-          </Router>
-        </SocketLayout>
-      </AuthLayout>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <SnackbarProvider dense classes={{ root: classes.snackbar }}>
+        <div className={classes.container}>
+          <AuthLayout>
+            <SocketLayout>
+              <Router route={Routes.Profile}>
+                <Profile />
+              </Router>
+              <Router route={`${Routes.Users}/:id`}>
+                <UsersListPage />
+              </Router>
+              <Router route={Routes.Users}>
+                <UsersListPage />
+              </Router>
+              <Router route={Routes.Channels}>
+                <Channels channelTabType={Routes.Channels} />
+              </Router>
+              <Router route={Routes.Direct}>
+                <Channels channelTabType={Routes.Direct} />
+              </Router>
+              <Router route={`${Routes.Channels}/:id`}>
+                <ChannelPage />
+              </Router>
+            </SocketLayout>
+          </AuthLayout>
+        </div>
+      </SnackbarProvider>
+    </ThemeProvider>
   );
 });

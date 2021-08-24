@@ -1,3 +1,4 @@
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { Router } from 'components/Router';
 import Login from 'containers/Login';
 import Signup from 'containers/Signup';
@@ -7,7 +8,6 @@ import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import Routes from 'routes';
-import { WineLoader } from 'ui-kit';
 import { usernameGenerator } from 'utils/users';
 
 interface Props {
@@ -38,7 +38,7 @@ const AuthLayout = observer(({ children }: Props): JSX.Element => {
   }
 
   if (root.auth.isAnonymousAllowed) {
-    return <WineLoader />;
+    return <LinearProgress />;
   }
 
   return (

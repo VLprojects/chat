@@ -1,26 +1,33 @@
+import { useSnackbar } from 'notistack';
 import { autorun, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { ReactNode, useEffect } from 'react';
-import { WineLoader } from 'ui-kit';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import api from '../../api';
 import { IRGetNode } from '../../types/serverResponses';
 import useKeystone from '../../keystone';
 import { getInitialData } from '../../keystone/service';
+import { getErrorMessage } from '../../utils/errors';
 
 interface Props {
   children: ReactNode;
 }
 
 const SocketLayout = observer(({ children }: Props): JSX.Element => {
-  const { socket, auth } = useKeystone();
+  const { socket, auth, ui } = useKeystone();
   const root = useKeystone();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() =>
     autorun(async () => {
       if (!socket.isSocketConnected) {
-        const response = (await api.get(`get-node`)) as IRGetNode;
-        if (response.uri) {
-          socket.connect(response.uri, auth.accessToken);
+        try {
+          const response = (await api.get(`get-node`)) as IRGetNode;
+          if (response.uri) {
+            socket.connect(response.uri, auth.accessToken);
+          }
+        } catch (error) {
+          enqueueSnackbar(getErrorMessage(error));
         }
       }
     }),
@@ -31,16 +38,23 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
       () => socket.isSocketConnected,
       (isSocketConnected) => {
         if (isSocketConnected) {
-          getInitialData(root);
+          (async () => {
+            try {
+              await getInitialData(root);
+              ui.setInitialized(true);
+            } catch (error) {
+              enqueueSnackbar(getErrorMessage(error));
+            }
+          })();
         }
       },
     ),
   );
 
-  if (!socket.isSocketConnected) {
+  if (!ui.initialized) {
     return (
       <>
-        <WineLoader />
+        <LinearProgress />
       </>
     );
   }

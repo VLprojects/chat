@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { FC, useCallback, useState } from 'react';
-import { Button, FormErrorMessage, Input } from 'ui-kit';
+import { Button, Input } from 'ui-kit';
 import useStyles from './styles';
 
 interface ICreateChannelForm {
@@ -26,7 +26,6 @@ const CreateChannelForm: FC<ICreateChannelForm> = observer((props) => {
           <div className={classes.field}>
             <Input fullWidth placeholder="Channel name" onChange={setChannelName} value={channelName} />
           </div>
-          <FormErrorMessage message="" />
           <div>
             <Button fullWidth variant="submit" onClick={onCreateChannel}>
               Create

@@ -2,7 +2,9 @@ import { Grid } from '@material-ui/core';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
-import { Button, FormErrorMessage } from 'ui-kit';
+import { Button } from 'ui-kit';
+import { useSnackbar } from 'notistack';
+import { getErrorMessage } from '../../utils/errors';
 import useKeystone from '../../keystone';
 import { sendMessage } from '../../keystone/service';
 import useStyles from './styles';
@@ -16,15 +18,20 @@ const MessageInput: FC<IMessageInput> = (props) => {
   const classes = useStyles();
   const [message, setMessage] = useState('');
   const root = useKeystone();
+  const { enqueueSnackbar } = useSnackbar();
 
   const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
 
-  const onMessageSubmit = () => {
+  const onMessageSubmit = async () => {
     if (message.length) {
-      sendMessage(root, channelId, message);
-      setMessage('');
+      try {
+        await sendMessage(root, channelId, message);
+        setMessage('');
+      } catch (error) {
+        enqueueSnackbar(getErrorMessage(error));
+      }
     }
   };
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -52,7 +59,6 @@ const MessageInput: FC<IMessageInput> = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <FormErrorMessage message={root.ui.messageSendError} />
     </>
   );
 };

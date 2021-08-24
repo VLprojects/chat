@@ -1,6 +1,6 @@
 import { Root } from './index';
 import api from '../api';
-import { IRChannel, IRGetInitial, IRLogin } from '../types/serverResponses';
+import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
 import Routes from '../routes';
 
 export const getInitialData = async (root: Root): Promise<void> => {
@@ -14,45 +14,35 @@ export const getInitialData = async (root: Root): Promise<void> => {
 };
 
 export const login = async (root: Root, username: string, password?: string): Promise<void> => {
-  try {
-    const response = (await api.post(`login`, {
-      api_token: root.auth.apiToken,
-      username,
-      password,
-    })) as IRLogin;
-    root.auth.setAccessToken(response.access_token);
-  } catch (e) {
-    root.ui.setAuthError(e.message);
-  }
+  const response = (await api.post(`login`, {
+    api_token: root.auth.apiToken,
+    username,
+    password,
+  })) as IRLogin;
+  root.auth.setAccessToken(response.access_token);
 };
 
 export const signup = async (root: Root, username: string, password?: string): Promise<void> => {
-  try {
-    const response = (await api.post(`signup`, {
-      api_token: root.auth.apiToken,
-      username,
-      password,
-    })) as IRLogin;
-    root.auth.setAccessToken(response.access_token);
-  } catch (e) {
-    root.ui.setAuthError(e.message);
-  }
+  const response = (await api.post(`signup`, {
+    api_token: root.auth.apiToken,
+    username,
+    password,
+  })) as IRLogin;
+  root.auth.setAccessToken(response.access_token);
 };
 
-export const saveProfile = async (root: Root, username: string, avatar?: string): Promise<void> => {
-  const sendData: { username?: string; avatarUrl?: string } = {};
-  if (username) {
-    sendData.username = username;
+export const saveProfile = async (root: Root, displayName: string, avatar?: string): Promise<void> => {
+  const sendData: { displayName?: string; avatarUrl?: string } = {};
+  if (displayName) {
+    sendData.displayName = displayName;
   }
+
   if (avatar) {
     sendData.avatarUrl = avatar;
   }
-  try {
-    await api.patch(`profile`, sendData);
-    root.ui.setProfileError('');
-  } catch (e) {
-    root.ui.setProfileError(e.messsage);
-  }
+
+  const user = await api.patch(`profile`, sendData) as IRUser;
+  root.auth.setMe(user);
 };
 
 export const joinChannel = async (root: Root, id: string): Promise<void> => {
@@ -86,12 +76,7 @@ export const redirectToInitial = (root: Root): void => {
 };
 
 export const sendMessage = async (root: Root, channelId: string, text: string): Promise<void> => {
-  root.ui.setMessageSendError('');
-  try {
-    await api.post(`messages/send`, { channelId, text });
-  } catch (e) {
-    root.ui.setMessageSendError(JSON.stringify(e));
-  }
+  await api.post(`messages/send`, { channelId, text });
 };
 
 export default {};

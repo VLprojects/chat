@@ -1,5 +1,4 @@
 import ChatFooter from 'components/Footer';
-import ChatHeader from 'components/Header';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
 import useKeystone from 'keystone';
@@ -14,7 +13,7 @@ const MAX_USERS_ON_PREVIEW = 2;
 
 const ChannelPage: FC = observer(() => {
   const classes = useStyles();
-  const { ui, chat } = useKeystone();
+  const { ui, chat, auth, settings } = useKeystone();
 
   const channelId = String(ui.params.id);
   const currentChannel = chat.channels.get(channelId);
@@ -25,18 +24,19 @@ const ChannelPage: FC = observer(() => {
   const onAvatarsClick = () => {
     ui.setRoute(`${Routes.Users}/${channelId}`);
   };
-  const backClickHandler = () => {
-    ui.setRoute(Routes.Channels);
-  };
 
   return (
     <div className={classes.pageWrapper}>
-      <ChatHeader title="Chat" />
       <div className={classes.subHeaderWrapper}>
-        <div className={classes.subHeaderBack} onClick={backClickHandler}>
-          <Image src={ChevronLeftIcon} alt="route icon" />
-        </div>
+        {settings.displayChannelList && (
+          <div className={classes.subHeaderBack} onClick={() => ui.setRoute(Routes.Channels)}>
+            <Image src={ChevronLeftIcon} alt="route icon" />
+          </div>
+        )}
         <div className={classes.chatNameTitle}>{currentChannel?.name}</div>
+        <div className={classes.avatarWrapper} onClick={() => ui.setRoute(Routes.Profile)}>
+          <Avatar key={auth.me.id} url={auth.me.avatarUrl} />
+        </div>
         <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
           {currentChannel.users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
             <Avatar key={item.id} url={item.current.avatarUrl} />
