@@ -37,14 +37,14 @@ const ChannelPage: FC = observer(() => {
         <div className={classes.avatarWrapper} onClick={() => ui.setRoute(Routes.Profile)}>
           <Avatar key={auth.me.id} url={auth.me.avatarUrl} />
         </div>
-        <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
+        {/* <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
           {currentChannel.users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
             <Avatar key={item.id} url={item.current.avatarUrl} />
           ))}
           {currentChannel.users.length > MAX_USERS_ON_PREVIEW && (
             <Avatar counter={currentChannel.users.length - MAX_USERS_ON_PREVIEW} />
           )}
-        </div>
+        </div> */}
       </div>
 
       <MessageList messages={currentChannel.sortedMessages} />

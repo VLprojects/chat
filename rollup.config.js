@@ -13,6 +13,7 @@ import alias from '@rollup/plugin-alias';
 import copy from 'rollup-plugin-copy';
 import analyze from 'rollup-plugin-analyzer';
 import dotenv from 'rollup-plugin-dotenv';
+import image from '@rollup/plugin-image';
 
 const config = {
   input: './src/lib/index.tsx',
@@ -37,9 +38,10 @@ const config = {
       },
     }),
     external(),
-    url({ include: ['**/*.woff', '**/*.woff2'] }),
+    url({ include: ['**/*.woff', '**/*.woff2'], limit: Infinity }),
     svgr(),
     dotenv(),
+    image(),
     postcss({
       plugins: [autoprefixer()],
       modules: true,

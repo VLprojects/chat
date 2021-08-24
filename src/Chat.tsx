@@ -29,7 +29,7 @@ const useStyles = makeStyles(
     },
     snackbar: {
       maxWidth: 310,
-    }
+    },
   },
   { name: 'Chat' },
 );
@@ -62,8 +62,11 @@ export const Chat: FC<IChatProps> = observer((props) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <SnackbarProvider dense classes={{ root: classes.snackbar }}>
-        <div className={classes.container}>
+      <div className={classes.container}>
+        <SnackbarProvider
+          dense
+          classes={{ root: classes.snackbar }}
+        >
           <AuthLayout>
             <SocketLayout>
               <Router route={Routes.Profile}>
@@ -86,8 +89,8 @@ export const Chat: FC<IChatProps> = observer((props) => {
               </Router>
             </SocketLayout>
           </AuthLayout>
-        </div>
-      </SnackbarProvider>
+        </SnackbarProvider>
+      </div>
     </ThemeProvider>
   );
 });
