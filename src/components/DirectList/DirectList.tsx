@@ -1,12 +1,11 @@
+import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
-import { HEADER_HEIGHT, SUBHEADER_HEIGHT } from '../../theme/consts';
-import Footer from './components/Footer';
-
-interface IChannelsList {
-  list: [];
-  onSelected: (id: string) => void;
-}
+import useKeystone from '../../keystone';
+import Routes from '../../routes';
+import { Avatar } from '../../ui-kit';
+import { getChatWithUser, getDirectChannelName } from './service';
+import useStyles from './styles';
 
 type TDirectListUser = {
   id: string;
@@ -15,32 +14,31 @@ type TDirectListUser = {
   online: string;
 };
 
-const DirectList: FC<IChannelsList> = (props) => {
-  const { list, onSelected } = props;
+const DirectList: FC = (props) => {
+  const classes = useStyles();
+  const root = useKeystone();
+  // const [filteredList, setFilteredList] = useState(getDirectChannelList(root));
+
+  const clickRowHandler = (channelId: string) => () => {
+    root.ui.setRoute(`${Routes.Channels}/${channelId}`);
+  };
 
   return (
     <div
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: `calc(100% - ${HEADER_HEIGHT}px - ${SUBHEADER_HEIGHT}px)`,
       }}
     >
       <div style={{ flexGrow: 1 }}>
-        {list && (
-          <ul>
-            {list.map((item: TDirectListUser) => (
-              <li aria-hidden="true" onClick={() => onSelected(item.id)}>
-                <div>
-                  <div>{item.username}</div>
-                  <div>{item.about}</div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+        {root.chat.directChannelsList.map((channel) => (
+          <div key={channel.id} className={classes.row} onClick={clickRowHandler(channel.id)}>
+            <Avatar url={getChatWithUser(root, channel.id)?.avatarUrl} size="large" />
+            <Typography className={classes.channelTitle}>{getDirectChannelName(root, channel.id)}</Typography>
+          </div>
+        ))}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

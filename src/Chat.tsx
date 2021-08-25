@@ -1,6 +1,7 @@
 import theme from 'theme/theme';
 import { SnackbarProvider } from 'notistack';
 import { CssBaseline, ThemeProvider, makeStyles } from '@material-ui/core';
+import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import { Router } from 'components/Router';
 import AuthLayout from 'containers/AuthLayout';
 import ChannelPage from 'containers/ChannelPage';
@@ -45,6 +46,10 @@ export const Chat: FC<IChatProps> = observer((props) => {
   const classes = useStyles();
   const root = useKeystone();
 
+  const generateClassName = createGenerateClassName({
+    productionPrefix: 'vlprojects-chat',
+  });
+
   useEffect(() => {
     const { apiTokenFromAttr, channelIdFromAttr } = findAppInitialData();
     root.auth.setApiToken(apiTokenFromAttr || apiToken || '');
@@ -60,37 +65,36 @@ export const Chat: FC<IChatProps> = observer((props) => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <div className={classes.container}>
-        <SnackbarProvider
-          dense
-          classes={{ root: classes.snackbar }}
-        >
-          <AuthLayout>
-            <SocketLayout>
-              <Router route={Routes.Profile}>
-                <Profile />
-              </Router>
-              <Router route={`${Routes.Users}/:id`}>
-                <UsersListPage />
-              </Router>
-              <Router route={Routes.Users}>
-                <UsersListPage />
-              </Router>
-              <Router route={Routes.Channels}>
-                <Channels channelTabType={Routes.Channels} />
-              </Router>
-              <Router route={Routes.Direct}>
-                <Channels channelTabType={Routes.Direct} />
-              </Router>
-              <Router route={`${Routes.Channels}/:id`}>
-                <ChannelPage />
-              </Router>
-            </SocketLayout>
-          </AuthLayout>
-        </SnackbarProvider>
-      </div>
-    </ThemeProvider>
+    <StylesProvider generateClassName={generateClassName}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className={classes.container}>
+          <SnackbarProvider dense classes={{ root: classes.snackbar }}>
+            <AuthLayout>
+              <SocketLayout>
+                <Router route={Routes.Profile}>
+                  <Profile />
+                </Router>
+                <Router route={`${Routes.Users}/:id`}>
+                  <UsersListPage />
+                </Router>
+                <Router route={Routes.Users}>
+                  <UsersListPage />
+                </Router>
+                <Router route={Routes.Channels}>
+                  <Channels channelTabType={Routes.Channels} />
+                </Router>
+                <Router route={Routes.Direct}>
+                  <Channels channelTabType={Routes.Direct} />
+                </Router>
+                <Router route={`${Routes.Channels}/:id`}>
+                  <ChannelPage />
+                </Router>
+              </SocketLayout>
+            </AuthLayout>
+          </SnackbarProvider>
+        </div>
+      </ThemeProvider>
+    </StylesProvider>
   );
 });

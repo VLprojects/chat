@@ -1,7 +1,7 @@
-import { Root } from './index';
 import api from '../api';
-import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
 import Routes from '../routes';
+import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
+import { Root } from './index';
 
 export const getInitialData = async (root: Root): Promise<void> => {
   const initial = (await api.get(`get-initial`)) as IRGetInitial;
@@ -41,7 +41,7 @@ export const saveProfile = async (root: Root, displayName: string, avatar?: stri
     sendData.avatarUrl = avatar;
   }
 
-  const user = await api.patch(`profile`, sendData) as IRUser;
+  const user = (await api.patch(`profile`, sendData)) as IRUser;
   root.auth.setMe(user);
 };
 

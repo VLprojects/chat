@@ -1,4 +1,3 @@
-import ChatFooter from 'components/Footer';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
 import useKeystone from 'keystone';
@@ -7,19 +6,23 @@ import React, { FC } from 'react';
 import Routes from 'routes';
 import { Avatar, Image } from 'ui-kit';
 import ChevronLeftIcon from 'ui-kit/assets/icons/chevron-left.svg';
+import { getChatWithUser, getDirectChannelName } from '../../components/DirectList/service';
+import { ChannelTypeEnum } from '../../types/enums';
 import useStyles from './styles';
 
 const MAX_USERS_ON_PREVIEW = 2;
 
 const ChannelPage: FC = observer(() => {
   const classes = useStyles();
-  const { ui, chat, auth, settings } = useKeystone();
+  const root = useKeystone();
+  const { ui, chat, settings } = root;
 
   const channelId = String(ui.params.id);
   const currentChannel = chat.channels.get(channelId);
   if (!currentChannel) {
     return null;
   }
+  const backUrl = currentChannel.type === ChannelTypeEnum.Direct ? Routes.Direct : Routes.Channels;
 
   const onAvatarsClick = () => {
     ui.setRoute(`${Routes.Users}/${channelId}`);
@@ -29,28 +32,34 @@ const ChannelPage: FC = observer(() => {
     <div className={classes.pageWrapper}>
       <div className={classes.subHeaderWrapper}>
         {settings.displayChannelList && (
-          <div className={classes.subHeaderBack} onClick={() => ui.setRoute(Routes.Channels)}>
+          <div className={classes.subHeaderBack} onClick={() => ui.setRoute(backUrl)}>
             <Image src={ChevronLeftIcon} alt="route icon" />
           </div>
         )}
-        <div className={classes.chatNameTitle}>{currentChannel?.name}</div>
-        <div className={classes.avatarWrapper} onClick={() => ui.setRoute(Routes.Profile)}>
-          <Avatar key={auth.me.id} url={auth.me.avatarUrl} />
+        <div className={classes.chatNameTitle}>
+          {currentChannel.type === ChannelTypeEnum.Direct
+            ? getDirectChannelName(root, currentChannel.id)
+            : currentChannel?.name}
         </div>
-        {/* <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
-          {currentChannel.users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
-            <Avatar key={item.id} url={item.current.avatarUrl} />
-          ))}
-          {currentChannel.users.length > MAX_USERS_ON_PREVIEW && (
-            <Avatar counter={currentChannel.users.length - MAX_USERS_ON_PREVIEW} />
-          )}
-        </div> */}
+
+        {currentChannel.type === ChannelTypeEnum.Direct ? (
+          <Avatar url={getChatWithUser(root, currentChannel.id)?.avatarUrl} />
+        ) : (
+          <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
+            {currentChannel.users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
+              <Avatar key={item.id} url={item.current.avatarUrl} />
+            ))}
+            {currentChannel.users.length > MAX_USERS_ON_PREVIEW && (
+              <Avatar counter={currentChannel.users.length - MAX_USERS_ON_PREVIEW} />
+            )}
+          </div>
+        )}
       </div>
 
       <MessageList messages={currentChannel.sortedMessages} />
-      <ChatFooter>
+      <div className={classes.footer}>
         <MessageInput channelId={channelId} />
-      </ChatFooter>
+      </div>
     </div>
   );
 });

@@ -6,4 +6,5 @@ export enum MessageTypeEnum {
 export enum ChannelTypeEnum {
   Public = 'public',
   Private = 'private',
+  Direct = 'direct',
 }

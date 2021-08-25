@@ -56,6 +56,11 @@ export default makeStyles(
       '& > div:not(:first-child)': { marginLeft: -8 },
     },
     subHeaderBack: { cursor: 'pointer' },
+    footer: {
+      padding: '14px 16px',
+      background: COLOURS.SURFACE_PRIMARY,
+      borderRadius: '15px 15px 0px 0px',
+    },
   },
   { name: 'ChannelsId' },
 );

@@ -36,6 +36,8 @@ const MessageInput: FC<IMessageInput> = (props) => {
   };
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
       onMessageSubmit();
     }
   };
