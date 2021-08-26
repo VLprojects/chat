@@ -50,6 +50,7 @@ export default makeStyles(
       borderRadius: '0px 0px 15px 15px',
     },
     avatarWrapper: {
+      marginRight: '10px',
       display: 'flex',
       alignItems: 'center',
       cursor: 'pointer',

@@ -6,6 +6,7 @@ export default makeStyles(
     channelsList: {
       display: 'flex',
       flexDirection: 'column',
+      flexGrow: 1,
     },
     channelRow: {
       display: 'flex',

@@ -12,8 +12,8 @@ export default class Channel extends Model({
   id: prop<string>(),
   externalId: prop<string>(''),
   type: prop<ChannelTypeEnum>(ChannelTypeEnum.Public),
-  users: prop<Ref<User>[]>(() => []), // todo convert to map or delete
   messages: prop(() => objectMap<Message>()),
+  users: prop(() => objectMap<Ref<User>>()),
 }) {
   @modelAction
   addMessages(messages: IRChannelMessage[]): void {
@@ -32,6 +32,13 @@ export default class Channel extends Model({
     });
   }
 
+  @modelAction
+  addUsers(userIds: string[]): void {
+    userIds.forEach((userId) => {
+      this.users.set(userId, userRef(getRoot(this).chat.getUserLazy(userId)));
+    });
+  }
+
   @computed
   get sortedMessages(): Message[] {
     return Array.from(this.messages.values()).sort((a: Message, b: Message) =>
@@ -42,5 +49,10 @@ export default class Channel extends Model({
   @computed
   get messagesCount(): number {
     return this.messages.size;
+  }
+
+  @computed
+  get userList(): User[] {
+    return Array.from(this.users.values()).map((ref) => ref.current);
   }
 }

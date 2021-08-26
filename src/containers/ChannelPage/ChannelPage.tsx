@@ -46,11 +46,11 @@ const ChannelPage: FC = observer(() => {
           <Avatar url={getChatWithUser(root, currentChannel.id)?.avatarUrl} />
         ) : (
           <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
-            {currentChannel.users.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
-              <Avatar key={item.id} url={item.current.avatarUrl} />
+            {currentChannel.userList.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
+              <Avatar key={item.id} url={item.avatarUrl} />
             ))}
-            {currentChannel.users.length > MAX_USERS_ON_PREVIEW && (
-              <Avatar counter={currentChannel.users.length - MAX_USERS_ON_PREVIEW} />
+            {currentChannel.userList.length > MAX_USERS_ON_PREVIEW && (
+              <Avatar counter={currentChannel.userList.length - MAX_USERS_ON_PREVIEW} />
             )}
           </div>
         )}

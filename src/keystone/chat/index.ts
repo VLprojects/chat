@@ -1,12 +1,12 @@
 import api from 'api';
-import { action, computed, observable } from 'mobx';
-import { model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
+import { computed, observable } from 'mobx';
+import { model, Model, modelAction, objectMap, prop } from 'mobx-keystone';
 import { chunkProcessor, IDisposer } from 'mobx-utils';
 import { ChannelTypeEnum } from '../../types/enums';
 import { IRChannel, IRPub, IRUser } from '../../types/serverResponses';
 import Channel from './channel';
 import Pub from './pub';
-import User, { userRef } from './user';
+import User from './user';
 
 @model('Chat')
 export default class Chat extends Model({
@@ -16,15 +16,10 @@ export default class Chat extends Model({
 }) {
   @observable fetchingQueueUser: string[] = [];
 
-  @action setFetchingQueueUser(queue: string[]): void {
-    this.fetchingQueueUser = queue;
-  }
-
   private startFetching(): IDisposer {
     const fetchUsers = async (ids: string[]) => {
       const newUsers = (await api.post('users/fetch', { ids })) as IRUser[];
       this.addUsers(newUsers);
-      this.setFetchingQueueUser([]);
     };
 
     return chunkProcessor(
@@ -54,7 +49,9 @@ export default class Chat extends Model({
 
   @computed
   get publicChannelsList(): Channel[] {
-    return Array.from(this.channels.values()).filter((ch) => ch.type === ChannelTypeEnum.Public);
+    return Array.from(this.channels.values()).filter((ch) =>
+      [ChannelTypeEnum.Public, ChannelTypeEnum.Blank].includes(ch.type),
+    );
   }
 
   @computed
@@ -99,47 +96,19 @@ export default class Chat extends Model({
     });
   }
 
-  private getUserRefs(channel: IRChannel): Ref<User>[] {
-    const userRefs: Ref<User>[] = [];
-    channel.userIds.forEach((userId) => {
-      const userModel = this.getUserLazy(userId);
-      if (userModel) {
-        userRefs.push(userRef(userModel));
-      }
-    });
-    return userRefs;
-  }
-
   @modelAction
   addChannels(channels: IRChannel[]): void {
     channels.forEach((channel) => {
-      // users
-      const userRefs = this.getUserRefs(channel);
-
-      // channel
       const channelModel = new Channel({
         id: String(channel.id),
         name: channel.name,
         type: channel.type,
-        users: userRefs,
       });
 
       this.channels.set(channel.id, channelModel);
       channelModel.addMessages(channel.messages);
+      channelModel.addUsers(channel.userIds);
     });
-  }
-
-  @modelAction
-  addChannel(channel: IRChannel): void {
-    const userRefs = this.getUserRefs(channel);
-
-    const channelModel = new Channel({
-      id: String(channel.id),
-      name: channel.name,
-      type: channel.type,
-      users: userRefs,
-    });
-    this.channels.set(channel.id, channelModel);
   }
 
   @modelAction

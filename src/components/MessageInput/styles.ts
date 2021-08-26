@@ -13,6 +13,7 @@ export default makeStyles(
       border: 'none',
       resize: 'none',
       padding: 0,
+      width: '100%',
     },
     sendButton: {
       fontSize: '16px !important',

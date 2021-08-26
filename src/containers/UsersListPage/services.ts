@@ -12,7 +12,7 @@ export const createNewDirectChannel = async (root: Root, chatWithUser: User): Pr
 
 export const searchDirectChannelWithUser = (root: Root, chatWithUser: User): Channel | undefined => {
   const directChannels = root.chat.directChannelsList;
-  return directChannels.find((channel) => channel.users.find((u) => u.current.id === chatWithUser.id));
+  return directChannels.find((channel) => channel.userList.find((u) => u.id === chatWithUser.id));
 };
 
 export const createOrOpenDirectChat = async (root: Root, chatWithUser: User): Promise<void> => {
@@ -20,6 +20,6 @@ export const createOrOpenDirectChat = async (root: Root, chatWithUser: User): Pr
   if (channel?.id) return root.ui.setRoute(`${Routes.Channels}/${channel.id}`);
 
   const newChannel = await createNewDirectChannel(root, chatWithUser);
-  root.chat.addChannel(newChannel);
+  root.chat.addChannels([newChannel]);
   return root.ui.setRoute(`${Routes.Channels}/${newChannel.id}`);
 };

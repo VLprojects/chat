@@ -10,8 +10,6 @@ export default makeStyles(
       alignItems: 'center',
       height: SUBHEADER_HEIGHT,
       background: COLOURS.SURFACE_SECONDARY4,
-      position: 'fixed',
-      bottom: 0,
       width: '100%',
     },
     buttonWrapper: {

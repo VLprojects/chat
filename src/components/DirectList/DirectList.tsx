@@ -24,21 +24,13 @@ const DirectList: FC = (props) => {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div style={{ flexGrow: 1 }}>
-        {root.chat.directChannelsList.map((channel) => (
-          <div key={channel.id} className={classes.row} onClick={clickRowHandler(channel.id)}>
-            <Avatar url={getChatWithUser(root, channel.id)?.avatarUrl} size="large" />
-            <Typography className={classes.channelTitle}>{getDirectChannelName(root, channel.id)}</Typography>
-          </div>
-        ))}
-      </div>
-      {/* <Footer /> */}
+    <div className={classes.directList}>
+      {root.chat.directChannelsList.map((channel) => (
+        <div key={channel.id} className={classes.row} onClick={clickRowHandler(channel.id)}>
+          <Avatar url={getChatWithUser(root, channel.id)?.avatarUrl} size="large" />
+          <Typography className={classes.channelTitle}>{getDirectChannelName(root, channel.id)}</Typography>
+        </div>
+      ))}
     </div>
   );
 };

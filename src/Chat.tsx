@@ -1,7 +1,5 @@
-import theme from 'theme/theme';
-import { SnackbarProvider } from 'notistack';
-import { CssBaseline, ThemeProvider, makeStyles } from '@material-ui/core';
-import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
+import { CssBaseline, makeStyles, ThemeProvider } from '@material-ui/core';
+import { createGenerateClassName, StylesProvider } from '@material-ui/core/styles';
 import { Router } from 'components/Router';
 import AuthLayout from 'containers/AuthLayout';
 import ChannelPage from 'containers/ChannelPage';
@@ -10,8 +8,10 @@ import Profile from 'containers/Profile';
 import SocketLayout from 'containers/SocketLayout';
 import UsersListPage from 'containers/UsersListPage';
 import { observer } from 'mobx-react-lite';
+import { SnackbarProvider } from 'notistack';
 import React, { FC, useEffect } from 'react';
 import Routes from 'routes';
+import theme from 'theme/theme';
 import useKeystone from './keystone';
 import { redirectToInitial } from './keystone/service';
 import { COLOURS } from './theme/consts';
@@ -27,6 +27,8 @@ const useStyles = makeStyles(
       overflow: 'auto',
       position: 'relative',
       minHeight: 400,
+      display: 'flex',
+      flexDirection: 'column',
     },
     snackbar: {
       maxWidth: 310,

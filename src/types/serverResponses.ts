@@ -23,6 +23,12 @@ export interface ISEMessage {
   message: IRChannelMessage;
 }
 
+
+export interface ISENewChannelUser {
+  channelId: string;
+  userId: string;
+}
+
 export interface IRChannel {
   id: string;
   name: string;

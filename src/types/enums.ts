@@ -7,4 +7,5 @@ export enum ChannelTypeEnum {
   Public = 'public',
   Private = 'private',
   Direct = 'direct',
+  Blank = 'blank',
 }
