@@ -8,7 +8,7 @@ import User from './chat/user';
 export default class Auth extends Model({
   me: prop<User>(() => new User({})),
   accessToken: prop<string>(''),
-  apiToken: prop<string>('').withSetter(),
+  appId: prop<string>('').withSetter(),
   isAuthorized: prop<boolean>(false).withSetter(),
   isAnonymousAllowed: prop<boolean>(false).withSetter(),
 }) {

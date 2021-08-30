@@ -4,5 +4,5 @@ export enum Cookie {
 }
 
 export const APP_ID = 'livedigital-chat';
-export const rootDivAttrApiToken = 'data-apitoken';
+export const rootDivAttrAppId = 'data-apitoken';
 export const rootDivAttrChatId = 'data-chatid';

@@ -15,7 +15,7 @@ export const getInitialData = async (root: Root): Promise<void> => {
 
 export const login = async (root: Root, username: string, password?: string): Promise<void> => {
   const response = (await api.post(`login`, {
-    api_token: root.auth.apiToken,
+    app_id: root.auth.appId,
     username,
     password,
   })) as IRLogin;
@@ -24,7 +24,7 @@ export const login = async (root: Root, username: string, password?: string): Pr
 
 export const signup = async (root: Root, username: string, password?: string): Promise<void> => {
   const response = (await api.post(`signup`, {
-    api_token: root.auth.apiToken,
+    app_id: root.auth.appId,
     username,
     password,
   })) as IRLogin;

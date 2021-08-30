@@ -26,7 +26,7 @@ const rootStore = createRootStore();
 const context = React.createContext(rootStore);
 const useKeystone = (): Root => React.useContext(context);
 
-if (process.env.REACT_APP_LOCAL_DEV) {
+if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line no-console
   onSnapshot(rootStore, (newSnapshot) => console.log('snapshot', newSnapshot));
 }
