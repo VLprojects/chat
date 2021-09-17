@@ -11,6 +11,7 @@ import svgr from '@svgr/rollup';
 import url from '@rollup/plugin-url';
 import alias from '@rollup/plugin-alias';
 import copy from 'rollup-plugin-copy';
+import json from '@rollup/plugin-json';
 import analyze from 'rollup-plugin-analyzer';
 import dotenv from 'rollup-plugin-dotenv';
 import image from '@rollup/plugin-image';
@@ -42,6 +43,7 @@ const config = {
     svgr(),
     dotenv(),
     image(),
+    json(),
     postcss({
       plugins: [autoprefixer()],
       modules: true,
