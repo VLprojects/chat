@@ -31,7 +31,7 @@ const MessageList: FC<MessageListProps> = (props) => {
 
   return (
     <div className={classes.messages}>
-      <Scrollbars autoHide ref={scrollbarRef} className={classes.scrollbars}>
+      <Scrollbars autoHide ref={scrollbarRef}>
         <div className={classes.messagesListWrapper}>
           {messages &&
             messages.map((msg, index: number) => {
@@ -44,7 +44,7 @@ const MessageList: FC<MessageListProps> = (props) => {
                   <UserMessage
                     short={msg.user.current.id === messages[index - 1]?.user?.current.id}
                     key={msg.id}
-                    own={msg.user.current.id === auth.me.id}
+                    own={msg.user.current.id === `${auth.me.id}`}
                     user={msg.user.current}
                     message={msg.text}
                     date={msg.createdAt}

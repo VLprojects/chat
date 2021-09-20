@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { COLOURS } from '../../../theme/consts';
 
 export default makeStyles(
   {
@@ -12,13 +13,14 @@ export default makeStyles(
       border: 0,
       letterSpacing: '0.01em',
       backgroundColor: 'transparent',
+      transition: 'all 0.2s ease-in-out',
       '&:hover': {
-        background: 'radial-gradient(100% 167.95% at 0% 50%, #00e0ff 0%, #bf51f2 74.27%, #f65fc7 99.99%, #f960c5 100%)',
-        boxShadow: '0px 10px 25px 2px #7918aa',
+        background: 'radial-gradient(100% 167.95% at 0% 50%, #535FC4 0%, #535FC4 0.01%, #7D40C8 52.98%, #A836AF 100%);',
+        boxShadow: '0px 2px 14px 2px #7918AA',
       },
       '&:active': {
-        background: 'radial-gradient(100% 167.95% at 0% 50%, #15cae2 0%, #b24ae2 74.27%, #dd50b1 99.99%)',
-        boxShadow: '0px 10px 25px 2px #7918aa',
+        background: 'radial-gradient(100% 167.95% at 0% 50%, #535FC4 0%, #535FC4 0.01%, #7D40C8 52.98%, #A836AF 100%);',
+        boxShadow: '0px 2px 14px 2px #7918AA',
       },
     },
     large: { height: 48, lineHeight: '48px' },
@@ -43,23 +45,28 @@ export default makeStyles(
       '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
     },
     outlined: {
-      borderRadius: 5,
-      border: '1px solid #ffffff',
+      borderRadius: 10,
+      color: COLOURS.TEXT_PRIMARY,
+      boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
       fontSize: 13,
       lineHeight: '16px',
+      '&:hover': {
+        color: '#fff',
+      },
       '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
     },
     text: {},
     fullWidth: { width: '100%' },
     submit: {
-      background: 'radial-gradient(100% 167.95% at 0% 50%, #00e0ff 0%, #bf51f2 74.27%, #f65fc7 99.99%, #f960c5 100%)',
-      boxShadow: '0px 10px 25px 2px rgba(0, 0, 0, 0.15)',
+      background: 'radial-gradient(100% 167.95% at 0% 50%, #535FC4 0%, #7D40C8 52.98%, #A836AF 100%);',
       borderRadius: 10,
       fontSize: 14,
       lineHeight: '18px',
+      padding: '6px 12px',
+      letterSpacing: '0.01em',
       '&[disabled]': {
-        background: 'transparent',
-        color: 'grey',
+        background: '#C4C4C4',
+        color: '#9A9A9A',
         boxShadow: '0 0 0 1px rgba(255, 255, 255, 0.1)',
       },
     },

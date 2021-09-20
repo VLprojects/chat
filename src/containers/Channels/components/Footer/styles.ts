@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { COLOURS, SUBHEADER_HEIGHT } from '../../../../theme/consts';
+import { SUBHEADER_HEIGHT } from '../../../../theme/consts';
 
 export default makeStyles(
   {
@@ -9,7 +9,7 @@ export default makeStyles(
       justifyContent: 'center',
       alignItems: 'center',
       height: SUBHEADER_HEIGHT,
-      background: COLOURS.SURFACE_SECONDARY4,
+      boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
       width: '100%',
     },
     buttonWrapper: {

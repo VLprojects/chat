@@ -1,3 +1,4 @@
+import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { Button } from 'ui-kit';
@@ -10,23 +11,26 @@ const ChannelList: FC = () => {
   const root = useKeystone();
   const classes = useStyles();
 
-  const onChannelClick = (id: string): void => {
-    root.ui.setRoute(`${Routes.Channels}/${id}`);
-  };
+  const goToChannel = (id: string) => root.ui.setRoute(`${Routes.Channels}/${id}`);
 
-  const onPubClick = (id: string): Promise<void> => joinChannel(root, id);
+  const onChannelClick = (id: string): void => goToChannel(id);
+
+  const onPubClick = async (id: string) => {
+    await joinChannel(root, id);
+    goToChannel(id);
+  };
 
   return (
     <div className={classes.channelsList}>
       {root.chat.publicChannelsList.map((item) => (
         <div key={item.id} className={classes.channelRow} onClick={() => onChannelClick(item.id)}>
-          <span className={classes.channelTitle}>{item.name}</span>
+          <Typography variant="subtitle1">{item.name}</Typography>
           <div className={classes.counter}>{item.messagesCount}</div>
         </div>
       ))}
       {root.chat.pubsList.map((item) => (
         <div key={item.id} className={classes.channelRow}>
-          <span className={classes.channelTitle}>{item.name}</span>
+          <Typography variant="subtitle1">{item.name}</Typography>
           <Button onClick={() => onPubClick(item.id)} variant="contained" size="small">
             Join
           </Button>

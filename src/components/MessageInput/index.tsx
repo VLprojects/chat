@@ -1,13 +1,12 @@
 import { Grid } from '@material-ui/core';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import { observer } from 'mobx-react-lite';
+import { useSnackbar } from 'notistack';
 import React, { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { Button } from 'ui-kit';
-import { useSnackbar } from 'notistack';
-import { getErrorMessage } from '../../utils/errors';
 import useKeystone from '../../keystone';
 import { sendMessage } from '../../keystone/service';
-import useStyles from './styles';
+import { getErrorMessage } from '../../utils/errors';
 
 interface IMessageInput {
   channelId: string;
@@ -15,7 +14,6 @@ interface IMessageInput {
 
 const MessageInput: FC<IMessageInput> = (props) => {
   const { channelId } = props;
-  const classes = useStyles();
   const [message, setMessage] = useState('');
   const root = useKeystone();
   const { enqueueSnackbar } = useSnackbar();
@@ -30,7 +28,7 @@ const MessageInput: FC<IMessageInput> = (props) => {
         await sendMessage(root, channelId, message);
         setMessage('');
       } catch (error) {
-        enqueueSnackbar(getErrorMessage(error));
+        enqueueSnackbar(getErrorMessage(error as Error));
       }
     }
   };
@@ -52,11 +50,10 @@ const MessageInput: FC<IMessageInput> = (props) => {
             value={message}
             maxRows={10}
             onChange={onInputChange}
-            className={classes.input}
           />
         </Grid>
         <Grid item>
-          <Button variant="submit" onClick={onMessageSubmit} className={classes.sendButton}>
+          <Button variant="submit" onClick={onMessageSubmit}>
             Send
           </Button>
         </Grid>

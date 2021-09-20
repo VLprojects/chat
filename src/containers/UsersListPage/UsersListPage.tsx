@@ -1,8 +1,9 @@
+import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import User from '../../keystone/chat/user';
 import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
+import User from '../../keystone/chat/user';
 import UserList from './components/UserList';
 
 const UsersListPage = () => {
@@ -21,7 +22,7 @@ const UsersListPage = () => {
   return (
     <>
       <SubHeader onBack={() => ui.back()}>
-        <div>Users list</div>
+        <Typography variant="h4">User list</Typography>
       </SubHeader>
       <UserList users={users} />
     </>

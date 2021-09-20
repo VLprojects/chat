@@ -5,13 +5,12 @@ export default makeStyles(
     root: {
       padding: '20px 0px',
     },
-    usersList: {
-      flex: 1,
-      padding: '20px 0 0',
-      boxSizing: 'border-box',
-      display: 'flex',
-      flexDirection: 'column',
-    },
+    // usersList: {
+    //   flex: 1,
+
+    //   display: 'flex',
+    //   flexDirection: 'column',
+    // },
     inputSearch: {
       border: '1px solid #B8B6C2',
       borderRadius: '5px',

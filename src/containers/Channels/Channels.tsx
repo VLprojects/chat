@@ -1,4 +1,5 @@
-import cls from 'classnames';
+import { Grid } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import ChannelsList from 'components/ChannelList';
 import CreateChannelForm from 'components/CreateChannelForm';
 import DirectList from 'components/DirectList';
@@ -42,17 +43,15 @@ const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = 
     <>
       {settings.displayDirect && (
         <SubHeader>
-          <div className={classes.subheader}>
+          <Grid container justifyContent="space-around" alignItems="center">
             {tabs.map((item: ITab) => (
-              <div
-                key={item.id}
-                className={cls(classes.btn, { [classes.btnActive]: item.id === tab })}
-                onClick={onTabClick(item.id)}
-              >
-                {item.title}
-              </div>
+              <Grid item key={item.id} className={classes.btn} onClick={onTabClick(item.id)}>
+                <Typography variant="h4" color="textPrimary">
+                  {item.title}
+                </Typography>
+              </Grid>
             ))}
-          </div>
+          </Grid>
         </SubHeader>
       )}
 

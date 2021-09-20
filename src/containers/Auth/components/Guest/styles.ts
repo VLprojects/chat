@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/core';
-import { fontRegular14LineHeight17, fontRegular14LineHeight18 } from 'theme/consts';
+import { COLOURS, fontRegular14LineHeight17, fontRegular14LineHeight18 } from 'theme/consts';
 
 export default makeStyles(
   {
@@ -13,11 +13,12 @@ export default makeStyles(
     },
     header: {
       fontWeight: 'bold',
+      marginBottom: 15,
     },
     field: {
       marginBottom: 21,
       '&:nth-of-type(2)': {
-        marginBottom: 33,
+        marginBottom: 20,
       },
     },
     fieldLabel: {
@@ -33,7 +34,15 @@ export default makeStyles(
         marginBottom: 24,
       },
     },
+    formLabel: {
+      ...fontRegular14LineHeight18,
+      marginTop: 10,
+      marginBottom: 15,
+      '& > a': {
+        color: COLOURS.LINK_PRIMARY,
+      },
+    },
     fontRegular14LineHeight18,
   },
-  { name: 'SignUpPage' },
+  { name: 'Guest' },
 );

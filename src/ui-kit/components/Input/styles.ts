@@ -7,7 +7,6 @@ export default makeStyles(
       lineHeight: '20px',
       border: 0,
       backgroundColor: 'transparent',
-      color: '#fff',
       outline: 'none',
     },
     fullWidth: { width: '100%' },

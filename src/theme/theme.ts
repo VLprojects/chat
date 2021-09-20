@@ -1,4 +1,5 @@
 import { createTheme } from '@material-ui/core';
+// eslint-disable-next-line no-restricted-imports
 import createPalette from '@material-ui/core/styles/createPalette';
 import { COLOURS } from './consts';
 import PTRootBoldWoff2 from './fonts/PT-Root-UI_Bold.woff2';
@@ -58,9 +59,26 @@ const themeOptions = {
         letterSpacing: '0.01em',
         margin: 0,
       },
+      h4: {
+        fontFamily: 'PTRootUIWebBold',
+        fontSize: 16,
+        lineHeight: '20px',
+        letterSpacing: '0.01em',
+      },
       body1: {
         fontSize: 14,
         lineHeight: '18px',
+      },
+      subtitle1: {
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: '20px',
+        letterSpacing: '0.01em',
+      },
+    },
+    MuiSvgIcon: {
+      root: {
+        fill: COLOURS.TEXT_PRIMARY,
       },
     },
     MuiCssBaseline: {
@@ -69,7 +87,7 @@ const themeOptions = {
         input: {
           padding: 0,
           '&::placeholder': {
-            color: COLOURS.TEXT_SECONDARY,
+            color: COLOURS.TEXT_SECONDARY2,
             opacity: 1,
             fontStyle: 'normal',
             fontWeight: 'normal',
@@ -79,9 +97,19 @@ const themeOptions = {
           },
         },
         textarea: {
+          color: COLOURS.TEXT_SECONDARY2,
+          fontSize: '16px',
+          lineHeight: '20px',
+          letterSpacing: '0.01em',
+          fontFamily: 'PTRootUIWebRegular',
+          border: 'none',
+          resize: 'none',
+          padding: 0,
+          width: '100%',
           '&::placeholder': {
-            color: COLOURS.TEXT_SECONDARY,
+            color: COLOURS.TEXT_SECONDARY2,
             fontSize: 16,
+            lineHeight: '20px',
             letterSpacing: '0.01em',
           },
         },

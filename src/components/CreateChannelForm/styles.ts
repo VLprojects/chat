@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { COLOURS } from '../../theme/consts';
 
 export default makeStyles(
   {
@@ -15,7 +16,7 @@ export default makeStyles(
       boxSizing: 'border-box',
       animationDuration: '.2s',
       animationName: 'slidein',
-      backgroundColor: '#353A41',
+      backgroundColor: COLOURS.SURFACE_PRIMARY,
       boxShadow: 'var(--shadow-main-totop)',
     },
     closeButton: {

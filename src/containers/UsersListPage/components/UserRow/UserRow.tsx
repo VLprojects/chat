@@ -1,6 +1,7 @@
+import { Grid, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import { Avatar, Image } from 'ui-kit';
-import SendMessageIcon from 'ui-kit/assets/icons/send-message-icon.svg';
+import { Avatar } from 'ui-kit';
+import SendMessageIcon from 'ui-kit/icons/SendMessageIcon';
 import User from '../../../../keystone/chat/user';
 import useStyles from './styles';
 
@@ -24,18 +25,17 @@ const UserRow: React.FC<IProps> = (props) => {
   };
 
   return (
-    <div className={classes.userRow} key={user.id}>
-      <Avatar size="large" url={user?.avatarUrl} />
-
-      <div key={user.id} style={{ marginLeft: 9 }}>
+    <Grid container className={classes.userRow} alignItems="center">
+      <Grid item component={Avatar} size="lg" src={user?.avatarUrl} />
+      <Grid item component={Typography} style={{ marginLeft: 9 }}>
         {user.displayName}
-      </div>
+      </Grid>
       {displayDirect && (
-        <div className={classes.sendMessageBtn} id="sendMessageBtn" onClick={clickHandler}>
-          {loading ? 'Loading' : <Image src={SendMessageIcon} alt="" />}
-        </div>
+        <Grid item className={classes.sendMessageBtn} id="sendMessageBtn" onClick={clickHandler}>
+          {loading ? 'Loading' : <SendMessageIcon />}
+        </Grid>
       )}
-    </div>
+    </Grid>
   );
 };
 

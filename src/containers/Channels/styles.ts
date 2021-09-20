@@ -2,20 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 export default makeStyles(
   {
-    subheader: {
-      display: 'flex',
-      height: '100%',
-    },
     btn: {
-      border: 0,
-      backgroundColor: 'transparent',
-      color: '#9a9a9a',
-      textAlign: 'center',
-      flex: 1,
-      display: 'block',
-      height: '100%',
-      fontWeight: 500,
-      fontSize: 16,
       cursor: 'pointer',
     },
     btnActive: {

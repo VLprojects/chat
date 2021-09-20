@@ -5,19 +5,25 @@ import { observer } from 'mobx-react-lite';
 import App from './App';
 import theme from './theme/theme';
 import useKeystone from './keystone';
-import { redirectToInitial } from './keystone/service';
+import { getSettings, redirectToInitial } from './keystone/service';
 import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
+import { IEvents, ListenerEventEnum } from './utils/eventBus/types';
+import useEventHook from './hooks/useEventHook';
 
 export interface IChatProps {
   appId?: string;
   channelId?: string;
   userToken?: string;
+  onEvent?: (data: IEvents) => void;
 }
 
 export const Chat: FC<IChatProps> = observer((props) => {
-  const { appId, channelId, userToken } = props;
+  const { appId, channelId, userToken, onEvent } = props;
   const root = useKeystone();
+  if (onEvent) {
+    useEventHook(ListenerEventEnum.App, onEvent);
+  }
 
   const generateClassName = createGenerateClassName({
     productionPrefix: 'vlprojects-chat',
@@ -28,6 +34,10 @@ export const Chat: FC<IChatProps> = observer((props) => {
     root.auth.setAppId(appIdFromAttr || appId || '');
     if (channelIdFromAttr || channelId) {
       root.ui.setChannelId(channelIdFromAttr || channelId || '');
+    }
+
+    if (root.auth.appId) {
+      getSettings(root, root.auth.appId);
     }
 
     const token = userToken || getStoredAccessToken();

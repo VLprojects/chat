@@ -1,6 +1,7 @@
+import { IconButton } from '@material-ui/core';
 import React, { FC } from 'react';
-import { Image } from 'ui-kit';
-import IconBack from 'ui-kit/assets/icons/icon-back.svg';
+import ChevronLeftIcon from 'ui-kit/icons/ChevronLeftIcon';
+import { COLOURS } from '../../theme/consts';
 import useStyles from './styles';
 
 interface ISubHeader {
@@ -15,9 +16,9 @@ const SubHeader: FC<ISubHeader> = (props) => {
   return (
     <div className={classes.subHeader}>
       {onBack && (
-        <button className={classes.btnBack} type="button" onClick={onBack}>
-          <Image src={IconBack} alt="" />
-        </button>
+        <IconButton onClick={onBack}>
+          <ChevronLeftIcon fill={COLOURS.TEXT_PRIMARY} />
+        </IconButton>
       )}
       <div className={classes.title}>{children}</div>
       {rightButton}

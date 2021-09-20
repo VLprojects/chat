@@ -1,8 +1,9 @@
 import { getRoot, model, Model, prop } from 'mobx-keystone';
 import { io } from 'socket.io-client';
+import { IRChannel, ISEMessage, ISENewChannelUser } from '../types/serverResponses';
 import SocketEventsEnum from '../types/socketEvents';
-import { ISEMessage, ISENewChannelUser } from '../types/serverResponses';
 import { Root } from './index';
+import { joinChannel } from './service';
 
 // has "Store" in name to not confuse with Socket instance
 @model('SocketStore')
@@ -24,7 +25,11 @@ export default class SocketStore extends Model({
       if (channel) {
         channel.addUsers([userId]);
       }
-    }
+    };
+
+    const onNewDirect = (channel: IRChannel): void => {
+      joinChannel(root, channel.id);
+    };
 
     const socket = io(uri, {
       auth: {
@@ -39,5 +44,6 @@ export default class SocketStore extends Model({
     socket.on(SocketEventsEnum.Message, onMessage);
     socket.on(SocketEventsEnum.SystemMessage, onMessage);
     socket.on(SocketEventsEnum.NewChannelUser, onNewChannelUser);
+    socket.on(SocketEventsEnum.NewDirect, onNewDirect);
   }
 }

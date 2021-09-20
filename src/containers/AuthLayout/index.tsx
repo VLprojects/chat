@@ -1,7 +1,4 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Router } from 'components/Router';
-import Login from 'containers/Login';
-import Signup from 'containers/Signup';
 import useKeystone from 'keystone';
 import { signup, redirectToInitial } from 'keystone/service';
 import { autorun } from 'mobx';
@@ -9,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import Routes from 'routes';
 import { usernameGenerator } from 'utils/users';
+import Auth from 'containers/Auth';
 
 interface Props {
   children: JSX.Element;
@@ -41,16 +39,7 @@ const AuthLayout = observer(({ children }: Props): JSX.Element => {
     return <LinearProgress />;
   }
 
-  return (
-    <>
-      <Router route={Routes.Login}>
-        <Login />
-      </Router>
-      <Router route={Routes.Signup}>
-        <Signup />
-      </Router>
-    </>
-  );
+  return <Auth />;
 });
 
 export default AuthLayout;

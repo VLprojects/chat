@@ -2,6 +2,8 @@ import api from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
 import { Root } from './index';
+import eventBus from '../utils/eventBus/eventBus';
+import { EventBusEventEnum, ListenerEventEnum } from '../utils/eventBus/types';
 
 export const getInitialData = async (root: Root): Promise<void> => {
   const initial = (await api.get(`get-initial`)) as IRGetInitial;
@@ -48,11 +50,12 @@ export const saveProfile = async (root: Root, displayName: string, avatar?: stri
 export const joinChannel = async (root: Root, id: string): Promise<void> => {
   if (!root.chat.channels.has(id)) {
     const response = (await api.post(`channels/join`, { id })) as IRChannel;
-    root.chat.pubs.delete(id);
+    if (root.chat.pubs.has(id)) {
+      root.chat.pubs.delete(id);
+    }
+
     root.chat.addChannels([response]);
   }
-
-  root.ui.setRoute(`${Routes.Channels}/${id}`);
 };
 
 export const joinChannelByExternalId = async (root: Root, externalId: string): Promise<void> => {
@@ -77,6 +80,17 @@ export const redirectToInitial = (root: Root): void => {
 
 export const sendMessage = async (root: Root, channelId: string, text: string): Promise<void> => {
   await api.post(`messages/send`, { channelId, text });
+  eventBus.emit(ListenerEventEnum.App, {
+    event: EventBusEventEnum.MessageSent,
+    data: {
+      message: text,
+    },
+  });
+};
+
+export const getSettings = async (root: Root, appId: string): Promise<void> => {
+  const settings = (await api.get(`applications/${appId}/settings`)) as Record<string, unknown>;
+  root.settings.setAll(settings);
 };
 
 export default {};

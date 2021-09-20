@@ -1,6 +1,7 @@
-import { observer } from 'mobx-react-lite';
+import { Grid, Typography } from '@material-ui/core';
 import cls from 'classnames';
-import { format } from 'date-fns';
+import { format, formatDistance, isToday, subDays } from 'date-fns';
+import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { Avatar } from 'ui-kit';
 import User from '../../../keystone/chat/user';
@@ -23,19 +24,25 @@ const UserMessage: FC<UserMessageProps> = (props) => {
   return (
     <>
       {!short && (
-        <div className={cls(classes.messageInfo, { [classes.messageInfoOwn]: own })}>
-          <Avatar url={user?.avatarUrl} size="large" />
-          <span className={classes.displayName}>{user?.displayName}</span>
+        <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'} spacing={2}>
+          <Grid item component={Avatar} src={user?.avatarUrl} size="lg" />
+          <Grid item component={Typography}>
+            {user?.displayName}
+          </Grid>
 
           <span className={classes.time} title={format(new Date(date), 'MM/dd/yyyy, HH:mm')}>
-            {format(new Date(date), 'HH:mm')}
+            {isToday(new Date(date))
+              ? format(new Date(date), 'HH:mm')
+              : formatDistance(subDays(new Date(date), 3), new Date(), { addSuffix: true })}
           </span>
-        </div>
+        </Grid>
       )}
 
-      <div style={{ display: 'flex' }} className={cls({ [classes.messageInfoOwn]: own })}>
-        <div className={cls(classes.message, classes.userMessage, { [classes.userMessageOwn]: own })}>{message}</div>
-      </div>
+      <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'}>
+        <Grid item className={cls(classes.message, classes.userMessage, { [classes.userMessageOwn]: own })}>
+          {message}
+        </Grid>
+      </Grid>
     </>
   );
 };

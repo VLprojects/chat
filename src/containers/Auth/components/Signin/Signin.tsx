@@ -1,17 +1,22 @@
 import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { reaction } from 'mobx';
+import React, { FC, useMemo, useState } from 'react';
 import { Button, Input } from 'ui-kit';
 import { useSnackbar } from 'notistack';
-import { getErrorMessage } from '../../utils/errors';
-import { usernameGenerator } from '../../utils/users';
-import Routes from '../../routes';
-import useKeystone from '../../keystone';
-import { login, signup, redirectToInitial } from '../../keystone/service';
+import { getErrorMessage } from '../../../../utils/errors';
+import useKeystone from '../../../../keystone';
+import { login } from '../../../../keystone/service';
 import useStyles from './styles';
+import { AUTH_PASSWORD_MIN_LENGTH, AUTH_USERNAME_MIN_LENGTH } from '../../const';
+import Routes from '../../../../routes';
 
-const Login = observer(() => {
+interface ISigninProps {
+  onClickSignUp: () => void;
+}
+
+const Signin: FC<ISigninProps> = observer((props) => {
+  const { onClickSignUp } = props;
+
   const classes = useStyles();
   const root = useKeystone();
   const { enqueueSnackbar } = useSnackbar();
@@ -29,36 +34,29 @@ const Login = observer(() => {
     }
   };
 
-  const onGuestEnter = async () => {
-    const generatedUsername = usernameGenerator();
-    try {
-      await signup(root, generatedUsername);
-    } catch (error) {
-      enqueueSnackbar(getErrorMessage(error));
-    }
-  };
-
-  useEffect(() =>
-    reaction(
-      () => root.auth.isAuthorized,
-      (isAuthorized) => {
-        if (isAuthorized) {
-          redirectToInitial(root);
-        }
-      },
-    ),
+  const isFilledForm = useMemo(
+    () => username.length >= AUTH_USERNAME_MIN_LENGTH && password.length >= AUTH_PASSWORD_MIN_LENGTH,
+    [username, password],
   );
 
   return (
     <>
       <div className={classes.container}>
         <Typography variant="h1" classes={{ root: classes.header }}>
-          Enter
+          Sign in
           <br /> the chat
         </Typography>
+        <div className={classes.formLabel}>
+          <span>Don&apos;t have an account ? </span>
+          <a href="#" onClick={onClickSignUp}>
+            Sign up
+          </a>
+        </div>
         <div className={classes.field}>
           <div className={classes.fieldLabel}>Name</div>
           <Input
+            id="username"
+            type="text"
             size="large"
             variant="outlined"
             fullWidth
@@ -70,6 +68,7 @@ const Login = observer(() => {
         <div className={classes.field}>
           <div className={classes.fieldLabel}>Password</div>
           <Input
+            id="password"
             size="large"
             variant="outlined"
             fullWidth
@@ -80,13 +79,10 @@ const Login = observer(() => {
           />
         </div>
         <div className={classes.footer}>
-          <Button variant="submit" fullWidth size="large" onClick={onLogin}>
-            Sign In
+          <Button disabled={!isFilledForm} variant="submit" fullWidth size="large" onClick={onLogin}>
+            Enter the chat
           </Button>
 
-          <Button variant="outlined" fullWidth size="large" onClick={onGuestEnter}>
-            Log in as a guest
-          </Button>
           <div>
             <span className={classes.fontRegular14LineHeight18}>Don&apos;t have an account ? </span>
             <a href="#" onClick={() => root.ui.setRoute(Routes.Signup)} className={classes.fontRegular14LineHeight18}>
@@ -99,4 +95,4 @@ const Login = observer(() => {
   );
 });
 
-export default Login;
+export default Signin;

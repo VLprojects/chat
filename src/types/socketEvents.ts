@@ -4,6 +4,7 @@ enum SocketEventsEnum {
   SystemMessage = 'system:message',
   NewPublic = 'new-public',
   NewChannelUser = 'new-channel-user',
+  NewDirect = 'new-direct',
 }
 
 export default SocketEventsEnum;

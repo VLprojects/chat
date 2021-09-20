@@ -1,10 +1,12 @@
+import { IconButton, Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useMemo, useState } from 'react';
-import { Image, Input } from 'ui-kit';
-import ChatUsersIcon from 'ui-kit/assets/icons/chat-users.svg';
-import IconSearch from 'ui-kit/assets/icons/icon-search.svg';
+import { Input } from 'ui-kit';
+import ChatUsersIcon from 'ui-kit/icons/ChatUsersIcon';
+import SearchIcon from 'ui-kit/icons/SearchIcon';
 import useKeystone from '../../../../keystone';
 import User from '../../../../keystone/chat/user';
+import { COLOURS } from '../../../../theme/consts';
 import { createOrOpenDirectChat } from '../../services';
 import UserRow from '../UserRow';
 import useStyles from './styles';
@@ -33,14 +35,14 @@ const UserList: FC<Props> = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.inputSearch}>
-        <Input placeholder="Search" onChange={(v) => setSearch(v)} value={search} />
-        <button type="button">
-          <Image src={IconSearch} alt="" />
-        </button>
+        <Input placeholder="Search" onChange={setSearch} value={search} />
+        <IconButton>
+          <SearchIcon fill={COLOURS.TEXT_PRIMARY} />
+        </IconButton>
       </div>
       <div className={classes.userCounter}>
-        <Image src={ChatUsersIcon} alt="" />
-        <span style={{ marginLeft: 8 }}>{filteredUsers.length}</span>
+        <ChatUsersIcon fill={COLOURS.TEXT_PRIMARY} />
+        <Typography style={{ marginLeft: 8 }}>{filteredUsers.length}</Typography>
       </div>
       <div className={classes.userListWrapper}>
         {filteredUsers.map((user) => (

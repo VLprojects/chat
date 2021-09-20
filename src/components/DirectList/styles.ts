@@ -1,20 +1,18 @@
 import { makeStyles } from '@material-ui/core';
+import { COLOURS } from '../../theme/consts';
 
 export default makeStyles(
   {
-    directList: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
     row: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: '12px 15px 12px',
+      cursor: 'pointer',
+      paddingLeft: '40px !important',
       '& > *': {
         marginRight: 12,
       },
-      '&:hover': { backgroundColor: '#353a41', cursor: 'pointer' },
+      '&:hover': {
+        boxShadow: '0px 10px 25px 2px rgba(0, 0, 0, 0.15)',
+        borderRadius: 10,
+      },
     },
     channelTitle: {
       fontSize: 16,

@@ -1,4 +1,4 @@
-import React from 'react';
+import { createContext, useContext } from 'react';
 import { model, Model, onSnapshot, prop, registerRootStore } from 'mobx-keystone';
 import UI from './ui';
 import Auth from './auth';
@@ -23,8 +23,8 @@ export const createRootStore = (): Root => {
 };
 
 const rootStore = createRootStore();
-const context = React.createContext(rootStore);
-const useKeystone = (): Root => React.useContext(context);
+const context = createContext(rootStore);
+const useKeystone = (): Root => useContext(context);
 
 if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line no-console

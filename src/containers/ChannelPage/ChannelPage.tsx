@@ -1,11 +1,13 @@
+import { Typography } from '@material-ui/core';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
+import SubHeader from 'components/SubHeader';
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import Routes from 'routes';
-import { Avatar, Image } from 'ui-kit';
-import ChevronLeftIcon from 'ui-kit/assets/icons/chevron-left.svg';
+import { Avatar } from 'ui-kit';
 import { getChatWithUser, getDirectChannelName } from '../../components/DirectList/service';
 import { ChannelTypeEnum } from '../../types/enums';
 import useStyles from './styles';
@@ -30,31 +32,26 @@ const ChannelPage: FC = observer(() => {
 
   return (
     <div className={classes.pageWrapper}>
-      <div className={classes.subHeaderWrapper}>
-        {settings.displayChannelList && (
-          <div className={classes.subHeaderBack} onClick={() => ui.setRoute(backUrl)}>
-            <Image src={ChevronLeftIcon} alt="route icon" />
-          </div>
-        )}
-        <div className={classes.chatNameTitle}>
-          {currentChannel.type === ChannelTypeEnum.Direct
-            ? getDirectChannelName(root, currentChannel.id)
-            : currentChannel?.name}
-        </div>
-
-        {currentChannel.type === ChannelTypeEnum.Direct ? (
-          <Avatar url={getChatWithUser(root, currentChannel.id)?.avatarUrl} />
-        ) : (
-          <div className={classes.avatarWrapper} onClick={onAvatarsClick}>
-            {currentChannel.userList.slice(0, MAX_USERS_ON_PREVIEW).map((item) => (
-              <Avatar key={item.id} url={item.avatarUrl} />
-            ))}
-            {currentChannel.userList.length > MAX_USERS_ON_PREVIEW && (
-              <Avatar counter={currentChannel.userList.length - MAX_USERS_ON_PREVIEW} />
+      {settings.displayHeader && (
+        <SubHeader onBack={settings.displayChannelList ? () => ui.setRoute(backUrl) : undefined}>
+          <Typography variant="h4">
+            {currentChannel.type === ChannelTypeEnum.Direct
+              ? getDirectChannelName(root, currentChannel.id)
+              : currentChannel?.name}
+          </Typography>
+          <div style={{ marginLeft: 'auto' }}>
+            {currentChannel.type === ChannelTypeEnum.Direct ? (
+              <Avatar src={getChatWithUser(root, currentChannel.id)?.avatarUrl} size="sm" />
+            ) : (
+              <AvatarGroup max={MAX_USERS_ON_PREVIEW} classes={{ avatar: classes.avatarGroup }} spacing={5}>
+                {currentChannel.userList.map((item) => (
+                  <Avatar key={item.id} src={item?.avatarUrl} size="sm" onClick={onAvatarsClick} />
+                ))}
+              </AvatarGroup>
             )}
           </div>
-        )}
-      </div>
+        </SubHeader>
+      )}
 
       <MessageList messages={currentChannel.sortedMessages} />
       <div className={classes.footer}>
