@@ -1,4 +1,4 @@
-import { IconButton } from '@material-ui/core';
+import { Box, IconButton } from '@material-ui/core';
 import React, { FC } from 'react';
 import ChevronLeftIcon from 'ui-kit/icons/ChevronLeftIcon';
 import { COLOURS } from '../../theme/consts';
@@ -17,7 +17,9 @@ const SubHeader: FC<ISubHeader> = (props) => {
     <div className={classes.subHeader}>
       {onBack && (
         <IconButton onClick={onBack}>
-          <ChevronLeftIcon fill={COLOURS.TEXT_PRIMARY} />
+          <Box m={2}>
+            <ChevronLeftIcon fill={COLOURS.TEXT_PRIMARY} />
+          </Box>
         </IconButton>
       )}
       <div className={classes.title}>{children}</div>

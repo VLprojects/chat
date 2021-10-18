@@ -1,16 +1,19 @@
 import { getRoot, model, Model, prop } from 'mobx-keystone';
-import { io } from 'socket.io-client';
+import Centrifuge from 'centrifuge';
+import { IServerPoll } from '../containers/CreatePollPage/types';
 import { IRChannel, ISEMessage, ISENewChannelUser } from '../types/serverResponses';
 import SocketEventsEnum from '../types/socketEvents';
+import { convertServerPollToModel } from '../utils/common';
 import { Root } from './index';
 import { joinChannel } from './service';
+import CentrifugeEventsEnum from '../types/centrifugeEvents';
 
 // has "Store" in name to not confuse with Socket instance
 @model('SocketStore')
 export default class SocketStore extends Model({
   isSocketConnected: prop<boolean>(false).withSetter(),
 }) {
-  connect(uri: string, accessToken: string): void {
+  connect(accessToken: string): void {
     const root: Root = getRoot(this);
 
     const onMessage = ({ channelId, message }: ISEMessage) => {
@@ -31,19 +34,69 @@ export default class SocketStore extends Model({
       joinChannel(root, channel.id);
     };
 
-    const socket = io(uri, {
-      auth: {
-        token: accessToken,
-      },
-    });
+    const onPollStart = (poll: IServerPoll & { channelId: number }) => {
+      const channel = root.chat.channels.get(`${poll.channelId}`);
+      if (!channel) return;
 
-    socket.on(SocketEventsEnum.Connect, () => {
+      channel.startPoll(convertServerPollToModel(poll));
+    };
+
+    const onPollStop = (poll: IServerPoll & { channelId: number }) => {
+      const channel = root.chat.channels.get(`${poll.channelId}`);
+      if (!channel) return;
+
+      channel.stopPoll(convertServerPollToModel(poll));
+    };
+
+    const onPollVote = (data: { channelId: number; pollOptionsIds: number[] }) => {
+      const { channelId, pollOptionsIds } = data;
+      const channel = root.chat.channels.get(`${channelId}`);
+      if (!channel) return;
+      channel.updateVotesCounter(pollOptionsIds);
+    };
+
+    const onUpdateProfile = (payload: { value: string; userId: number }) => {
+      const { value, userId } = payload;
+
+      return root.chat.updateUser({ userId, name: value });
+    };
+
+    const centrifuge = new Centrifuge(`${process.env.REACT_APP_WS_URL}`);
+
+    centrifuge.on(CentrifugeEventsEnum.Connect, () => {
       this.setIsSocketConnected(true);
     });
 
-    socket.on(SocketEventsEnum.Message, onMessage);
-    socket.on(SocketEventsEnum.SystemMessage, onMessage);
-    socket.on(SocketEventsEnum.NewChannelUser, onNewChannelUser);
-    socket.on(SocketEventsEnum.NewDirect, onNewDirect);
+    centrifuge.on(CentrifugeEventsEnum.Publish, (ctx) => {
+      const { event, payload } = ctx.data;
+      switch (event) {
+        case SocketEventsEnum.SystemMessage:
+        case SocketEventsEnum.Message:
+          onMessage(payload);
+          break;
+        case SocketEventsEnum.NewChannelUser:
+          onNewChannelUser(payload);
+          break;
+        case SocketEventsEnum.NewDirect:
+          onNewDirect(payload);
+          break;
+        case SocketEventsEnum.PollStart:
+          onPollStart(payload);
+          break;
+        case SocketEventsEnum.PollStop:
+          onPollStop(payload);
+          break;
+        case SocketEventsEnum.PollVote:
+          onPollVote(payload);
+          break;
+        case SocketEventsEnum.UserUpdateProfile:
+          onUpdateProfile(payload);
+          break;
+        default:
+      }
+    });
+
+    centrifuge.setToken(accessToken);
+    centrifuge.connect();
   }
 }

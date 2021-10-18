@@ -1,10 +1,11 @@
-import { ChannelTypeEnum, MessageTypeEnum } from './enums';
+import { IServerPoll } from '../containers/CreatePollPage/types';
+import { ChannelTypeEnum, MessageTypeEnum, UserRoleEnum } from './enums';
 
 // IR - Interface of API Response
 export interface IRUser {
   id: string;
   avatarUrl: string;
-  role: string;
+  role: UserRoleEnum;
   username: string;
   displayName: string;
 }
@@ -23,7 +24,6 @@ export interface ISEMessage {
   message: IRChannelMessage;
 }
 
-
 export interface ISENewChannelUser {
   channelId: string;
   userId: string;
@@ -32,6 +32,7 @@ export interface ISENewChannelUser {
 export interface IRChannel {
   id: string;
   name: string;
+  externalId: string;
   type: ChannelTypeEnum;
   userIds: string[];
   messages: IRChannelMessage[];
@@ -47,6 +48,7 @@ export interface IRGetInitial {
   user: IRUser;
   users: IRUser[];
   settings: Record<string, unknown>;
+  polls: (IServerPoll & { channelId: number })[];
 }
 
 export interface IRLogin {

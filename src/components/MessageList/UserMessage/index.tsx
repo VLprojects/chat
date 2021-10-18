@@ -25,7 +25,7 @@ const UserMessage: FC<UserMessageProps> = (props) => {
     <>
       {!short && (
         <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'} spacing={2}>
-          <Grid item component={Avatar} src={user?.avatarUrl} size="lg" />
+          <Grid item component={Avatar} name={user?.displayName} src={user?.avatarUrl} size="lg" />
           <Grid item component={Typography}>
             {user?.displayName}
           </Grid>
@@ -39,7 +39,11 @@ const UserMessage: FC<UserMessageProps> = (props) => {
       )}
 
       <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'}>
-        <Grid item className={cls(classes.message, classes.userMessage, { [classes.userMessageOwn]: own })}>
+        <Grid
+          item
+          data-qa="chat-msg"
+          className={cls(classes.message, classes.userMessage, { [classes.userMessageOwn]: own })}
+        >
           {message}
         </Grid>
       </Grid>

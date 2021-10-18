@@ -10,6 +10,11 @@ export enum ChannelTypeEnum {
   Blank = 'blank',
 }
 
+export enum UserRoleEnum {
+  User = 'user',
+  Moderator = 'moderator',
+}
+
 export enum AuthModeEnum {
   // All disabled
   Mode1 = 1,

@@ -1,6 +1,7 @@
 import { IconButton, Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { Input } from 'ui-kit';
 import ChatUsersIcon from 'ui-kit/icons/ChatUsersIcon';
 import SearchIcon from 'ui-kit/icons/SearchIcon';
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const UserList: FC<Props> = (props) => {
+  const intl = useIntl();
   const classes = useStyles();
 
   const root = useKeystone();
@@ -35,7 +37,7 @@ const UserList: FC<Props> = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.inputSearch}>
-        <Input placeholder="Search" onChange={setSearch} value={search} />
+        <Input placeholder={intl.formatMessage({ id: 'search' })} onChange={setSearch} value={search} />
         <IconButton>
           <SearchIcon fill={COLOURS.TEXT_PRIMARY} />
         </IconButton>

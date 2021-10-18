@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, ReactElement } from 'react';
 
 interface IProps {
   className?: string;
@@ -8,7 +8,7 @@ interface IProps {
   style?: CSSProperties;
 }
 
-export default (props: IProps) => {
+export default (props: IProps): ReactElement => {
   const { className, fill = '#000', width = 20, height = 20, style } = props;
 
   return (

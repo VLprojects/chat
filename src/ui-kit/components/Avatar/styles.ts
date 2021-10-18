@@ -7,6 +7,7 @@ export default makeStyles(
       width: (props: IProps) => Size[props.size],
       height: (props: IProps) => Size[props.size],
       cursor: 'pointer',
+      fontSize: 16,
     },
   },
   { name: 'Avatar' },

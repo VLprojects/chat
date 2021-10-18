@@ -1,5 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import SubHeader from 'components/SubHeader';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useKeystone from 'keystone';
 import { saveProfile } from 'keystone/service';
 import { observer } from 'mobx-react-lite';
@@ -10,6 +11,7 @@ import { getErrorMessage } from '../../utils/errors';
 import useStyles from './styles';
 
 const Profile = observer(() => {
+  const intl = useIntl();
   const classes = useStyles();
   const { auth, ui } = useKeystone();
   const root = useKeystone();
@@ -36,37 +38,41 @@ const Profile = observer(() => {
     <>
       <SubHeader onBack={() => ui.back()}>
         <Typography variant="h4" color="textPrimary">
-          Profile
+          <FormattedMessage id="profile" />
         </Typography>
       </SubHeader>
       <div className={classes.container}>
         <div className={classes.field}>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">
+            <FormattedMessage id="username" />:
+          </label>
           <Input
             id="username"
             fullWidth
             variant="outlined"
             size="large"
-            placeholder="Username"
+            placeholder={intl.formatMessage({ id: 'username' })}
             value={displayName}
             onChange={setDisplayName}
           />
         </div>
         <div className={classes.field}>
-          <label htmlFor="avatar">Avatar:</label>
+          <label htmlFor="avatar">
+            <FormattedMessage id="avatar" />:
+          </label>
           <Input
             id="avatar"
             fullWidth
             variant="outlined"
             size="large"
-            placeholder="Avatar URL"
+            placeholder={intl.formatMessage({ id: 'avatarUrl' })}
             value={avatar}
             onChange={setAvatar}
           />
         </div>
 
         <Button fullWidth size="large" variant="submit" onClick={onSaveProfile}>
-          Save
+          <FormattedMessage id="save" />
         </Button>
       </div>
     </>

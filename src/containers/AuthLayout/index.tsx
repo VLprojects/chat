@@ -1,6 +1,6 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import useKeystone from 'keystone';
-import { signup, redirectToInitial } from 'keystone/service';
+import { signup } from 'keystone/service';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
@@ -22,7 +22,6 @@ const AuthLayout = observer(({ children }: Props): JSX.Element => {
           if (root.auth.isAnonymousAllowed) {
             const generatedUsername = usernameGenerator();
             await signup(root, generatedUsername);
-            redirectToInitial(root);
           } else {
             root.ui.setRoute(Routes.Login);
           }

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
 import React, { ChangeEvent, FC, KeyboardEvent, useState } from 'react';
 import { Button } from 'ui-kit';
+import { FormattedMessage, useIntl } from 'react-intl';
 import useKeystone from '../../keystone';
 import { sendMessage } from '../../keystone/service';
 import { getErrorMessage } from '../../utils/errors';
@@ -13,8 +14,10 @@ interface IMessageInput {
 }
 
 const MessageInput: FC<IMessageInput> = (props) => {
+  const intl = useIntl();
   const { channelId } = props;
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const root = useKeystone();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -25,10 +28,13 @@ const MessageInput: FC<IMessageInput> = (props) => {
   const onMessageSubmit = async () => {
     if (message.length) {
       try {
+        setLoading(true);
         await sendMessage(root, channelId, message);
         setMessage('');
       } catch (error) {
         enqueueSnackbar(getErrorMessage(error as Error));
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -46,15 +52,17 @@ const MessageInput: FC<IMessageInput> = (props) => {
           <TextareaAutosize
             onKeyDown={onKeyDown}
             aria-label="empty textarea"
-            placeholder="Enter your message"
+            placeholder={intl.formatMessage({ id: 'messageInputPlaceholder' })}
             value={message}
-            maxRows={10}
+            maxRows={5}
             onChange={onInputChange}
+            disabled={loading}
+            data-qa="input-message"
           />
         </Grid>
         <Grid item>
-          <Button variant="submit" onClick={onMessageSubmit}>
-            Send
+          <Button variant="submit" data-qa="send-button" onClick={onMessageSubmit} disabled={loading}>
+            <FormattedMessage id="send" />
           </Button>
         </Grid>
       </Grid>

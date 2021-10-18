@@ -1,19 +1,20 @@
-import React, { FC, memo } from 'react';
-import useStyles from './styles';
+import React, { FC, Fragment, memo } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Button } from '../../../../ui-kit';
-
-interface IActionBlockProps {
-  buttonText: string;
-  onClickButton: () => void;
-  footerActions?: null | IFooter[];
-}
+import useStyles from './styles';
 
 interface IFooter {
   text: string;
-  onClick: (index: number) => void;
+  onClick: () => void;
 }
 
-const ActionBlock: FC<IActionBlockProps> = (props) => {
+interface IProps {
+  buttonText: string;
+  onClickButton: () => void;
+  footerActions?: IFooter[];
+}
+
+const ActionBlock: FC<IProps> = (props) => {
   const { buttonText, onClickButton, footerActions } = props;
   const classes = useStyles();
 
@@ -24,13 +25,18 @@ const ActionBlock: FC<IActionBlockProps> = (props) => {
       </Button>
 
       <div className={classes.footerActions}>
-        {footerActions?.map(({ text, onClick }, index) => (
-          <React.Fragment key={index.toString()}>
-            <a href="#" onClick={() => onClick(index)}>
-              {text}
+        {footerActions?.map((action, index) => (
+          <Fragment key={index}>
+            <a href="#" onClick={action.onClick}>
+              {action.text}
             </a>
-            {index + 1 !== footerActions?.length && <span> or </span>}
-          </React.Fragment>
+            {index + 1 !== footerActions.length && (
+              <span>
+                {' '}
+                <FormattedMessage id="or" />{' '}
+              </span>
+            )}
+          </Fragment>
         ))}
       </div>
     </>

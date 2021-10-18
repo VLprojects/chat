@@ -4,5 +4,7 @@ export enum Cookie {
 }
 
 export const APP_ID = 'livedigital-chat';
-export const rootDivAttrAppId = 'data-apitoken';
+export const rootDivAttrAppId = 'data-appId';
 export const rootDivAttrChatId = 'data-chatid';
+
+export const POLL_CONTAINER = 'poll-container';

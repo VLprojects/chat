@@ -112,6 +112,9 @@ const themeOptions = {
             lineHeight: '20px',
             letterSpacing: '0.01em',
           },
+          '&:disabled': {
+            backgroundColor: 'inherit',
+          },
         },
         html: {
           letterSpacing: '0.01em',

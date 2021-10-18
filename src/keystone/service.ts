@@ -1,18 +1,24 @@
 import api from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
-import { Root } from './index';
+import { convertServerPollToModel } from '../utils/common';
 import eventBus from '../utils/eventBus/eventBus';
 import { EventBusEventEnum, ListenerEventEnum } from '../utils/eventBus/types';
+import { Root } from './index';
 
 export const getInitialData = async (root: Root): Promise<void> => {
   const initial = (await api.get(`get-initial`)) as IRGetInitial;
-  const { settings, publics, user, users, channels } = initial;
+  const { settings, publics, user, users, channels, polls } = initial;
   root.chat.addUsers(users); // users first to prevent auto-fetch
   root.chat.addChannels(channels);
   root.chat.addPubs(publics);
   root.auth.setMe(user);
   root.settings.setAll(settings);
+  polls.forEach((poll) => {
+    const channel = root.chat.channels.get(`${poll.channelId}`);
+    channel?.addPoll(poll);
+    channel?.startPoll(convertServerPollToModel(poll));
+  });
 };
 
 export const login = async (root: Root, username: string, password?: string): Promise<void> => {
@@ -55,27 +61,30 @@ export const joinChannel = async (root: Root, id: string): Promise<void> => {
     }
 
     root.chat.addChannels([response]);
+    // to set poll data.
+    getInitialData(root);
   }
 };
 
 export const joinChannelByExternalId = async (root: Root, externalId: string): Promise<void> => {
   const found = root.chat.channelsList.find((item) => item.externalId === externalId);
+
   if (found) {
     root.ui.setRoute(`${Routes.Channels}/${found.id}`);
   } else {
     const response = (await api.post(`channels/join-external/${externalId}`)) as IRChannel;
-    root.chat.pubs.delete(externalId);
+    root.chat.pubs.delete(response.id);
     root.chat.addChannels([response]);
     root.ui.setRoute(`${Routes.Channels}/${response.id}`);
   }
 };
 
-export const redirectToInitial = (root: Root): void => {
-  if (!root.ui.channelId) {
-    root.ui.setRoute(Routes.Channels);
-  } else {
-    joinChannelByExternalId(root, root.ui.channelId);
+export const redirectToInitial = (root: Root): Promise<void> | void => {
+  if (root.ui.channelId) {
+    return joinChannelByExternalId(root, root.ui.channelId);
   }
+
+  return root.ui.setRoute(Routes.Channels);
 };
 
 export const sendMessage = async (root: Root, channelId: string, text: string): Promise<void> => {

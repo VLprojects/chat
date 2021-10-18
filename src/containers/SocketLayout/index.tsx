@@ -1,12 +1,11 @@
-import { useSnackbar } from 'notistack';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { autorun, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
+import { useSnackbar } from 'notistack';
 import React, { ReactNode, useEffect } from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import api from '../../api';
-import { IRGetNode } from '../../types/serverResponses';
 import useKeystone from '../../keystone';
-import { getInitialData } from '../../keystone/service';
+import { getInitialData, redirectToInitial } from '../../keystone/service';
 import { getErrorMessage } from '../../utils/errors';
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
 }
 
 const SocketLayout = observer(({ children }: Props): JSX.Element => {
-  const { socket, auth, ui } = useKeystone();
+  const { socket, ui } = useKeystone();
   const root = useKeystone();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -22,9 +21,9 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
     autorun(async () => {
       if (!socket.isSocketConnected) {
         try {
-          const response = (await api.get(`get-node`)) as IRGetNode;
-          if (response.uri) {
-            socket.connect(response.uri, auth.accessToken);
+          const response = (await api.get(`centrifuge-token`)) as { token: string };
+          if (response.token) {
+            socket.connect(response.token);
           }
         } catch (error) {
           enqueueSnackbar(getErrorMessage(error));
@@ -41,6 +40,10 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
           (async () => {
             try {
               await getInitialData(root);
+              // when all initial data is ready we can place user on his entrypoint route
+              // await here if there any extra API join channel calls
+              await redirectToInitial(root);
+              // now we got everything to start render
               ui.setInitialized(true);
             } catch (error) {
               enqueueSnackbar(getErrorMessage(error));
@@ -54,7 +57,7 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
   if (!ui.initialized) {
     return (
       <>
-        <LinearProgress />
+        <LinearProgress color="secondary" />
       </>
     );
   }

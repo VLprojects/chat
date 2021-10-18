@@ -1,17 +1,17 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { reaction } from 'mobx';
-import useKeystone from '../../keystone';
-import { redirectToInitial } from '../../keystone/service';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import Drawer from '../../components/Drawer';
-import useStyles from './styles';
-import Signup from './components/Signup';
-import Signin from './components/Signin';
+import useKeystone from '../../keystone';
 import { AuthModeEnum } from '../../types/enums';
-import Guest from './components/Guest';
 import ActionBlock from './components/ActionBlock';
+import Guest from './components/Guest';
+import Signin from './components/Signin';
+import Signup from './components/Signup';
+import useStyles from './styles';
 
-const Auth = observer(() => {
+const Auth = () => {
+  const intl = useIntl();
   const classes = useStyles();
   const root = useKeystone();
   const { settings } = root;
@@ -34,16 +34,57 @@ const Auth = observer(() => {
     setOpenDrawerGuestEnter(true);
   };
 
-  useEffect(() =>
-    reaction(
-      () => root.auth.isAuthorized,
-      (isAuthorized) => {
-        if (isAuthorized) {
-          redirectToInitial(root);
-        }
-      },
-    ),
-  );
+  const renderMode = () => {
+    switch (settings.authMode) {
+      case AuthModeEnum.Mode1:
+        return <ActionBlock buttonText={intl.formatMessage({ id: 'signIn' })} onClickButton={onSignIn} />;
+      case AuthModeEnum.Mode2:
+      case AuthModeEnum.Mode4:
+        return (
+          <ActionBlock
+            buttonText={intl.formatMessage({ id: 'loginAsGuest' })}
+            onClickButton={onGuestEnter}
+            footerActions={[{ text: intl.formatMessage({ id: 'signIn' }), onClick: onSignIn }]}
+          />
+        );
+      case AuthModeEnum.Mode5:
+      case AuthModeEnum.Mode7:
+        return (
+          <ActionBlock
+            buttonText={intl.formatMessage({ id: 'createAccount' })}
+            onClickButton={onSignUp}
+            footerActions={[{ text: intl.formatMessage({ id: 'signIn' }), onClick: onSignIn }]}
+          />
+        );
+      case AuthModeEnum.Mode6:
+        return (
+          <ActionBlock
+            buttonText={intl.formatMessage({ id: 'loginAsGuest' })}
+            onClickButton={onGuestEnter}
+            footerActions={[
+              { text: intl.formatMessage({ id: 'createAccount' }), onClick: onSignUp },
+              { text: intl.formatMessage({ id: 'signIn' }).toLocaleLowerCase(), onClick: onSignIn },
+            ]}
+          />
+        );
+      case AuthModeEnum.Mode8:
+        return (
+          <ActionBlock
+            buttonText={intl.formatMessage({ id: 'loginAsGuest' })}
+            onClickButton={onGuestEnter}
+            footerActions={[
+              { text: intl.formatMessage({ id: 'createAccount' }), onClick: onSignUp },
+              {
+                text: intl.formatMessage({ id: 'signIn' }).toLocaleLowerCase(),
+                onClick: onSignIn,
+              },
+            ]}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -60,71 +101,10 @@ const Auth = observer(() => {
       </Drawer>
 
       <div className={classes.container}>
-        <div className={classes.footer}>
-          {settings.authMode === AuthModeEnum.Mode1 && <ActionBlock buttonText="Sign in" onClickButton={onSignIn} />}
-
-          {settings.authMode === AuthModeEnum.Mode2 && (
-            <ActionBlock
-              buttonText="Login as guest"
-              onClickButton={onGuestEnter}
-              footerActions={[{ text: 'Sign in', onClick: () => onSignIn() }]}
-            />
-          )}
-
-          {settings.authMode === AuthModeEnum.Mode3}
-
-          {settings.authMode === AuthModeEnum.Mode4 && (
-            <ActionBlock
-              buttonText="Login as guest"
-              onClickButton={onGuestEnter}
-              footerActions={[{ text: 'Sign in', onClick: () => onSignIn() }]}
-            />
-          )}
-
-          {settings.authMode === AuthModeEnum.Mode5 && (
-            <ActionBlock
-              buttonText="Create an account"
-              onClickButton={onSignUp}
-              footerActions={[{ text: 'Sign in', onClick: () => onSignIn() }]}
-            />
-          )}
-
-          {settings.authMode === AuthModeEnum.Mode6 && (
-            <ActionBlock
-              buttonText="Login as guest"
-              onClickButton={onGuestEnter}
-              footerActions={[
-                { text: 'Create an account', onClick: () => onSignUp() },
-                { text: 'sign in', onClick: () => onSignIn() },
-              ]}
-            />
-          )}
-
-          {settings.authMode === AuthModeEnum.Mode7 && (
-            <ActionBlock
-              buttonText="Create an account"
-              onClickButton={onSignUp}
-              footerActions={[{ text: 'Sign in', onClick: () => onSignIn() }]}
-            />
-          )}
-
-          {settings.authMode === AuthModeEnum.Mode8 && (
-            <ActionBlock
-              buttonText="Login as guest"
-              onClickButton={onGuestEnter}
-              footerActions={[
-                { text: 'Create an account', onClick: () => onSignUp() },
-                {
-                  text: 'sign in',
-                  onClick: () => onSignIn(),
-                },
-              ]}
-            />
-          )}
-        </div>
+        <div className={classes.footer}>{renderMode()}</div>
       </div>
     </>
   );
-});
+};
 
-export default Auth;
+export default observer(Auth);

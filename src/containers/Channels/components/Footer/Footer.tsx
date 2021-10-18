@@ -1,6 +1,7 @@
 import { Typography } from '@material-ui/core';
 import React, { FC } from 'react';
 import ChatUsersIcon from 'ui-kit/icons/ChatUsersIcon';
+import { FormattedMessage } from 'react-intl';
 import useKeystone from '../../../../keystone';
 import Routes from '../../../../routes';
 import useStyles from './styles';
@@ -13,12 +14,16 @@ const Footer: FC = () => {
     <div className={classes.root}>
       <div className={classes.buttonWrapper} onClick={() => root.ui.setRoute(Routes.Profile)}>
         <ChatUsersIcon />
-        <Typography>Profile</Typography>
+        <Typography>
+          <FormattedMessage id="profile" />
+        </Typography>
       </div>
 
       <div className={classes.buttonWrapper} onClick={() => root.ui.setRoute(Routes.Users)}>
         <ChatUsersIcon />
-        <Typography>Users</Typography>
+        <Typography>
+          <FormattedMessage id="users" />
+        </Typography>
       </div>
     </div>
   );

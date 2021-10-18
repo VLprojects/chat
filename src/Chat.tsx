@@ -1,15 +1,17 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { createGenerateClassName, StylesProvider } from '@material-ui/core/styles';
-import React, { FC, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
+import React, { FC, useEffect, useState } from 'react';
+import { RawIntlProvider } from 'react-intl';
 import App from './App';
-import theme from './theme/theme';
+import useEventHook from './hooks/useEventHook';
 import useKeystone from './keystone';
-import { getSettings, redirectToInitial } from './keystone/service';
+import { getSettings } from './keystone/service';
+import theme from './theme/theme';
 import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
 import { IEvents, ListenerEventEnum } from './utils/eventBus/types';
-import useEventHook from './hooks/useEventHook';
+import intl from './utils/intl';
 
 export interface IChatProps {
   appId?: string;
@@ -20,6 +22,8 @@ export interface IChatProps {
 
 export const Chat: FC<IChatProps> = observer((props) => {
   const { appId, channelId, userToken, onEvent } = props;
+  const [tokenInit, setTokenInit] = useState(false);
+
   const root = useKeystone();
   if (onEvent) {
     useEventHook(ListenerEventEnum.App, onEvent);
@@ -43,16 +47,20 @@ export const Chat: FC<IChatProps> = observer((props) => {
     const token = userToken || getStoredAccessToken();
     if (token) {
       root.auth.setAccessToken(token);
-      redirectToInitial(root);
     }
-  });
+    setTokenInit(true);
+  }, []);
+
+  if (!tokenInit) return null;
 
   return (
     <StylesProvider generateClassName={generateClassName}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
+      <RawIntlProvider value={intl}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </RawIntlProvider>
     </StylesProvider>
   );
 });

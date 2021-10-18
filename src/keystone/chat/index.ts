@@ -82,6 +82,13 @@ export default class Chat extends Model({
   }
 
   @modelAction
+  updateUser(payload: { userId: number; name: string }) {
+    const { userId, name } = payload;
+    const user = this.users.get(`${userId}`);
+    if (user) user.displayName = name;
+  }
+
+  @modelAction
   addUsers(users: IRUser[]): void {
     users.forEach((user) => {
       const userModel = new User({
@@ -103,6 +110,7 @@ export default class Chat extends Model({
         id: String(channel.id),
         name: channel.name,
         type: channel.type,
+        externalId: channel.externalId,
       });
 
       this.channels.set(channel.id, channelModel);

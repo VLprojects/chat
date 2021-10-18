@@ -8,8 +8,10 @@ import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import Routes from 'routes';
+import { FormattedMessage } from 'react-intl';
 import Footer from './components/Footer';
 import useStyles from './styles';
+import intl from '../../utils/intl';
 
 interface ITab {
   id: Routes;
@@ -19,11 +21,11 @@ interface ITab {
 const tabs: ITab[] = [
   {
     id: Routes.Channels,
-    title: 'Channels',
+    title: intl.formatMessage({ id: 'channels' }),
   },
   {
     id: Routes.Direct,
-    title: 'Direct',
+    title: intl.formatMessage({ id: 'direct' }),
   },
 ];
 
@@ -60,7 +62,7 @@ const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = 
           <ChannelsList />
           {settings.createChannelAllowed && (
             <button className={classes.btnCreate} type="button" onClick={() => setIsShowCreateChannel(true)}>
-              Create a new channel
+              <FormattedMessage id="createNewChannel" />
             </button>
           )}
 
