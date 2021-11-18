@@ -1,30 +1,48 @@
-export const HEADER_HEIGHT = 67;
-export const SUBHEADER_HEIGHT = 52;
+export const HEADER_HEIGHT = 68;
+export const CHAT_MESSAGE_SUBMIT_FOOTER_HEIGHT = 60;
 
 export const zINDEX = {
   HEADER: 10,
 };
 
-export const COLOURS = {
-  TEXT_PRIMARY: '#333333',
-  TEXT_SECONDARY: '#252323',
-  TEXT_SECONDARY2: '#676767',
-  TEXT_SECONDARY3: '#A1B0BC',
+export enum AvatarColorEnum {
+  AVATAR1_BURGUNDY = 'AVATAR1_BURGUNDY',
+  AVATAR2_RED = 'AVATAR2_RED',
+  AVATAR3_DARK_PINK = 'AVATAR3_DARK_PINK',
+  AVATAR4_PINK = 'AVATAR4_PINK',
+  AVATAR5_GOLD = 'AVATAR5_GOLD',
+  AVATAR6_NAVY_GREEN = 'AVATAR6_NAVY_GREEN',
+  AVATAR7_NAVY_BLUE = 'AVATAR7_NAVY_BLUE',
+  AVATAR8_PURPLE = 'AVATAR8_PURPLE',
+}
 
-  LINK_PRIMARY: '#7EA4DC',
-  MAIN_BG: '#fff',
+export const COLOURS = {
+  BLACK_01: '#333333',
+  BLACK_03: '#999999',
+  WHITE: '#FFF',
+  BLACK: '#000',
+
+  POLL_TEXT_PRIMARY: '#676767',
+  POLL_TEXT_SECONDARY: '#A1B0BC',
+
   SURFACE_PRIMARY: '#FFF',
   SURFACE_SECONDARY: '#E8E8E9',
-};
 
-export const fontRegular14LineHeight17 = {
-  fontSize: 14,
-  fontWeight: 500,
-  lineHeight: '17px',
-};
+  BG_FOR_SLOT: '#EEF1F3',
+  LIGHT_01: '#DEE3E7',
+  LIGHT_02: '#A1B0BC',
+  LIGHT_03: '#E8E8E9',
+  LIGHT_04: '#F6F6F9',
 
-export const fontRegular14LineHeight18 = {
-  fontSize: 14,
-  fontWeight: 500,
-  lineHeight: '18px',
+  ACTIVE: '#535FC4',
+  BLUE: '#1399FA',
+
+  [AvatarColorEnum.AVATAR1_BURGUNDY]: '#6B0C22',
+  [AvatarColorEnum.AVATAR2_RED]: '#D9042B',
+  [AvatarColorEnum.AVATAR3_DARK_PINK]: '#C0437F',
+  [AvatarColorEnum.AVATAR4_PINK]: '#D792D8',
+  [AvatarColorEnum.AVATAR5_GOLD]: '#E2B978',
+  [AvatarColorEnum.AVATAR6_NAVY_GREEN]: '#588C8C',
+  [AvatarColorEnum.AVATAR7_NAVY_BLUE]: '#66588C',
+  [AvatarColorEnum.AVATAR8_PURPLE]: '#5E0C6B',
 };

@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
-import { COLOURS, fontRegular14LineHeight17, fontRegular14LineHeight18 } from 'theme/consts';
+import { makeStyles } from '@mui/styles';
+import { COLOURS } from 'theme/consts';
 
 export default makeStyles(
   {
@@ -11,9 +11,6 @@ export default makeStyles(
       height: '100%',
       justifyContent: 'center',
     },
-    header: {
-      fontWeight: 'bold',
-    },
     field: {
       marginBottom: 21,
       '&:nth-of-type(2)': {
@@ -22,7 +19,6 @@ export default makeStyles(
     },
     fieldLabel: {
       marginBottom: 4,
-      ...fontRegular14LineHeight17,
     },
     footer: {
       display: 'flex',
@@ -34,14 +30,13 @@ export default makeStyles(
       },
     },
     formLabel: {
-      ...fontRegular14LineHeight18,
       marginTop: 10,
-      marginBottom: 15,
+      marginBottom: 24,
       '& > a': {
-        color: COLOURS.LINK_PRIMARY,
+        marginLeft: 4,
+        color: COLOURS.BLUE,
       },
     },
-    fontRegular14LineHeight18,
   },
   { name: 'Signin' },
 );

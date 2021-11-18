@@ -1,9 +1,8 @@
-import { Grid, IconButton, Typography } from '@material-ui/core';
-import Portal from '@material-ui/core/Portal';
+import { Grid, IconButton, Portal, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useRef } from 'react';
+import { FormattedMessage } from 'react-intl';
 import useKeystone from '../../keystone';
-import { COLOURS } from '../../theme/consts';
 import { POLL_CONTAINER } from '../../types/const';
 import { UserRoleEnum } from '../../types/enums';
 import { IPollStatus } from '../../types/types';
@@ -47,7 +46,9 @@ const PollPortal: FC = () => {
             <CloseButton />
           </Grid>
         </Grid>
-        <Typography style={{ color: COLOURS.TEXT_SECONDARY3 }}>Poll</Typography>
+        <Typography color="text.pollSecondary">
+          <FormattedMessage id="poll" />
+        </Typography>
         {isVoted || isModerator ? <ResultVariant poll={poll} /> : <PollVariant poll={poll} channel={currentChannel} />}
       </div>
     </Portal>

@@ -1,5 +1,4 @@
-import { makeStyles } from '@material-ui/core';
-import { COLOURS, fontRegular14LineHeight17, fontRegular14LineHeight18 } from 'theme/consts';
+import { makeStyles } from '@mui/styles';
 
 export default makeStyles(
   {
@@ -11,11 +10,8 @@ export default makeStyles(
       height: '100%',
       justifyContent: 'center',
     },
-    header: {
-      fontWeight: 'bold',
-      marginBottom: 15,
-    },
     field: {
+      marginTop: 24,
       marginBottom: 21,
       '&:nth-of-type(2)': {
         marginBottom: 20,
@@ -23,7 +19,6 @@ export default makeStyles(
     },
     fieldLabel: {
       marginBottom: 4,
-      ...fontRegular14LineHeight17,
     },
     footer: {
       display: 'flex',
@@ -34,15 +29,6 @@ export default makeStyles(
         marginBottom: 24,
       },
     },
-    formLabel: {
-      ...fontRegular14LineHeight18,
-      marginTop: 10,
-      marginBottom: 15,
-      '& > a': {
-        color: COLOURS.LINK_PRIMARY,
-      },
-    },
-    fontRegular14LineHeight18,
   },
   { name: 'Guest' },
 );

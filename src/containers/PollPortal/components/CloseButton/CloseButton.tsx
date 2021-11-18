@@ -1,10 +1,10 @@
-import { makeStyles } from '@material-ui/core';
-import CloseRounded from '@material-ui/icons/CloseRounded';
+import { CloseRounded } from '@mui/icons-material';
+import { makeStyles } from '@mui/styles';
 import React, { FC } from 'react';
 import { COLOURS } from '../../../../theme/consts';
 
 const useStyles = makeStyles({
-  deleteButton: { color: 'white', backgroundColor: COLOURS.TEXT_PRIMARY, borderRadius: 4, fill: 'white', width: 20 },
+  deleteButton: { color: 'white', backgroundColor: COLOURS.BLACK_01, borderRadius: 4, fill: 'white', width: 20 },
 });
 
 const CloseButton: FC = () => {

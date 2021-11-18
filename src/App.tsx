@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import { SnackbarProvider } from 'notistack';
 import React, { FC, useEffect } from 'react';
 import { Router } from './components/Router';
@@ -19,12 +19,14 @@ const useStyles = makeStyles(
     container: {
       width: '100%',
       height: '100%',
-      background: COLOURS.MAIN_BG,
+      background: COLOURS.SURFACE_PRIMARY,
       overflow: 'auto',
       position: 'relative',
       minHeight: 400,
       display: 'flex',
       flexDirection: 'column',
+      boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.07)',
+      borderRadius: 10,
     },
     snackbar: {
       maxWidth: 310,
@@ -49,7 +51,7 @@ const App: FC = () => {
 
   return (
     <div className={classes.container}>
-      <SnackbarProvider dense classes={{ root: classes.snackbar }}>
+      <SnackbarProvider maxSnack={3} autoHideDuration={3000} dense classes={{ root: classes.snackbar }}>
         <AuthLayout>
           <SocketLayout>
             <Router route={Routes.Profile}>

@@ -1,4 +1,5 @@
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { LinearProgress } from '@mui/material';
+import Auth from 'containers/Auth';
 import useKeystone from 'keystone';
 import { signup } from 'keystone/service';
 import { autorun } from 'mobx';
@@ -6,7 +7,6 @@ import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import Routes from 'routes';
 import { usernameGenerator } from 'utils/users';
-import Auth from 'containers/Auth';
 
 interface Props {
   children: JSX.Element;

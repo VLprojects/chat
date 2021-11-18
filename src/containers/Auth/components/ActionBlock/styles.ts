@@ -1,12 +1,11 @@
-import { makeStyles } from '@material-ui/core';
-import { COLOURS, fontRegular14LineHeight18 } from 'theme/consts';
+import { makeStyles } from '@mui/styles';
+import { COLOURS } from 'theme/consts';
 
 export default makeStyles(
   {
     footerActions: {
-      ...fontRegular14LineHeight18,
       '& > a': {
-        color: COLOURS.LINK_PRIMARY,
+        color: COLOURS.BLUE,
       },
     },
   },

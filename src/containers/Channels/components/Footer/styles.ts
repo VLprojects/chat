@@ -1,5 +1,5 @@
-import { makeStyles } from '@material-ui/core';
-import { SUBHEADER_HEIGHT } from '../../../../theme/consts';
+import { makeStyles } from '@mui/styles';
+import { HEADER_HEIGHT } from '../../../../theme/consts';
 
 export default makeStyles(
   {
@@ -8,7 +8,7 @@ export default makeStyles(
       flexWrap: 'nowrap',
       justifyContent: 'center',
       alignItems: 'center',
-      height: SUBHEADER_HEIGHT,
+      height: HEADER_HEIGHT,
       boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
       width: '100%',
     },

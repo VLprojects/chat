@@ -1,4 +1,4 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Poll from '../../../../keystone/chat/poll';

@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import { COLOURS } from '../../../theme/consts';
 
 export default makeStyles(
@@ -13,6 +13,7 @@ export default makeStyles(
       border: 0,
       letterSpacing: '0.01em',
       backgroundColor: 'transparent',
+      transition: 'all 0.1s ease-in-out',
     },
     large: { height: 48, lineHeight: '48px' },
     medium: { fontSize: 14, lineHeight: '18px' },
@@ -37,17 +38,17 @@ export default makeStyles(
     },
     outlined: {
       borderRadius: 10,
-      color: COLOURS.TEXT_PRIMARY,
+      color: COLOURS.BLACK_01,
       boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
       '&:hover': {
-        color: COLOURS.TEXT_PRIMARY,
+        color: COLOURS.BLACK_01,
       },
       '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
     },
     flatTransparent: {
       borderRadius: 10,
       border: '1px solid #B8B6C2',
-      color: COLOURS.TEXT_PRIMARY,
+      color: COLOURS.BLACK_01,
       '&:hover': {},
       '&:active': {},
     },
@@ -70,9 +71,31 @@ export default makeStyles(
       },
       '&[disabled]': {
         background: COLOURS.SURFACE_SECONDARY,
-        color: COLOURS.TEXT_SECONDARY3,
+        color: COLOURS.POLL_TEXT_SECONDARY,
         boxShadow: 'none',
       },
+    },
+    link: {
+      color: COLOURS.BLACK_01,
+      background: 'none',
+      border: 0,
+      padding: 0,
+
+      '&:hover, &:focus, &:active, &:active:focus': {
+        color: COLOURS.BLACK_01,
+      },
+
+      '&:disabled': {
+        color: COLOURS.BLACK_03,
+      },
+    },
+    active: {
+      borderRadius: 10,
+      backgroundColor: COLOURS.ACTIVE,
+      '&:hover': {
+        backgroundColor: COLOURS.BLUE,
+      },
+      '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
     },
   },
   { name: 'Button' },

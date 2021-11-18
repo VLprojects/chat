@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 import SubHeader from '../../components/SubHeader';

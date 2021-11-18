@@ -1,4 +1,5 @@
-import { Box, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Box, Theme, Typography } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 import { observer } from 'mobx-react';
 import React, { FC } from 'react';
 import useKeystone from '../../../../keystone';
@@ -69,7 +70,7 @@ const PollVariant: FC<IProps> = () => {
               bgcolor={option.votesCount ? bgColor : COLOURS.SURFACE_SECONDARY}
               className={classes.progressLine}
             >
-              <Typography variant="subtitle1" className={classes.text}>
+              <Typography variant="subtitle2" className={classes.text}>
                 {option.option}
               </Typography>
             </Box>

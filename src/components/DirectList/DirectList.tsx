@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import useKeystone from '../../keystone';
@@ -17,21 +17,27 @@ const DirectList: FC = () => {
 
   return (
     <Grid container direction="column" spacing={4} style={{ marginTop: 10, flexGrow: 1 }}>
-      {root.chat.directChannelsList.map((channel) => (
-        <Grid
-          item
-          container
-          key={channel.id}
-          className={classes.row}
-          onClick={clickRowHandler(channel.id)}
-          alignItems="center"
-        >
-          <Grid item xs component={Avatar} src={getChatWithUser(root, channel.id)?.avatarUrl} size="lg" />
-          <Grid item component={Typography} className={classes.channelTitle}>
-            {getDirectChannelName(root, channel.id)}
+      {root.chat.directChannelsList.map((channel) => {
+        const user = getChatWithUser(root, channel.id);
+
+        if (!user) return null;
+
+        return (
+          <Grid
+            item
+            container
+            key={channel.id}
+            className={classes.row}
+            onClick={clickRowHandler(channel.id)}
+            alignItems="center"
+          >
+            <Grid item xs component={Avatar} src={user.avatarUrl} avatarColor={user.avatarColor} size="lg" />
+            <Grid item component={Typography} className={classes.channelTitle}>
+              {getDirectChannelName(root, channel.id)}
+            </Grid>
           </Grid>
-        </Grid>
-      ))}
+        );
+      })}
     </Grid>
   );
 };

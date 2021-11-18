@@ -1,14 +1,14 @@
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useSnackbar } from 'notistack';
 import React, { FC, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Input } from 'ui-kit';
-import { useSnackbar } from 'notistack';
-import { getErrorMessage } from '../../../../utils/errors';
 import useKeystone from '../../../../keystone';
 import { signup } from '../../../../keystone/service';
-import useStyles from './styles';
+import { getErrorMessage } from '../../../../utils/errors';
 import { usernameGenerator } from '../../../../utils/users';
+import useStyles from './styles';
 
 const Guest: FC = observer(() => {
   const intl = useIntl();
@@ -34,13 +34,14 @@ const Guest: FC = observer(() => {
   return (
     <>
       <div className={classes.container}>
-        <Typography variant="h1" classes={{ root: classes.header }}>
-          <FormattedMessage id="login" />
-          <br /> <FormattedMessage id="asGuest" />
+        <Typography variant="h2">
+          <FormattedMessage id="loginAsGuest" />
         </Typography>
 
         <div className={classes.field}>
-          <div className={classes.fieldLabel}>Name</div>
+          <Typography variant="body2" className={classes.fieldLabel}>
+            <FormattedMessage id="name" />
+          </Typography>
           <Input
             id="username"
             type="text"
@@ -54,7 +55,7 @@ const Guest: FC = observer(() => {
         </div>
 
         <div className={classes.footer}>
-          <Button variant="submit" fullWidth size="large" onClick={onGuestEnter}>
+          <Button variant="active" fullWidth size="large" onClick={onGuestEnter}>
             <FormattedMessage id="enterTheChat" />
           </Button>
         </div>

@@ -1,3 +1,4 @@
+import { computed } from 'mobx';
 import { model, Model, prop, Ref } from 'mobx-keystone';
 import { MessageTypeEnum } from '../../types/enums';
 import User from './user';
@@ -9,4 +10,9 @@ export default class Message extends Model({
   type: prop<MessageTypeEnum>(),
   user: prop<Ref<User> | null>(),
   createdAt: prop<string>(),
-}) {}
+}) {
+  @computed
+  get getUser(): User | undefined {
+    return this.user?.current;
+  }
+}

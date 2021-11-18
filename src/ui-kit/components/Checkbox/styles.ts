@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import { COLOURS } from '../../../theme/consts';
 
 export default makeStyles(
@@ -6,7 +6,7 @@ export default makeStyles(
     checkbox: {
       width: 20,
       height: 20,
-      border: `2px solid ${COLOURS.TEXT_SECONDARY}`,
+      border: `2px solid ${COLOURS.BLACK_03}`,
       borderRadius: 4,
     },
     input: {

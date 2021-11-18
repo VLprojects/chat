@@ -1,16 +1,13 @@
-import { makeStyles } from '@material-ui/core';
-import { COLOURS, SUBHEADER_HEIGHT } from '../../theme/consts';
+import { makeStyles } from '@mui/styles';
+import { COLOURS, HEADER_HEIGHT } from '../../theme/consts';
 
 export default makeStyles(
   {
-    subHeader: {
-      height: SUBHEADER_HEIGHT,
-      lineHeight: '52px',
-      background: COLOURS.SURFACE_PRIMARY,
-      boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
-      borderRadius: '0px 0px 10px 10px',
+    header: {
+      height: HEADER_HEIGHT,
       display: 'flex',
       position: 'relative',
+      borderBottom: `1px solid ${COLOURS.LIGHT_01}`,
     },
     btnBack: {
       border: 0,
@@ -29,7 +26,6 @@ export default makeStyles(
       padding: '0 64px',
       display: 'flex',
       alignItems: 'center',
-      minHeight: SUBHEADER_HEIGHT,
     },
   },
   { name: 'SubHeader' },

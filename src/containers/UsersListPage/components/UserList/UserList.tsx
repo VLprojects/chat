@@ -1,9 +1,9 @@
-import { IconButton, Typography } from '@material-ui/core';
+import PersonIcon from '@mui/icons-material/Person';
+import { IconButton, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Input } from 'ui-kit';
-import ChatUsersIcon from 'ui-kit/icons/ChatUsersIcon';
 import SearchIcon from 'ui-kit/icons/SearchIcon';
 import useKeystone from '../../../../keystone';
 import User from '../../../../keystone/chat/user';
@@ -39,11 +39,11 @@ const UserList: FC<Props> = (props) => {
       <div className={classes.inputSearch}>
         <Input placeholder={intl.formatMessage({ id: 'search' })} onChange={setSearch} value={search} />
         <IconButton>
-          <SearchIcon fill={COLOURS.TEXT_PRIMARY} />
+          <SearchIcon fill={COLOURS.BLACK_01} />
         </IconButton>
       </div>
       <div className={classes.userCounter}>
-        <ChatUsersIcon fill={COLOURS.TEXT_PRIMARY} />
+        <PersonIcon fill={COLOURS.BLACK_01} />
         <Typography style={{ marginLeft: 8 }}>{filteredUsers.length}</Typography>
       </div>
       <div className={classes.userListWrapper}>

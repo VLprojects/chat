@@ -1,4 +1,4 @@
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { LinearProgress } from '@mui/material';
 import { autorun, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';

@@ -1,6 +1,7 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 import { observer } from 'mobx-react';
 import React, { FC, useEffect } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { FormattedMessage } from 'react-intl';
 import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
@@ -46,24 +47,29 @@ const PollListPage: FC = () => {
       <SubHeader onBack={() => ui.back()}>
         <ChannelName name={currentChannel?.name} />
       </SubHeader>
-      <Grid container direction="column" style={{ padding: '32px 24px' }}>
-        <Grid
-          item
-          component={Button}
-          variant="outlined"
-          size="large"
-          onClick={onCreatePoll}
-          style={{ marginBottom: 30 }}
-        >
-          <Typography variant="body1">
-            <FormattedMessage id="newPoll" />
-          </Typography>
-        </Grid>
+      <Scrollbars autoHide>
+        <Grid container direction="column" style={{ padding: '32px 24px' }}>
+          <Grid
+            item
+            component={Button}
+            variant="outlined"
+            size="large"
+            onClick={onCreatePoll}
+            style={{ marginBottom: 30 }}
+          >
+            <Typography variant="body1">
+              <FormattedMessage id="newPoll" />
+            </Typography>
+          </Grid>
 
-        {currentChannel.polls.map((poll) => (
-          <PollCard key={poll.question} poll={poll} onDelete={onDeletePoll} />
-        ))}
-      </Grid>
+          {currentChannel.polls
+            .slice()
+            .sort((a, b) => +b.id - +a.id)
+            .map((poll) => (
+              <PollCard key={`${poll.question}-${poll.id}`} poll={poll} onDelete={onDeletePoll} />
+            ))}
+        </Grid>
+      </Scrollbars>
 
       <PollPortal />
     </>

@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Avatar } from 'ui-kit';
@@ -25,10 +25,18 @@ const UserRow: React.FC<IProps> = (props) => {
       setLoading(false);
     }
   };
+  if (!user) return null;
 
   return (
     <Grid container className={classes.userRow} alignItems="center">
-      <Grid item component={Avatar} name={user?.displayName} size="lg" src={user?.avatarUrl} />
+      <Grid
+        item
+        component={Avatar}
+        name={user?.displayName}
+        size="lg"
+        src={user.avatarUrl}
+        avatarColor={user.avatarColor}
+      />
       <Grid item component={Typography} style={{ marginLeft: 9 }}>
         {user.displayName}
       </Grid>

@@ -82,7 +82,7 @@ export default class Chat extends Model({
   }
 
   @modelAction
-  updateUser(payload: { userId: number; name: string }) {
+  updateUser(payload: { userId: number; name: string }): void {
     const { userId, name } = payload;
     const user = this.users.get(`${userId}`);
     if (user) user.displayName = name;

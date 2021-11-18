@@ -1,6 +1,7 @@
-import { Typography } from '@material-ui/core';
+import GroupIcon from '@mui/icons-material/Group';
+import PersonIcon from '@mui/icons-material/Person';
+import { Typography } from '@mui/material';
 import React, { FC } from 'react';
-import ChatUsersIcon from 'ui-kit/icons/ChatUsersIcon';
 import { FormattedMessage } from 'react-intl';
 import useKeystone from '../../../../keystone';
 import Routes from '../../../../routes';
@@ -13,15 +14,15 @@ const Footer: FC = () => {
   return (
     <div className={classes.root}>
       <div className={classes.buttonWrapper} onClick={() => root.ui.setRoute(Routes.Profile)}>
-        <ChatUsersIcon />
-        <Typography>
+        <PersonIcon />
+        <Typography variant="body2">
           <FormattedMessage id="profile" />
         </Typography>
       </div>
 
       <div className={classes.buttonWrapper} onClick={() => root.ui.setRoute(Routes.Users)}>
-        <ChatUsersIcon />
-        <Typography>
+        <GroupIcon />
+        <Typography variant="body2">
           <FormattedMessage id="users" />
         </Typography>
       </div>

@@ -1,4 +1,4 @@
-import { Checkbox, FormControl, FormControlLabel, FormGroup } from '@material-ui/core';
+import { Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Poll from '../../../../keystone/chat/poll';

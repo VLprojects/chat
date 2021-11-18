@@ -2,8 +2,9 @@ import { compareAsc } from 'date-fns';
 import { computed } from 'mobx';
 import { getRoot, model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
 import { IServerPoll } from '../../containers/CreatePollPage/types';
-import { ChannelTypeEnum, MessageTypeEnum } from '../../types/enums';
+import { ChannelTypeEnum } from '../../types/enums';
 import { IRChannelMessage } from '../../types/serverResponses';
+import { IPollStatus } from '../../types/types';
 import { convertServerPollToModel } from '../../utils/common';
 import Message from './message';
 import Poll, { pollRef } from './poll';
@@ -23,17 +24,18 @@ export default class Channel extends Model({
   @modelAction
   addMessages(messages: IRChannelMessage[]): void {
     messages.forEach((message) => {
-      const messageModel = new Message({
-        id: message.id,
-        text: message.text,
-        type: message.type,
-        createdAt: message.createdAt,
-        user: [MessageTypeEnum.System].includes(message.type)
-          ? null
-          : userRef(getRoot(this).chat.getUserLazy(message.userId)),
-      });
-
-      this.messages.set(message.id, messageModel);
+      // temporarily ignore messages without user
+      if (message.userId) {
+        const messageModel = new Message({
+          id: message.id,
+          text: message.text,
+          type: message.type,
+          createdAt: message.createdAt,
+          user: userRef(getRoot(this).chat.getUserLazy(message.userId)),
+        });
+  
+        this.messages.set(message.id, messageModel);
+      }
     });
   }
 
@@ -108,6 +110,12 @@ export default class Channel extends Model({
     if (this.activePoll && poll) this.activePoll.current.status = poll.status;
 
     this.activePoll = undefined;
+
+    this.polls.forEach((p) => {
+      if (p.id === poll.id) {
+        p.status = IPollStatus.Done;
+      }
+    });
   }
 
   @modelAction

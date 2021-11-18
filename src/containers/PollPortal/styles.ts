@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
 export default makeStyles({
   root: {
@@ -13,5 +13,6 @@ export default makeStyles({
     boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
     borderRadius: 10,
     padding: 14,
+    zIndex: 999999,
   },
 });

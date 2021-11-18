@@ -1,4 +1,5 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { COLOURS } from 'theme/consts';
 
 export default makeStyles(
   {
@@ -6,7 +7,9 @@ export default makeStyles(
       cursor: 'pointer',
     },
     btnActive: {
-      color: '#fff',
+      padding: '8px 16px',
+      backgroundColor: COLOURS.BG_FOR_SLOT,
+      borderRadius: 37,
     },
     btnCreate: {
       border: 0,

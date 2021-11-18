@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { autorun } from 'mobx';
 import React, { FC, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -5,6 +6,7 @@ import { IPollStatus } from 'types/types';
 import { Button } from 'ui-kit';
 import useKeystone from '../../../../keystone';
 import Poll from '../../../../keystone/chat/poll';
+import Routes from '../../../../routes';
 import { startPoll, stopPoll } from '../../services';
 
 interface IProps {
@@ -42,8 +44,17 @@ const PollAction: FC<IProps> = (props) => {
   const onPollEnd = async () => {
     try {
       await stopPoll(+poll.id);
+      currentChannel.stopPoll(poll);
     } catch (e) {
-      // show error
+      const err = e as AxiosError;
+      switch (err?.response?.status) {
+        case 409:
+          currentChannel.stopPoll(poll);
+          break;
+        default:
+          ui.setRoute(`/${Routes.Polls}`);
+          break;
+      }
     }
   };
 

@@ -1,12 +1,12 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { COLOURS } from 'theme/consts';
 
 export default makeStyles(
   {
     userRow: {
       padding: '12px 16px',
       '&:hover': {
-        boxShadow: '0px 10px 25px 2px rgba(0, 0, 0, 0.15)',
-        borderRadius: 10,
+        backgroundColor: COLOURS.LIGHT_04,
       },
       '&:hover > #sendMessageBtn': {
         display: 'block',

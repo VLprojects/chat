@@ -1,6 +1,8 @@
-import React, { FC, memo } from 'react';
-import { Button } from '@material-ui/core';
+import { ChevronLeft } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import cls from 'classnames';
+import React, { FC, memo } from 'react';
+import { COLOURS } from 'theme/consts';
 import useStyles from './styles';
 
 interface IDrawerProps {
@@ -24,9 +26,9 @@ const Drawer: FC<IDrawerProps> = (props) => {
               [classes.root]: true,
             })}
           >
-            <div className={classes.cancelButton}>
-              <Button onClick={onClickClose}>Cancel</Button>
-            </div>
+            <IconButton className={classes.cancelButton} onClick={onClickClose}>
+              <ChevronLeft fill={COLOURS.BLACK_01} />
+            </IconButton>
 
             <div className={classes.content}>{children}</div>
           </div>

@@ -1,4 +1,5 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import { COLOURS } from 'theme/consts';
 
 export default makeStyles(
   {
@@ -10,10 +11,10 @@ export default makeStyles(
       outline: 'none',
     },
     fullWidth: { width: '100%' },
-    large: { height: 48, lineHeight: '48px', padding: '0 0 0 8px' },
+    large: { height: 40, lineHeight: '48px', padding: '12px 16px' },
     outlined: {
-      border: '1px solid #b8b6c2',
-      borderRadius: 5,
+      border: `1px solid ${COLOURS.LIGHT_03}`,
+      borderRadius: 10,
     },
     text: {},
     medium: {},

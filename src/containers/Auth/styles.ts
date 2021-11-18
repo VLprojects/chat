@@ -1,5 +1,4 @@
-import { makeStyles } from '@material-ui/core';
-import { fontRegular14LineHeight17 } from 'theme/consts';
+import { makeStyles } from '@mui/styles';
 
 export default makeStyles(
   {
@@ -23,7 +22,6 @@ export default makeStyles(
     },
     fieldLabel: {
       marginBottom: 4,
-      ...fontRegular14LineHeight17,
     },
     footer: {
       display: 'flex',

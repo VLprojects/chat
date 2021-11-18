@@ -1,5 +1,6 @@
-import { CssBaseline, ThemeProvider } from '@material-ui/core';
-import { createGenerateClassName, StylesProvider } from '@material-ui/core/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
+import { createGenerateClassName, StylesProvider } from '@mui/styles';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { RawIntlProvider } from 'react-intl';
@@ -54,13 +55,15 @@ export const Chat: FC<IChatProps> = observer((props) => {
   if (!tokenInit) return null;
 
   return (
-    <StylesProvider generateClassName={generateClassName}>
-      <RawIntlProvider value={intl}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </RawIntlProvider>
-    </StylesProvider>
+    <StyledEngineProvider injectFirst>
+      <StylesProvider generateClassName={generateClassName}>
+        <RawIntlProvider value={intl}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </RawIntlProvider>
+      </StylesProvider>
+    </StyledEngineProvider>
   );
 });

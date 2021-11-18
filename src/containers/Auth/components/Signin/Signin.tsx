@@ -1,15 +1,14 @@
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useSnackbar } from 'notistack';
 import React, { FC, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Input } from 'ui-kit';
-import { useSnackbar } from 'notistack';
-import { getErrorMessage } from '../../../../utils/errors';
 import useKeystone from '../../../../keystone';
 import { login } from '../../../../keystone/service';
-import useStyles from './styles';
+import { getErrorMessage } from '../../../../utils/errors';
 import { AUTH_PASSWORD_MIN_LENGTH, AUTH_USERNAME_MIN_LENGTH } from '../../const';
-import Routes from '../../../../routes';
+import useStyles from './styles';
 
 interface ISigninProps {
   onClickSignUp: () => void;
@@ -44,20 +43,27 @@ const Signin: FC<ISigninProps> = observer((props) => {
   return (
     <>
       <div className={classes.container}>
-        <Typography variant="h1" classes={{ root: classes.header }}>
-          <FormattedMessage id="signIn" />
-          <br /> <FormattedMessage id="theChat" />
+        <Typography variant="h2">
+          <FormattedMessage id="signInTheChat" />
         </Typography>
-        <div className={classes.formLabel}>
+        <Typography
+          variant="h4"
+          fontWeight={500}
+          fontFamily="PTRootUIWebMedium"
+          component="div"
+          className={classes.formLabel}
+        >
           <span>
             <FormattedMessage id="dontHaveAccount" />
           </span>
           <a href="#" onClick={onClickSignUp}>
             <FormattedMessage id="signUp" />
           </a>
-        </div>
+        </Typography>
         <div className={classes.field}>
-          <div className={classes.fieldLabel}>Name</div>
+          <Typography variant="body2" className={classes.fieldLabel}>
+            <FormattedMessage id="name" />
+          </Typography>
           <Input
             id="username"
             type="text"
@@ -70,7 +76,9 @@ const Signin: FC<ISigninProps> = observer((props) => {
           />
         </div>
         <div className={classes.field}>
-          <div className={classes.fieldLabel}>Password</div>
+          <Typography variant="body2" className={classes.fieldLabel}>
+            <FormattedMessage id="password" />
+          </Typography>
           <Input
             id="password"
             size="large"
@@ -83,18 +91,9 @@ const Signin: FC<ISigninProps> = observer((props) => {
           />
         </div>
         <div className={classes.footer}>
-          <Button disabled={!isFilledForm} variant="submit" fullWidth size="large" onClick={onLogin}>
+          <Button disabled={!isFilledForm} variant="active" fullWidth size="large" onClick={onLogin}>
             <FormattedMessage id="enterTheChat" />
           </Button>
-
-          <div>
-            <span className={classes.fontRegular14LineHeight18}>
-              <FormattedMessage id="dontHaveAccount" />
-            </span>
-            <a href="#" onClick={() => root.ui.setRoute(Routes.Signup)} className={classes.fontRegular14LineHeight18}>
-              <FormattedMessage id="signUp" />
-            </a>
-          </div>
         </div>
       </div>
     </>

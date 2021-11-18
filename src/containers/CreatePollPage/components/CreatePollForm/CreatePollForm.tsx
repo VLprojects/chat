@@ -1,15 +1,19 @@
-import { FormLabel, IconButton, Typography } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import InputMui from '@material-ui/core/Input';
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  IconButton,
+  Input as InputMui,
+  Typography,
+} from '@mui/material';
 import arrayMutators from 'final-form-arrays';
 import FieldHOC from 'hoc/FieldHOC';
 import React, { FC } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Field, Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
+import { FormattedMessage, useIntl } from 'react-intl';
 import CloseIcon from 'ui-kit/icons/CloseIcon';
 import useKeystone from '../../../../keystone';
 import Channel from '../../../../keystone/chat/channel';
@@ -23,6 +27,7 @@ import validate from './validate';
 const InputField = FieldHOC(InputMui);
 const CheckboxField = FieldHOC(Checkbox);
 const MAX_ADDED_OPTIONS = 10;
+const MAX_OPTION_LENGTH = 150;
 
 interface IProps {
   channel: Channel;
@@ -37,6 +42,10 @@ const CreatePollForm: FC<IProps> = (props) => {
 
   const onSubmit = async (values: ICreatePollForm) => {
     try {
+      if (values?.options) {
+        values.options = values.options.filter((option) => option);
+      }
+
       const response = await createPoll(values, +channel.id);
       channel.addPoll(response);
       ui.back();
@@ -106,6 +115,9 @@ const CreatePollForm: FC<IProps> = (props) => {
                             placeholder={intl.formatMessage({ id: 'enterOption' })}
                             classes={{ root: classes.textInput }}
                             disableUnderline
+                            inputProps={{
+                              maxLength: MAX_OPTION_LENGTH,
+                            }}
                           />
                         }
                         label=""

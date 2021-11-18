@@ -7,7 +7,7 @@ interface ButtonProps {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   fullWidth?: boolean;
   disabled?: boolean;
-  variant?: 'contained' | 'text' | 'submit' | 'outlined' | 'flatTransparent';
+  variant?: 'contained' | 'text' | 'submit' | 'outlined' | 'flatTransparent' | 'link' | 'active';
   size?: 'large' | 'medium' | 'small';
   className?: string;
   [prop: string]: unknown;

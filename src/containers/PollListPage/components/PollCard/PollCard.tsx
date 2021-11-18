@@ -1,6 +1,5 @@
-import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem } from '@material-ui/core';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { DeleteForever, MoreHoriz } from '@mui/icons-material';
+import { Card, CardContent, CardHeader, IconButton, Menu, MenuItem } from '@mui/material';
 import React, { FC, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Poll from '../../../../keystone/chat/poll';
@@ -34,14 +33,14 @@ const PollCard: FC<IProps> = (props) => {
       <CardHeader
         action={
           <IconButton aria-label="settings" onClick={handleMenuActionClick}>
-            <MoreHorizIcon color="primary" className={classes.moreAction} />
+            <MoreHoriz color="primary" className={classes.moreAction} />
           </IconButton>
         }
         title={poll.question}
       />
       <Menu id="poll-menu" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={handleMenuActionClose}>
         <MenuItem onClick={onDelete} disabled={poll.status === IPollStatus.InProgress}>
-          <DeleteForeverIcon /> <FormattedMessage id="deletePoll" />
+          <DeleteForever /> <FormattedMessage id="deletePoll" />
         </MenuItem>
       </Menu>
       <CardContent>

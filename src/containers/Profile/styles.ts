@@ -1,15 +1,14 @@
-import { makeStyles } from '@material-ui/core';
-import { COLOURS } from '../../theme/consts';
+import { makeStyles } from '@mui/styles';
 
 export default makeStyles(
   {
     container: {
-      padding: '40px 40px 20px',
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      padding: '24px',
     },
-    field: {
-      margin: '0 0 20px',
-      label: { marginRight: 4, color: COLOURS.TEXT_SECONDARY },
-    },
+
     error: {
       display: 'inline-block',
       borderRadius: 4,

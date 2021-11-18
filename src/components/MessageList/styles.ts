@@ -1,11 +1,18 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 
 export default makeStyles(
   {
     messages: {
       flexGrow: 1,
     },
-    messagesListWrapper: { width: '100%', padding: '15px 12px' },
+    message: {
+      padding: '6px 12px',
+      whiteSpace: 'pre-wrap',
+      wordWrap: 'break-word',
+    },
+    messageContainer: {
+      padding: '0 12px',
+    },
   },
   { name: 'MessageList' },
 );

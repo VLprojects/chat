@@ -1,14 +1,14 @@
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
+import { useSnackbar } from 'notistack';
 import React, { FC, useMemo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Input } from 'ui-kit';
-import { useSnackbar } from 'notistack';
 import { getErrorMessage } from 'utils/errors';
-import { signup } from '../../../../keystone/service';
 import useKeystone from '../../../../keystone';
-import useStyles from './styles';
+import { signup } from '../../../../keystone/service';
 import { AUTH_PASSWORD_MIN_LENGTH, AUTH_USERNAME_MIN_LENGTH } from '../../const';
+import useStyles from './styles';
 
 interface ISignupProps {
   onClickSignIn: () => void;
@@ -42,9 +42,8 @@ const Signup: FC<ISignupProps> = observer((props) => {
 
   return (
     <div className={classes.container}>
-      <Typography variant="h1" classes={{ root: classes.header }}>
-        <FormattedMessage id="signUp" />
-        <br /> <FormattedMessage id="inTheChat" />
+      <Typography variant="h2">
+        <FormattedMessage id="signUpinTheChat" />
       </Typography>
       <div className={classes.formLabel}>
         <span>
@@ -55,9 +54,9 @@ const Signup: FC<ISignupProps> = observer((props) => {
         </a>
       </div>
       <div className={classes.field}>
-        <div className={classes.fieldLabel}>
+        <Typography variant="body2" className={classes.fieldLabel}>
           <FormattedMessage id="name" />
-        </div>
+        </Typography>
         <Input
           id="username"
           type="text"
@@ -70,9 +69,9 @@ const Signup: FC<ISignupProps> = observer((props) => {
         />
       </div>
       <div className={classes.field}>
-        <div className={classes.fieldLabel}>
+        <Typography variant="body2" className={classes.fieldLabel}>
           <FormattedMessage id="password" />
-        </div>
+        </Typography>
         <Input
           id="password"
           size="large"
@@ -85,7 +84,7 @@ const Signup: FC<ISignupProps> = observer((props) => {
         />
       </div>
       <div className={classes.footer}>
-        <Button disabled={!isFilledForm} variant="submit" fullWidth size="large" onClick={onSignup}>
+        <Button disabled={!isFilledForm} variant="active" fullWidth size="large" onClick={onSignup}>
           <FormattedMessage id="createAccount" />
         </Button>
       </div>

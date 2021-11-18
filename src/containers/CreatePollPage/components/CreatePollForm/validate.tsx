@@ -9,7 +9,7 @@ function findNumberOfFilledOptions(options: string[], min_number: number): numbe
   return options.slice(0).reduce(
     (acc, curr, i, arr) =>
       // @ts-ignore
-      acc === min_number ? arr.splice(1) : (acc += curr.trim() ? 1 : 0),
+      acc === min_number ? arr.splice(1) : (acc += curr ? 1 : 0),
     0,
   ) as unknown as number;
 }
@@ -43,7 +43,7 @@ export default (values: ICreatePollForm): IReturnProps => {
   }
 
   if (values?.question?.trim().length > 150) {
-    errors.all.push("Question couldn't be longer then 150 letters");
+    errors.all.push(intl.formatMessage({ id: 'questionValidateNotLongerLetters' }));
   }
 
   if (findNumberOfFilledOptions(values.options, MIN_NUMBER_OF_WRITTEN_OPTIONS) < MIN_NUMBER_OF_WRITTEN_OPTIONS) {

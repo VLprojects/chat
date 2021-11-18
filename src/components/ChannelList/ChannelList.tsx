@@ -1,10 +1,11 @@
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { Button } from 'ui-kit';
 import useKeystone from '../../keystone';
 import { joinChannel } from '../../keystone/service';
 import Routes from '../../routes';
+import LastMessage from './components/LastMessage';
 import useStyles from './styles';
 
 const ChannelList: FC = () => {
@@ -13,9 +14,7 @@ const ChannelList: FC = () => {
 
   const goToChannel = (id: string) => root.ui.setRoute(`${Routes.Channels}/${id}`);
 
-  const onChannelClick = (id: string): void => goToChannel(id);
-
-  const onPubClick = async (id: string) => {
+  const onPubClick = (id: string) => async () => {
     await joinChannel(root, id);
     goToChannel(id);
   };
@@ -23,18 +22,15 @@ const ChannelList: FC = () => {
   return (
     <div className={classes.channelsList}>
       {root.chat.publicChannelsList.map((item) => (
-        <div key={item.id} className={classes.channelRow} onClick={() => onChannelClick(item.id)}>
-          <Typography variant="subtitle1">{item.name}</Typography>
-          <div className={classes.counter}>{item.messagesCount}</div>
-        </div>
+        <LastMessage key={item.id} channel={item} />
       ))}
       {root.chat.pubsList.map((item) => (
-        <div key={item.id} className={classes.channelRow}>
-          <Typography variant="subtitle1">{item.name}</Typography>
-          <Button onClick={() => onPubClick(item.id)} variant="contained" size="small">
+        <Grid container key={item.id} alignItems="center" justifyContent="space-between" sx={{ padding: '12px 16px' }}>
+          <Typography variant="subtitle2">{item.name}</Typography>
+          <Button onClick={onPubClick(item.id)} variant="contained" size="small">
             Join
           </Button>
-        </div>
+        </Grid>
       ))}
     </div>
   );

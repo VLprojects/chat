@@ -1,11 +1,11 @@
-import Typography from '@material-ui/core/Typography';
+import { Grid, Typography } from '@mui/material';
 import SubHeader from 'components/SubHeader';
-import { FormattedMessage, useIntl } from 'react-intl';
 import useKeystone from 'keystone';
 import { saveProfile } from 'keystone/service';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Input } from 'ui-kit';
 import { getErrorMessage } from '../../utils/errors';
 import useStyles from './styles';
@@ -37,41 +37,40 @@ const Profile = observer(() => {
   return (
     <>
       <SubHeader onBack={() => ui.back()}>
-        <Typography variant="h4" color="textPrimary">
-          <FormattedMessage id="profile" />
-        </Typography>
+        <Grid container justifyContent="space-around" alignItems="center">
+          <Typography fontFamily="PTRootUIWebBold">
+            <FormattedMessage id="profile" />
+          </Typography>
+        </Grid>
       </SubHeader>
       <div className={classes.container}>
-        <div className={classes.field}>
-          <label htmlFor="username">
-            <FormattedMessage id="username" />:
-          </label>
-          <Input
-            id="username"
-            fullWidth
-            variant="outlined"
-            size="large"
-            placeholder={intl.formatMessage({ id: 'username' })}
-            value={displayName}
-            onChange={setDisplayName}
-          />
-        </div>
-        <div className={classes.field}>
-          <label htmlFor="avatar">
-            <FormattedMessage id="avatar" />:
-          </label>
-          <Input
-            id="avatar"
-            fullWidth
-            variant="outlined"
-            size="large"
-            placeholder={intl.formatMessage({ id: 'avatarUrl' })}
-            value={avatar}
-            onChange={setAvatar}
-          />
-        </div>
+        <Typography component="label" htmlFor="username" variant="body2" fontFamily="PTRootUIWebBold">
+          <FormattedMessage id="username" />
+        </Typography>
+        <Input
+          id="username"
+          fullWidth
+          variant="outlined"
+          size="large"
+          placeholder={intl.formatMessage({ id: 'username' })}
+          value={displayName}
+          onChange={setDisplayName}
+        />
 
-        <Button fullWidth size="large" variant="submit" onClick={onSaveProfile}>
+        <Typography component="label" htmlFor="avatar" variant="body2" marginTop="20px" fontFamily="PTRootUIWebBold">
+          <FormattedMessage id="avatar" />
+        </Typography>
+        <Input
+          id="avatar"
+          fullWidth
+          variant="outlined"
+          size="large"
+          placeholder={intl.formatMessage({ id: 'avatarUrl' })}
+          value={avatar}
+          onChange={setAvatar}
+        />
+
+        <Button fullWidth size="large" variant="active" onClick={onSaveProfile} style={{ marginTop: 'auto' }}>
           <FormattedMessage id="save" />
         </Button>
       </div>

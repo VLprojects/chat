@@ -1,14 +1,19 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
-export const getErrorMessage = (error: Error): string => {
-  if (axios.isAxiosError(error)) {
-    if (error.response?.data.message) {
-      return String(error.response.data.message);
+export const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    if (axios.isAxiosError(error)) {
+      const err = error as unknown as AxiosError<{ message: string }>;
+      if (err.response?.data.message) {
+        return String(err.response.data.message);
+      }
+      return 'Unknown server error';
     }
-    return 'Unknown server error';
+
+    return error.message;
   }
 
-  return error.message;
-}
+  return '';
+};
 
 export default {};
