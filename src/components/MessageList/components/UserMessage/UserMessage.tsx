@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import cls from 'classnames';
 import { format, formatDistance, isToday, subDays } from 'date-fns';
 import { enGB, ru } from 'date-fns/locale';
@@ -9,6 +10,7 @@ import { Avatar } from 'ui-kit';
 import User from '../../../../keystone/chat/user';
 import intl from '../../../../utils/intl';
 import useCommonStyles from '../../styles';
+import MessageActions from '../MessageActions';
 import useStyles from './styles';
 
 export interface IProps {
@@ -17,10 +19,12 @@ export interface IProps {
   message: string;
   date: Date;
   short?: boolean;
+  isModerator?: boolean;
+  messageId: number;
 }
 
 const UserMessage: FC<IProps> = (props) => {
-  const { own = false, user, message = '', date, short = false } = props;
+  const { own = false, user, message = '', date, short = false, isModerator, messageId } = props;
   const classes = useStyles(props);
   const commonClasses = useCommonStyles();
 
@@ -38,7 +42,7 @@ const UserMessage: FC<IProps> = (props) => {
             size="lg"
             avatarColor={user?.avatarColor}
           />
-          <Grid className={classes.displayName} item component={Typography}>
+          <Grid className={classes.displayName} item>
             <Typography variant="body2" fontWeight="bold">
               {user?.displayName}
             </Typography>
@@ -67,12 +71,17 @@ const UserMessage: FC<IProps> = (props) => {
           data-qa="chat-msg"
           className={cls(commonClasses.message, classes.userMessage, { [classes.userMessageOwn]: own })}
         >
-          <Typography>
-            <Linkify options={{ target: '_blank' }} style={{ color: 'red' }}>
-              {message}
-            </Linkify>
-          </Typography>
+          <Tooltip
+            placement={own ? 'left' : 'right'}
+            title={isModerator ? <MessageActions messageId={messageId} /> : false}
+            classes={{ tooltip: classes.tooltip }}
+          >
+            <Typography>
+              <Linkify options={{ target: '_blank' }}>{message}</Linkify>
+            </Typography>
+          </Tooltip>
         </Grid>
+        {}
       </Grid>
     </>
   );

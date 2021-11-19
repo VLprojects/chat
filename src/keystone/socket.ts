@@ -1,12 +1,13 @@
-import { getRoot, model, Model, prop } from 'mobx-keystone';
 import Centrifuge from 'centrifuge';
+import { getPinnedMessages } from 'containers/ChannelPage/service';
+import { getRoot, model, Model, prop } from 'mobx-keystone';
 import { IServerPoll } from '../containers/CreatePollPage/types';
+import CentrifugeEventsEnum from '../types/centrifugeEvents';
 import { IRChannel, ISEMessage, ISENewChannelUser } from '../types/serverResponses';
 import SocketEventsEnum from '../types/socketEvents';
 import { convertServerPollToModel } from '../utils/common';
 import { Root } from './index';
 import { joinChannel } from './service';
-import CentrifugeEventsEnum from '../types/centrifugeEvents';
 
 // has "Store" in name to not confuse with Socket instance
 @model('SocketStore')
@@ -55,6 +56,11 @@ export default class SocketStore extends Model({
       channel.updateVotesCounter(pollOptionsIds);
     };
 
+    const onMessagePinned = (data: { channelId: string }) => {
+      const { channelId } = data;
+      getPinnedMessages(root, channelId);
+    };
+
     const onUpdateProfile = (payload: { value: string; userId: number }) => {
       const { value, userId } = payload;
 
@@ -91,6 +97,9 @@ export default class SocketStore extends Model({
           break;
         case SocketEventsEnum.UserUpdateProfile:
           onUpdateProfile(payload);
+          break;
+        case SocketEventsEnum.MessagePinned:
+          onMessagePinned(payload);
           break;
         default:
       }

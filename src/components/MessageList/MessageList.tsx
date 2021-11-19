@@ -1,9 +1,8 @@
+import { Grid } from '@mui/material';
 import { observer } from 'mobx-react-lite';
-import React, { createRef, FC, RefObject, useEffect } from 'react';
-import Scrollbars, { positionValues } from 'react-custom-scrollbars-2';
+import React, { createRef, FC, RefObject, useEffect, useRef, useState } from 'react';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
-import { CHAT_MESSAGE_SUBMIT_FOOTER_HEIGHT } from 'theme/consts';
-import { MessageTypeEnum } from 'types/enums';
+import { MessageTypeEnum, UserRoleEnum } from 'types/enums';
 import useKeystone from '../../keystone';
 import Message from '../../keystone/chat/message';
 import SystemMessage from './components/SystemMessage/SystemMessage';
@@ -19,23 +18,65 @@ export const cache = new CellMeasurerCache({
   fixedWidth: true,
 });
 
+function easeInOutQuint(t: number) {
+  // eslint-disable-next-line no-plusplus
+  return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
+}
+
 const MessageList: FC<MessageListProps> = (props) => {
   const classes = useStyles();
   const { messages = [] } = props;
-  const { auth } = useKeystone();
+  const [scrollTop, setScrollTop] = useState<number>();
+  const { auth, ui } = useKeystone();
   const listRef = createRef<List>();
-  const scrollRef = createRef<Scrollbars>();
+  const scrollTopInitial = useRef<number>();
+  const animationStartTime = useRef<number>();
 
-  const handleScroll = (e: React.UIEvent) => {
-    const { scrollTop, scrollLeft } = e.target as unknown as positionValues;
-    listRef.current?.Grid?.handleScrollEvent({ scrollTop, scrollLeft });
+  const onScroll = ({ scrollTop: _scrollTop }: { scrollTop: number }) => {
+    if (!animationStartTime.current) {
+      scrollTopInitial.current = _scrollTop;
+    }
+  };
+
+  const jumpToMessage = () => {
+    const scrollTopFinal = listRef?.current?.getOffsetForRow({
+      index: ui.pinnedMessageIdx.msgIdx,
+    });
+    const animate = () => {
+      requestAnimationFrame(() => {
+        const duration = 1000;
+
+        const now = performance.now();
+        if (
+          animationStartTime.current &&
+          (scrollTopFinal || scrollTopFinal === 0) &&
+          (scrollTopInitial.current || scrollTopInitial.current === 0)
+        ) {
+          const ellapsed = now - animationStartTime.current;
+          const scrollDelta = scrollTopFinal - scrollTopInitial.current;
+          const easedTime = easeInOutQuint(Math.min(1, ellapsed / duration));
+          const calculatedScrollTop = scrollTopInitial.current + scrollDelta * easedTime;
+
+          setScrollTop(calculatedScrollTop);
+          if (ellapsed < duration) {
+            animate();
+          } else {
+            animationStartTime.current = undefined;
+            scrollTopInitial.current = scrollTopFinal;
+            setScrollTop(undefined);
+          }
+        }
+      });
+    };
+    animationStartTime.current = performance.now();
+    animate();
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      scrollRef.current?.scrollToBottom();
-    }, 0);
-  }, [messages]);
+    if (ui.pinnedMessageIdx.msgIdx || ui.pinnedMessageIdx.msgIdx === 0) {
+      jumpToMessage();
+    }
+  }, [ui.pinnedMessageIdx]);
 
   const messageRenderer = ({ index, key, style, parent }: ListRowProps) => {
     const msg = messages[index];
@@ -66,7 +107,9 @@ const MessageList: FC<MessageListProps> = (props) => {
                   own={msg.user.current.id === `${auth.me.id}`}
                   user={msg.user.current}
                   message={msg.text}
+                  messageId={+msg.id}
                   date={new Date(msg.createdAt)}
+                  isModerator={auth.me.role === UserRoleEnum.Moderator}
                 />
               ) : (
                 msg.user &&
@@ -80,33 +123,25 @@ const MessageList: FC<MessageListProps> = (props) => {
   };
 
   return (
-    <div className={classes.messages}>
+    <Grid item xs>
       <AutoSizer>
         {({ width, height }) => (
-          <Scrollbars
-            autoHide
-            ref={scrollRef}
-            onScroll={(e) => handleScroll(e)}
-            style={{ width, height: height - CHAT_MESSAGE_SUBMIT_FOOTER_HEIGHT }}
-          >
-            <List
-              ref={listRef}
-              style={{
-                overflow: 'visible',
-              }}
-              width={width}
-              height={height}
-              deferredMeasurementCache={cache}
-              rowHeight={cache.rowHeight}
-              rowRenderer={messageRenderer}
-              rowCount={messages.length}
-              scrollToIndex={messages.length - 1}
-              overscanRowCount={2}
-            />
-          </Scrollbars>
+          <List
+            ref={listRef}
+            width={width}
+            height={height}
+            deferredMeasurementCache={cache}
+            rowHeight={cache.rowHeight}
+            rowRenderer={messageRenderer}
+            rowCount={messages.length}
+            scrollToIndex={messages.length - 1}
+            scrollTop={scrollTop}
+            onScroll={onScroll}
+            overscanRowCount={2}
+          />
         )}
       </AutoSizer>
-    </div>
+    </Grid>
   );
 };
 

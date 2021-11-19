@@ -1,10 +1,11 @@
 import { Typography } from '@mui/material';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
+import PinnedMessageList from 'components/PinnedMessageList';
 import SubHeader from 'components/SubHeader';
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Routes from 'routes';
 import { Button } from 'ui-kit';
@@ -12,17 +13,21 @@ import { getDirectChannelName } from '../../components/DirectList/service';
 import { ChannelTypeEnum, UserRoleEnum } from '../../types/enums';
 import ChannelName from '../../ui-kit/ChannelName';
 import PollPortal from '../PollPortal';
-import useStyles from './styles';
+import { getPinnedMessages } from './service';
 
 // const MAX_USERS_ON_PREVIEW = 2;
 
 const ChannelPage: FC = observer(() => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const root = useKeystone();
   const { ui, chat, settings, auth } = root;
-
   const channelId = String(ui.params.id);
   const currentChannel = chat.channels.get(channelId);
+
+  useEffect(() => {
+    getPinnedMessages(root, channelId);
+  }, []);
+
   if (!currentChannel) {
     return null;
   }
@@ -37,7 +42,7 @@ const ChannelPage: FC = observer(() => {
   };
 
   return (
-    <div className={classes.pageWrapper}>
+    <>
       <SubHeader onBack={settings.displayChannelList ? () => ui.setRoute(backUrl) : undefined}>
         <ChannelName
           name={
@@ -73,13 +78,13 @@ const ChannelPage: FC = observer(() => {
           )}
         </div> */}
       </SubHeader>
-
+      <PinnedMessageList />
       <MessageList messages={currentChannel.sortedMessages} />
 
       <MessageInput channelId={channelId} />
 
       <PollPortal />
-    </div>
+    </>
   );
 });
 

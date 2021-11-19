@@ -3,10 +3,11 @@ import { computed } from 'mobx';
 import { getRoot, model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
 import { IServerPoll } from '../../containers/CreatePollPage/types';
 import { ChannelTypeEnum } from '../../types/enums';
-import { IRChannelMessage } from '../../types/serverResponses';
+import { IRChannelMessage, IRPinnedMessage } from '../../types/serverResponses';
 import { IPollStatus } from '../../types/types';
 import { convertServerPollToModel } from '../../utils/common';
 import Message from './message';
+import PinnedMessage from './pinnedMessage';
 import Poll, { pollRef } from './poll';
 import User, { userRef } from './user';
 
@@ -20,6 +21,7 @@ export default class Channel extends Model({
   users: prop(() => objectMap<Ref<User>>()),
   polls: prop<Poll[]>(() => []),
   activePoll: prop<Ref<Poll> | undefined>(() => undefined),
+  pinnedMessages: prop<PinnedMessage[]>(() => []),
 }) {
   @modelAction
   addMessages(messages: IRChannelMessage[]): void {
@@ -128,6 +130,13 @@ export default class Channel extends Model({
     this.activePoll = poll ? pollRef(poll) : undefined;
   }
 
+  @modelAction
+  setPinnedMessages(items: Array<IRPinnedMessage | PinnedMessage>): void {
+    this.pinnedMessages = items.map((item) =>
+      item instanceof PinnedMessage ? item : new PinnedMessage({ ...item, id: `${item.id}` }),
+    );
+  }
+
   @computed
   get sortedMessages(): Message[] {
     return Array.from(this.messages.values()).sort((a: Message, b: Message) =>
@@ -148,5 +157,21 @@ export default class Channel extends Model({
   @computed
   get getActivePoll(): Poll | undefined {
     return this.activePoll?.maybeCurrent;
+  }
+
+  @computed
+  get getPinnedMessages(): PinnedMessage[] {
+    return Array.from(this.pinnedMessages.values());
+  }
+
+  @computed
+  get lastPinnedMessage(): PinnedMessage {
+    const pinnedMessages = this.getPinnedMessages;
+    return pinnedMessages[pinnedMessages.length - 1];
+  }
+
+  @modelAction
+  findMessageIdx(messageId: number): number {
+    return Array.from(this.messages.values()).findIndex((msg) => +msg.id === messageId);
   }
 }

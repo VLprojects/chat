@@ -58,3 +58,10 @@ export interface IRLogin {
 export interface IRGetNode {
   uri: string;
 }
+
+export interface IRPinnedMessage {
+  id: number;
+  channelId: number;
+  messageId: number;
+  message: IRChannelMessage;
+}

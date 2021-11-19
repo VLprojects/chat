@@ -23,6 +23,15 @@ export default makeStyles(
       marginRight: 44,
     },
     isNew: {},
+    tooltipRoot: {
+      width: 20,
+      zIndex: 0,
+    },
+    tooltip: {
+      backgroundColor: COLOURS.WHITE,
+      boxShadow: 'none',
+      borderRadius: 'none',
+    },
   },
 
   { name: 'Message' },

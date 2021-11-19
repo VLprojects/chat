@@ -8,6 +8,7 @@ enum SocketEventsEnum {
   PollStop = 'poll-stop',
   PollVote = 'poll-vote',
   UserUpdateProfile = 'user-update-profile',
+  MessagePinned = 'message-pinned',
 }
 
 export default SocketEventsEnum;

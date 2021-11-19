@@ -1,7 +1,7 @@
 {
   "name": "@vlprojects-chat/chat",
   "author": "vlprojects",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "chat",
   "license": "ISC",
   "main": "dist/index.js",

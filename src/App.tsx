@@ -20,7 +20,7 @@ const useStyles = makeStyles(
       width: '100%',
       height: '100%',
       background: COLOURS.SURFACE_PRIMARY,
-      overflow: 'auto',
+      overflow: 'hidden',
       position: 'relative',
       minHeight: 400,
       display: 'flex',

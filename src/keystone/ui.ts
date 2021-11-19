@@ -6,6 +6,8 @@ export default class UI extends Model({
   channelId: prop<string>('').withSetter(),
   params: prop<Record<string, unknown>>(() => ({})).withSetter(),
   initialized: prop<boolean>(false).withSetter(),
+  // pinnedMessageIdx: prop<number | undefined>().withSetter(),
+  pinnedMessageIdx: prop<Record<string, number>>(() => ({})).withSetter(),
 }) {
   routeHistory: string[] = [];
 
