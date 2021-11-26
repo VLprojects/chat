@@ -10,7 +10,6 @@ export default makeStyles(
       borderTop: `1px solid ${COLOURS.LIGHT_01}`,
       background: COLOURS.WHITE,
       zIndex: 10,
-      marginTop: 10,
     },
   },
   { name: 'MessageInput' },

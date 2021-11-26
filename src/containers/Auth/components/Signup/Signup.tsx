@@ -84,7 +84,7 @@ const Signup: FC<ISignupProps> = observer((props) => {
         />
       </div>
       <div className={classes.footer}>
-        <Button disabled={!isFilledForm} variant="active" fullWidth size="large" onClick={onSignup}>
+        <Button disabled={!isFilledForm} variant="primary" fullWidth size="large" onClick={onSignup}>
           <FormattedMessage id="createAccount" />
         </Button>
       </div>

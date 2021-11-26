@@ -1,7 +1,8 @@
-import { pinMessage } from 'containers/ChannelPage/service';
+import { deleteMessage, pinMessage } from 'containers/ChannelPage/service';
 import MoreButton from 'hoc/MoreButtonHOC';
 import useKeystone from 'keystone';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { DropMenuItem } from 'ui-kit/components/DropMenu';
 
 interface IProps {
@@ -19,9 +20,19 @@ const MessageActions: React.FC<IProps> = (props) => {
     if (onClose) onClose();
   };
 
+  const onDeleteMessage = () => {
+    deleteMessage(props.messageId);
+    if (onClose) onClose();
+  };
+
   return (
     <>
-      <DropMenuItem action={onPinMessage}>Pin message</DropMenuItem>
+      <DropMenuItem action={onPinMessage}>
+        <FormattedMessage id="pinMessage" />
+      </DropMenuItem>
+      <DropMenuItem action={onDeleteMessage}>
+        <FormattedMessage id="deleteMessage" />
+      </DropMenuItem>
     </>
   );
 };

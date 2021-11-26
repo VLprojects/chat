@@ -4,10 +4,6 @@ import { IProps } from './UserMessage';
 
 export default makeStyles(
   {
-    displayName: {
-      marginLeft: 8,
-      marginRight: 12,
-    },
     userMessage: {
       backgroundColor: COLOURS.SURFACE_SECONDARY,
       borderRadius: 10,
@@ -17,7 +13,7 @@ export default makeStyles(
       marginBottom: 6,
     },
     userMessageOwn: {
-      backgroundColor: (props: IProps) => COLOURS[props.user.avatarColor],
+      backgroundColor: (props: IProps) => COLOURS[props.user.getAvatarColor],
       color: COLOURS.WHITE,
       maxWidth: '80%',
       marginRight: 44,

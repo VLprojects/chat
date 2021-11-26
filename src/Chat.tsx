@@ -7,14 +7,15 @@ import { RawIntlProvider } from 'react-intl';
 import App from './App';
 import useEventHook from './hooks/useEventHook';
 import useKeystone from './keystone';
-import { getSettings } from './keystone/service';
 import theme from './theme/theme';
 import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
 import { IEvents, ListenerEventEnum } from './utils/eventBus/types';
 import intl from './utils/intl';
+import { initializeApi } from './api'
 
 export interface IChatProps {
+  apiUrl?: string;
   appId?: string;
   channelId?: string;
   userToken?: string;
@@ -22,7 +23,7 @@ export interface IChatProps {
 }
 
 export const Chat: FC<IChatProps> = observer((props) => {
-  const { appId, channelId, userToken, onEvent } = props;
+  const { apiUrl, appId, channelId, userToken, onEvent } = props;
   const [tokenInit, setTokenInit] = useState(false);
 
   const root = useKeystone();
@@ -35,14 +36,11 @@ export const Chat: FC<IChatProps> = observer((props) => {
   });
 
   useEffect(() => {
-    const { appIdFromAttr, channelIdFromAttr } = findAppInitialData();
+    const { apiUrlFromAttr, appIdFromAttr, channelIdFromAttr } = findAppInitialData();
     root.auth.setAppId(appIdFromAttr || appId || '');
+    initializeApi(apiUrlFromAttr || apiUrl || process.env.REACT_APP_API_BASEURL || '');
     if (channelIdFromAttr || channelId) {
       root.ui.setChannelId(channelIdFromAttr || channelId || '');
-    }
-
-    if (root.auth.appId) {
-      getSettings(root, root.auth.appId);
     }
 
     const token = userToken || getStoredAccessToken();

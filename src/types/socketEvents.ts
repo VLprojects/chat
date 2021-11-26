@@ -9,6 +9,8 @@ enum SocketEventsEnum {
   PollVote = 'poll-vote',
   UserUpdateProfile = 'user-update-profile',
   MessagePinned = 'message-pinned',
+  DeleteMessages = 'delete-messages',
+  CleanChannelMessages = 'сlean-channel-messages',
 }
 
 export default SocketEventsEnum;

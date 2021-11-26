@@ -8,9 +8,11 @@ const palette = {
     secondary: COLOURS.BLACK_03,
     white: COLOURS.WHITE,
     black: COLOURS.BLACK,
-
     pollPrimary: COLOURS.POLL_TEXT_PRIMARY,
     pollSecondary: COLOURS.POLL_TEXT_SECONDARY,
+  },
+  primary: {
+    main: '#535FC4',
   },
 };
 

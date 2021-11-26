@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Badge, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { format, formatDistance, isToday, subDays } from 'date-fns';
 import { enGB, ru } from 'date-fns/locale';
@@ -26,9 +26,7 @@ const useStyles = makeStyles({
     },
   },
   badge: {
-    padding: '2px 4px',
-    backgroundColor: COLOURS.ACTIVE,
-    borderRadius: '100px',
+    marginRight: 10,
   },
 });
 
@@ -72,7 +70,7 @@ const LastMessage: FC<IProps> = (props) => {
               name={lastMessage.getUser?.displayName}
               src={lastMessage.getUser?.avatarUrl}
               size="lg"
-              avatarColor={lastMessage.getUser?.avatarColor}
+              avatarColor={lastMessage.getUser?.getAvatarColor}
             />
           </Grid>
         )}
@@ -82,13 +80,7 @@ const LastMessage: FC<IProps> = (props) => {
             {lastMessage?.text || <FormattedMessage id="channelCreated" />}
           </Typography>
         </Grid>
-        {lastMessage && (
-          <div className={classes.badge}>
-            <Typography variant="subtitle2" color="text.white">
-              {channel.messagesCount}
-            </Typography>
-          </div>
-        )}
+        {lastMessage && <Badge badgeContent={channel.messagesCount} color="primary" className={classes.badge} />}
       </Grid>
     </Grid>
   );

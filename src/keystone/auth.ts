@@ -1,4 +1,4 @@
-import api from 'api';
+import { setToken } from 'api';
 import { model, Model, modelAction, prop } from 'mobx-keystone';
 import { IRUser } from '../types/serverResponses';
 import { storeAccessToken } from '../utils/auth';
@@ -14,7 +14,7 @@ export default class Auth extends Model({
 }) {
   @modelAction
   setAccessToken(token: string): void {
-    api.setToken(token);
+    setToken(token);
     this.accessToken = token;
     this.isAuthorized = true;
     storeAccessToken(token);

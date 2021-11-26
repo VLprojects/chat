@@ -40,10 +40,10 @@ const UserMessage: FC<IProps> = (props) => {
             name={user.displayName}
             src={user.avatarUrl}
             size="lg"
-            avatarColor={user?.avatarColor}
+            avatarColor={user?.getAvatarColor}
           />
-          <Grid className={classes.displayName} item>
-            <Typography variant="body2" fontWeight="bold">
+          <Grid item marginLeft="8px" marginRight="12px">
+            <Typography variant="body2" fontWeight={600} component="span">
               {user?.displayName}
             </Typography>
           </Grid>
@@ -66,22 +66,21 @@ const UserMessage: FC<IProps> = (props) => {
       )}
 
       <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'}>
-        <Grid
-          item
-          data-qa="chat-msg"
-          className={cls(commonClasses.message, classes.userMessage, { [classes.userMessageOwn]: own })}
+        <Tooltip
+          placement={own ? 'left' : 'right'}
+          title={isModerator ? <MessageActions messageId={messageId} /> : false}
+          classes={{ tooltip: classes.tooltip }}
         >
-          <Tooltip
-            placement={own ? 'left' : 'right'}
-            title={isModerator ? <MessageActions messageId={messageId} /> : false}
-            classes={{ tooltip: classes.tooltip }}
+          <Grid
+            item
+            data-qa="chat-msg"
+            className={cls(commonClasses.message, classes.userMessage, { [classes.userMessageOwn]: own })}
           >
             <Typography>
               <Linkify options={{ target: '_blank' }}>{message}</Linkify>
             </Typography>
-          </Tooltip>
-        </Grid>
-        {}
+          </Grid>
+        </Tooltip>
       </Grid>
     </>
   );

@@ -35,7 +35,7 @@ export default class Channel extends Model({
           createdAt: message.createdAt,
           user: userRef(getRoot(this).chat.getUserLazy(message.userId)),
         });
-  
+
         this.messages.set(message.id, messageModel);
       }
     });
@@ -135,6 +135,21 @@ export default class Channel extends Model({
     this.pinnedMessages = items.map((item) =>
       item instanceof PinnedMessage ? item : new PinnedMessage({ ...item, id: `${item.id}` }),
     );
+  }
+
+  @modelAction
+  cleanAllMessages(): void {
+    this.messages.clear();
+  }
+
+  @modelAction
+  deleteMessages(ids: number[]): void {
+    ids.forEach((id) => {
+      const messageToDelete = this.messages.get(`${id}`);
+      if (messageToDelete) {
+        this.messages.delete(messageToDelete.id);
+      }
+    });
   }
 
   @computed

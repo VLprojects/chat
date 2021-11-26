@@ -31,7 +31,7 @@ const DirectList: FC = () => {
             onClick={clickRowHandler(channel.id)}
             alignItems="center"
           >
-            <Grid item xs component={Avatar} src={user.avatarUrl} avatarColor={user.avatarColor} size="lg" />
+            <Grid item xs component={Avatar} src={user.avatarUrl} avatarColor={user.getAvatarColor} size="lg" />
             <Grid item component={Typography} className={classes.channelTitle}>
               {getDirectChannelName(root, channel.id)}
             </Grid>

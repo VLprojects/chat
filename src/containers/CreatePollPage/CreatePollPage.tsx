@@ -1,16 +1,14 @@
 import { Grid, Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
+import HeaderTitle from 'ui-kit/HeaderTitle';
 import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
-import ChannelName from '../../ui-kit/ChannelName';
 import CreatePollForm from './components/CreatePollForm';
-import useStyles from './styles';
 
 const CreatePollPage: FC = () => {
   const root = useKeystone();
   const { ui, chat } = root;
-  const classes = useStyles();
 
   const channelId = String(ui.params.id);
 
@@ -20,17 +18,15 @@ const CreatePollPage: FC = () => {
   }
 
   return (
-    <div>
+    <>
       <SubHeader onBack={() => ui.back()}>
-        <ChannelName name={currentChannel?.name} />
+        <HeaderTitle title={currentChannel?.name} />
       </SubHeader>
-      <Grid container direction="column" alignItems="center" className={classes.root}>
-        <Grid item component={Typography}>
-          <FormattedMessage id="createPoll" />
-        </Grid>
-        <Grid item component={CreatePollForm} channel={currentChannel} />
+      <Grid item component={Typography} sx={{ padding: '32px 24px 0px' }}>
+        <FormattedMessage id="createPoll" />
       </Grid>
-    </div>
+      <Grid item component={CreatePollForm} channel={currentChannel} />
+    </>
   );
 };
 

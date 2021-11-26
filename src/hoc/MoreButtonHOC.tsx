@@ -11,7 +11,7 @@ const useStyles = makeStyles({
 });
 
 type IMoreButtonHOCProps<T> = T & {
-  icon?: React.Component;
+  icon?: React.ReactNode;
 };
 
 type IInjected = {

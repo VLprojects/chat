@@ -14,7 +14,7 @@ import { joinChannel } from './service';
 export default class SocketStore extends Model({
   isSocketConnected: prop<boolean>(false).withSetter(),
 }) {
-  connect(accessToken: string): void {
+  connect(socketUrl: string, accessToken: string): void {
     const root: Root = getRoot(this);
 
     const onMessage = ({ channelId, message }: ISEMessage) => {
@@ -61,13 +61,25 @@ export default class SocketStore extends Model({
       getPinnedMessages(root, channelId);
     };
 
+    const onMessagesDelete = (data: { ids: number[]; channelId: number }) => {
+      const { channelId, ids } = data;
+      const channel = root.chat.channels.get(`${channelId}`);
+      channel?.deleteMessages(ids);
+    };
+
+    const onCleanChannelMessages = (data: { channelId: number }) => {
+      const { channelId } = data;
+      const channel = root.chat.channels.get(`${channelId}`);
+      channel?.cleanAllMessages();
+    };
+
     const onUpdateProfile = (payload: { value: string; userId: number }) => {
       const { value, userId } = payload;
 
       return root.chat.updateUser({ userId, name: value });
     };
 
-    const centrifuge = new Centrifuge(`${process.env.REACT_APP_WS_URL}`);
+    const centrifuge = new Centrifuge(socketUrl);
 
     centrifuge.on(CentrifugeEventsEnum.Connect, () => {
       this.setIsSocketConnected(true);
@@ -100,6 +112,12 @@ export default class SocketStore extends Model({
           break;
         case SocketEventsEnum.MessagePinned:
           onMessagePinned(payload);
+          break;
+        case SocketEventsEnum.DeleteMessages:
+          onMessagesDelete(payload);
+          break;
+        case SocketEventsEnum.CleanChannelMessages:
+          onCleanChannelMessages(payload);
           break;
         default:
       }

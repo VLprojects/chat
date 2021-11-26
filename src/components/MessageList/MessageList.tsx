@@ -14,7 +14,7 @@ interface MessageListProps {
 }
 
 export const cache = new CellMeasurerCache({
-  // defaultHeight: 55,
+  defaultHeight: 55,
   fixedWidth: true,
 });
 
@@ -78,7 +78,7 @@ const MessageList: FC<MessageListProps> = (props) => {
     }
   }, [ui.pinnedMessageIdx]);
 
-  const messageRenderer = ({ index, key, style, parent }: ListRowProps) => {
+  const messageRenderer = ({ index, key, parent, style }: ListRowProps) => {
     const msg = messages[index];
 
     if (!msg) {
@@ -92,15 +92,8 @@ const MessageList: FC<MessageListProps> = (props) => {
           const short =
             msg.user?.current.id === messages[index - 1]?.user?.current.id &&
             messages[index - 1].type !== MessageTypeEnum.System;
-          const nextShort =
-            msg.user?.current.id === messages[index + 1]?.user?.current.id &&
-            messages[index + 1].type !== MessageTypeEnum.System;
           return (
-            <div
-              ref={cellMeasurerChild}
-              className={classes.messageContainer}
-              style={{ ...style, paddingTop: short ? 0 : 12, paddingBottom: nextShort ? 0 : 12 }}
-            >
+            <div ref={cellMeasurerChild} className={classes.messageContainer} style={style}>
               {msg.user && msg.type === MessageTypeEnum.User ? (
                 <UserMessage
                   short={short}
@@ -112,8 +105,7 @@ const MessageList: FC<MessageListProps> = (props) => {
                   isModerator={auth.me.role === UserRoleEnum.Moderator}
                 />
               ) : (
-                msg.user &&
-                msg.type === MessageTypeEnum.System && <SystemMessage key={key} user={msg.user.current} />
+                msg.user && msg.type === MessageTypeEnum.System && <SystemMessage key={key} user={msg.user.current} />
               )}
             </div>
           );
@@ -123,24 +115,26 @@ const MessageList: FC<MessageListProps> = (props) => {
   };
 
   return (
-    <Grid item xs>
-      <AutoSizer>
-        {({ width, height }) => (
-          <List
-            ref={listRef}
-            width={width}
-            height={height}
-            deferredMeasurementCache={cache}
-            rowHeight={cache.rowHeight}
-            rowRenderer={messageRenderer}
-            rowCount={messages.length}
-            scrollToIndex={messages.length - 1}
-            scrollTop={scrollTop}
-            onScroll={onScroll}
-            overscanRowCount={2}
-          />
-        )}
-      </AutoSizer>
+    <Grid item xs container>
+      <div style={{ flex: '1 1 auto' }}>
+        <AutoSizer>
+          {({ width, height }) => (
+            <List
+              ref={listRef}
+              width={width}
+              height={height}
+              deferredMeasurementCache={cache}
+              rowHeight={cache.rowHeight}
+              rowRenderer={messageRenderer}
+              rowCount={messages.length}
+              scrollToIndex={messages.length - 1}
+              scrollTop={scrollTop}
+              onScroll={onScroll}
+              overscanRowCount={2}
+            />
+          )}
+        </AutoSizer>
+      </div>
     </Grid>
   );
 };

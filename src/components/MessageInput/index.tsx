@@ -1,3 +1,4 @@
+import SettingsIcon from '@mui/icons-material/Settings';
 import { Grid, IconButton, TextareaAutosize } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
@@ -8,15 +9,17 @@ import SubmitMessageIcon from 'ui-kit/icons/SubmitMessageIcon';
 import useKeystone from '../../keystone';
 import { sendMessage } from '../../keystone/service';
 import { getErrorMessage } from '../../utils/errors';
+import MessageInputActions from './components/MessageInputActions';
 import useStyles from './styles';
 
 interface IMessageInput {
   channelId: string;
+  isModerator: boolean;
 }
 
 const MessageInput: FC<IMessageInput> = (props) => {
   const intl = useIntl();
-  const { channelId } = props;
+  const { channelId, isModerator } = props;
   const classes = useStyles();
 
   const [message, setMessage] = useState('');
@@ -52,8 +55,13 @@ const MessageInput: FC<IMessageInput> = (props) => {
   };
   return (
     <div className={classes.root}>
-      <Grid container justifyContent="space-between" alignItems="center" spacing={1.5} wrap="nowrap">
-        <Grid item xs={10} sx={{ overflow: 'auto' }}>
+      <Grid container alignItems="center" spacing={1.5} wrap="nowrap">
+        {isModerator && (
+          <Grid item alignSelf="baseline" sx={{ color: '#999999', cursor: 'pointer' }}>
+            <MessageInputActions icon={<SettingsIcon fontSize="small" color="inherit" />} />
+          </Grid>
+        )}
+        <Grid item xs={10} sx={{ overflow: 'auto', paddingLeft: '9px' }}>
           <TextareaAutosize
             onKeyDown={onKeyDown}
             placeholder={intl.formatMessage({ id: 'messageInputPlaceholder' })}

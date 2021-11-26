@@ -55,7 +55,7 @@ const Guest: FC = observer(() => {
         </div>
 
         <div className={classes.footer}>
-          <Button variant="active" fullWidth size="large" onClick={onGuestEnter}>
+          <Button variant="primary" fullWidth size="large" onClick={onGuestEnter}>
             <FormattedMessage id="enterTheChat" />
           </Button>
         </div>

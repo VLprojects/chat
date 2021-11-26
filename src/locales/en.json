@@ -54,5 +54,8 @@
   "questionValidateCorrectAnswerNotEmpty": "Correct answer couldn't be empty",
   "questionValidateNotLongerLetters": "Question couldn't be longer then 150 letters",
   "joined": "joined",
-  "channelCreated": "Channel created"
+  "channelCreated": "Channel created",
+  "pinMessage": "Pin message",
+  "deleteMessage": "Delete message",
+  "deleteAllMessage": "Delete all messages"
 }

@@ -29,7 +29,9 @@ const Avatar: FC<IProps> = (props) => {
       onClick={onClick}
       sx={{ bgcolor: src ? 'inherit' : COLOURS[avatarColor] }}
     >
-      <Typography variant="h4">{name && getLeadingLetters(name.trim())}</Typography>
+      <Typography variant="h4" sx={{ textTransform: 'uppercase' }}>
+        {name && getLeadingLetters(name)}
+      </Typography>
     </AvatarMUI>
   );
 };

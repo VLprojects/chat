@@ -54,5 +54,8 @@
   "questionValidateCorrectAnswerNotEmpty": "Правильный ответ не может быть пустым",
   "questionValidateNotLongerLetters": "Вопрос не может быть длиннее 150 символов",
   "joined": "присоединился",
-  "channelCreated": "Канал создан"
+  "channelCreated": "Канал создан",
+  "pinMessage": "Закрепить",
+  "deleteMessage": "Удалить сообщение",
+  "deleteAllMessage": "Удалить все сообщения"
 }

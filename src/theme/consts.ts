@@ -34,7 +34,6 @@ export const COLOURS = {
   LIGHT_03: '#E8E8E9',
   LIGHT_04: '#F6F6F9',
 
-  ACTIVE: '#535FC4',
   BLUE: '#1399FA',
 
   [AvatarColorEnum.AVATAR1_BURGUNDY]: '#6B0C22',

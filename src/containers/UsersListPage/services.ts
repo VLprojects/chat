@@ -1,5 +1,5 @@
 import { Root } from 'keystone/index';
-import api from '../../api';
+import { POST } from '../../api';
 import Channel from '../../keystone/chat/channel';
 import User from '../../keystone/chat/user';
 import { joinChannel } from '../../keystone/service'
@@ -7,7 +7,7 @@ import Routes from '../../routes';
 import { IRChannel } from '../../types/serverResponses';
 
 export const createNewDirectChannel = async (root: Root, chatWithUser: User): Promise<IRChannel> =>
-  (await api.post(`channels/create-direct`, {
+  (await POST(`channels/create-direct`, {
     userId: chatWithUser.id,
   })) as IRChannel;
 

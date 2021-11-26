@@ -55,112 +55,114 @@ const CreatePollForm: FC<IProps> = (props) => {
   };
 
   return (
-    <Form onSubmit={onSubmit} initialValues={EMPTY_POLL} mutators={{ ...arrayMutators }} validate={validate}>
-      {({ handleSubmit, values, errors }) => (
-        <form onSubmit={handleSubmit} className={classes.form}>
-          <FormControl component="fieldset" fullWidth>
-            <FormLabel component="legend" style={{ marginBottom: 4 }}>
-              <FormattedMessage id="pollQuestion" />
-            </FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                style={{ margin: 0 }}
-                control={
-                  <Field
-                    name="question"
-                    component={InputField}
-                    rows={5}
-                    multiline
-                    placeholder={intl.formatMessage({ id: 'enterYourQuestion' })}
-                    classes={{ root: classes.textInput }}
-                    disableUnderline
-                  />
-                }
-                label=""
-              />
-            </FormGroup>
-          </FormControl>
-          <FormControl component="fieldset" fullWidth>
-            <FormGroup>
-              <FormControlLabel
-                control={<Field name="withAnswer" component={CheckboxField} />}
-                label={intl.formatMessage({ id: 'pollWithCorrectAnswer' })}
-              />
-            </FormGroup>
-          </FormControl>
-          <FormControl component="fieldset" fullWidth>
-            <FormLabel component="legend" style={{ marginBottom: 4 }}>
-              <FormattedMessage id="pollOptions" />
-            </FormLabel>
-          </FormControl>
+    <div style={{ padding: '32px 24px', overflow: 'auto' }}>
+      <Form onSubmit={onSubmit} initialValues={EMPTY_POLL} mutators={{ ...arrayMutators }} validate={validate}>
+        {({ handleSubmit, values, errors }) => (
+          <form onSubmit={handleSubmit} className={classes.form}>
+            <FormControl component="fieldset" fullWidth>
+              <FormLabel component="legend" style={{ marginBottom: 4 }}>
+                <FormattedMessage id="pollQuestion" />
+              </FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  style={{ margin: 0 }}
+                  control={
+                    <Field
+                      name="question"
+                      component={InputField}
+                      rows={5}
+                      multiline
+                      placeholder={intl.formatMessage({ id: 'enterYourQuestion' })}
+                      classes={{ root: classes.textInput }}
+                      disableUnderline
+                    />
+                  }
+                  label=""
+                />
+              </FormGroup>
+            </FormControl>
+            <FormControl component="fieldset" fullWidth>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Field name="withAnswer" component={CheckboxField} />}
+                  label={intl.formatMessage({ id: 'pollWithCorrectAnswer' })}
+                />
+              </FormGroup>
+            </FormControl>
+            <FormControl component="fieldset" fullWidth>
+              <FormLabel component="legend" style={{ marginBottom: 4 }}>
+                <FormattedMessage id="pollOptions" />
+              </FormLabel>
+            </FormControl>
 
-          <FieldArray name="options">
-            {({ fields }) => (
-              <>
-                {fields.map((field, idx) => (
-                  <FormControl component="fieldset" fullWidth key={field} style={{ marginBottom: 16 }}>
-                    <FormGroup row>
-                      {values.withAnswer && (
+            <FieldArray name="options">
+              {({ fields }) => (
+                <>
+                  {fields.map((field, idx) => (
+                    <FormControl component="fieldset" fullWidth key={field} style={{ marginBottom: 16 }}>
+                      <FormGroup row>
+                        {values.withAnswer && (
+                          <FormControlLabel
+                            control={<Field name={`validOptions.${idx}`} component={CheckboxField} />}
+                            label=""
+                          />
+                        )}
                         <FormControlLabel
-                          control={<Field name={`validOptions.${idx}`} component={CheckboxField} />}
+                          style={{ margin: 0, flexGrow: 1 }}
+                          control={
+                            <Field
+                              name={`${field}`}
+                              component={InputField}
+                              placeholder={intl.formatMessage({ id: 'enterOption' })}
+                              classes={{ root: classes.textInput }}
+                              disableUnderline
+                              inputProps={{
+                                maxLength: MAX_OPTION_LENGTH,
+                              }}
+                            />
+                          }
                           label=""
                         />
-                      )}
-                      <FormControlLabel
-                        style={{ margin: 0, flexGrow: 1 }}
-                        control={
-                          <Field
-                            name={`${field}`}
-                            component={InputField}
-                            placeholder={intl.formatMessage({ id: 'enterOption' })}
-                            classes={{ root: classes.textInput }}
-                            disableUnderline
-                            inputProps={{
-                              maxLength: MAX_OPTION_LENGTH,
-                            }}
-                          />
-                        }
-                        label=""
-                      />
-                      <FormControlLabel
-                        control={
-                          <IconButton
-                            onClick={() => {
-                              if (values.options.length > 2) fields.remove(idx);
-                            }}
-                            style={{ marginLeft: 12 }}
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        }
-                        label=""
-                      />
-                    </FormGroup>
-                  </FormControl>
-                ))}
+                        <FormControlLabel
+                          control={
+                            <IconButton
+                              onClick={() => {
+                                if (values.options.length > 2) fields.remove(idx);
+                              }}
+                              style={{ marginLeft: 12 }}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          }
+                          label=""
+                        />
+                      </FormGroup>
+                    </FormControl>
+                  ))}
 
-                <Button
-                  variant="flatTransparent"
-                  fullWidth
-                  size="large"
-                  onClick={() => fields.value.length < MAX_ADDED_OPTIONS && fields.push('')}
-                >
-                  <Typography>
-                    <FormattedMessage id="addOption" />
-                  </Typography>
-                </Button>
-              </>
-            )}
-          </FieldArray>
-          <ErrorMessage message={errors?.all[0]} />
-          <Button type="submit" variant="submit" fullWidth size="large" disabled={errors?.all[0]}>
-            <Typography>
-              <FormattedMessage id="createPoll" />
-            </Typography>
-          </Button>
-        </form>
-      )}
-    </Form>
+                  <Button
+                    variant="flatTransparent"
+                    fullWidth
+                    size="large"
+                    onClick={() => fields.value.length < MAX_ADDED_OPTIONS && fields.push('')}
+                  >
+                    <Typography>
+                      <FormattedMessage id="addOption" />
+                    </Typography>
+                  </Button>
+                </>
+              )}
+            </FieldArray>
+            <ErrorMessage message={errors?.all[0]} />
+            <Button type="submit" variant="submit" fullWidth size="large" disabled={errors?.all[0]}>
+              <Typography>
+                <FormattedMessage id="createPoll" />
+              </Typography>
+            </Button>
+          </form>
+        )}
+      </Form>
+    </div>
   );
 };
 

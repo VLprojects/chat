@@ -3,9 +3,9 @@ import { autorun, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
 import React, { ReactNode, useEffect } from 'react';
-import api from '../../api';
+import { GET } from '../../api';
 import useKeystone from '../../keystone';
-import { getInitialData, redirectToInitial } from '../../keystone/service';
+import { getSettings, getInitialData, redirectToInitial } from '../../keystone/service';
 import { getErrorMessage } from '../../utils/errors';
 
 interface Props {
@@ -21,9 +21,10 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
     autorun(async () => {
       if (!socket.isSocketConnected) {
         try {
-          const response = (await api.get(`centrifuge-token`)) as { token: string };
-          if (response.token) {
-            socket.connect(response.token);
+          await getSettings(root, root.auth.appId);
+          const response = (await GET(`centrifuge-token`)) as { token: string };
+          if (root.settings.socketUrl && response.token) {
+            socket.connect(root.settings.socketUrl, response.token);
           }
         } catch (error) {
           enqueueSnackbar(getErrorMessage(error));

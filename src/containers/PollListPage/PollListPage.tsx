@@ -1,14 +1,13 @@
 import { Grid, Typography } from '@mui/material';
 import { observer } from 'mobx-react';
 import React, { FC, useEffect } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import { FormattedMessage } from 'react-intl';
+import HeaderTitle from 'ui-kit/HeaderTitle';
 import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
 import Poll from '../../keystone/chat/poll';
 import Routes from '../../routes';
 import { Button } from '../../ui-kit';
-import ChannelName from '../../ui-kit/ChannelName';
 import PollPortal from '../PollPortal';
 import PollCard from './components/PollCard';
 import { deletePoll, getPollListForChannel } from './services';
@@ -45,31 +44,33 @@ const PollListPage: FC = () => {
   return (
     <>
       <SubHeader onBack={() => ui.back()}>
-        <ChannelName name={currentChannel?.name} />
+        <HeaderTitle title={currentChannel?.name} />
       </SubHeader>
-      <Scrollbars autoHide>
-        <Grid container direction="column" style={{ padding: '32px 24px' }}>
-          <Grid
-            item
-            component={Button}
-            variant="outlined"
-            size="large"
-            onClick={onCreatePoll}
-            style={{ marginBottom: 30 }}
-          >
-            <Typography variant="body1">
-              <FormattedMessage id="newPoll" />
-            </Typography>
-          </Grid>
 
-          {currentChannel.polls
-            .slice()
-            .sort((a, b) => +b.id - +a.id)
-            .map((poll) => (
-              <PollCard key={`${poll.question}-${poll.id}`} poll={poll} onDelete={onDeletePoll} />
-            ))}
+      <Grid container style={{ padding: '32px 24px', overflow: 'auto' }}>
+        <Grid
+          item
+          xs={12}
+          component={Button}
+          variant="outlined"
+          size="large"
+          onClick={onCreatePoll}
+          style={{ marginBottom: 30 }}
+        >
+          <Typography variant="body1">
+            <FormattedMessage id="newPoll" />
+          </Typography>
         </Grid>
-      </Scrollbars>
+
+        {currentChannel.polls
+          .slice()
+          .sort((a, b) => +b.id - +a.id)
+          .map((poll) => (
+            <Grid item xs={12}>
+              <PollCard key={`${poll.question}-${poll.id}`} poll={poll} onDelete={onDeletePoll} />
+            </Grid>
+          ))}
+      </Grid>
 
       <PollPortal />
     </>

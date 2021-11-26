@@ -13,6 +13,7 @@ export default class Settings extends Model({
   displayChannelList: prop<boolean>(false).withSetter(),
   displaySystemMessages: prop<boolean>(false).withSetter(),
   displayHeader: prop<boolean>(false).withSetter(),
+  socketUrl: prop<string>('').withSetter(),
 }) {
   @modelAction
   setAll({
@@ -25,6 +26,7 @@ export default class Settings extends Model({
     displayChannelList = false,
     displaySystemMessages = false,
     displayHeader = false,
+    socketUrl,
   }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Record<string, any>): void {
     this.createChannelAllowed = createChannelAllowed;
@@ -36,6 +38,7 @@ export default class Settings extends Model({
     this.displayChannelList = displayChannelList;
     this.displaySystemMessages = displaySystemMessages;
     this.displayHeader = displayHeader;
+    this.socketUrl = socketUrl;
   }
 
   @computed

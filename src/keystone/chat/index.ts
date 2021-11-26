@@ -1,4 +1,4 @@
-import api from 'api';
+import { POST } from 'api';
 import { computed, observable } from 'mobx';
 import { model, Model, modelAction, objectMap, prop } from 'mobx-keystone';
 import { chunkProcessor, IDisposer } from 'mobx-utils';
@@ -18,7 +18,7 @@ export default class Chat extends Model({
 
   private startFetching(): IDisposer {
     const fetchUsers = async (ids: string[]) => {
-      const newUsers = (await api.post('users/fetch', { ids })) as IRUser[];
+      const newUsers = (await POST('users/fetch', { ids })) as IRUser[];
       this.addUsers(newUsers);
     };
 

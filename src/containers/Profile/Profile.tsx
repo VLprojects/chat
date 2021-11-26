@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import SubHeader from 'components/SubHeader';
 import useKeystone from 'keystone';
 import { saveProfile } from 'keystone/service';
@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Input } from 'ui-kit';
+import HeaderTitle from 'ui-kit/HeaderTitle';
 import { getErrorMessage } from '../../utils/errors';
 import useStyles from './styles';
 
@@ -37,11 +38,9 @@ const Profile = observer(() => {
   return (
     <>
       <SubHeader onBack={() => ui.back()}>
-        <Grid container justifyContent="space-around" alignItems="center">
-          <Typography fontFamily="PTRootUIWebBold">
-            <FormattedMessage id="profile" />
-          </Typography>
-        </Grid>
+        <HeaderTitle>
+          <FormattedMessage id="profile" />
+        </HeaderTitle>
       </SubHeader>
       <div className={classes.container}>
         <Typography component="label" htmlFor="username" variant="body2" fontFamily="PTRootUIWebBold">
@@ -70,7 +69,7 @@ const Profile = observer(() => {
           onChange={setAvatar}
         />
 
-        <Button fullWidth size="large" variant="active" onClick={onSaveProfile} style={{ marginTop: 'auto' }}>
+        <Button fullWidth size="large" variant="primary" onClick={onSaveProfile} style={{ marginTop: 'auto' }}>
           <FormattedMessage id="save" />
         </Button>
       </div>

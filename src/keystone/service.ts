@@ -1,4 +1,4 @@
-import api from '../api';
+import { GET, POST, PATCH } from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
 import { convertServerPollToModel } from '../utils/common';
@@ -7,13 +7,12 @@ import { EventBusEventEnum, ListenerEventEnum } from '../utils/eventBus/types';
 import { Root } from './index';
 
 export const getInitialData = async (root: Root): Promise<void> => {
-  const initial = (await api.get(`get-initial`)) as IRGetInitial;
-  const { settings, publics, user, users, channels, polls } = initial;
+  const initial = (await GET(`get-initial`)) as IRGetInitial;
+  const { publics, user, users, channels, polls } = initial;
   root.chat.addUsers(users); // users first to prevent auto-fetch
   root.chat.addChannels(channels);
   root.chat.addPubs(publics);
   root.auth.setMe(user);
-  root.settings.setAll(settings);
   polls.forEach((poll) => {
     const channel = root.chat.channels.get(`${poll.channelId}`);
     channel?.addPoll(poll);
@@ -22,7 +21,7 @@ export const getInitialData = async (root: Root): Promise<void> => {
 };
 
 export const login = async (root: Root, username: string, password?: string): Promise<void> => {
-  const response = (await api.post(`login`, {
+  const response = (await POST(`login`, {
     app_id: root.auth.appId,
     username,
     password,
@@ -31,7 +30,7 @@ export const login = async (root: Root, username: string, password?: string): Pr
 };
 
 export const signup = async (root: Root, username: string, password?: string): Promise<void> => {
-  const response = (await api.post(`signup`, {
+  const response = (await POST(`signup`, {
     app_id: root.auth.appId,
     username,
     password,
@@ -49,13 +48,13 @@ export const saveProfile = async (root: Root, displayName: string, avatar?: stri
     sendData.avatarUrl = avatar;
   }
 
-  const user = (await api.patch(`profile`, sendData)) as IRUser;
+  const user = (await PATCH(`profile`, sendData)) as IRUser;
   root.auth.setMe(user);
 };
 
 export const joinChannel = async (root: Root, id: string): Promise<void> => {
   if (!root.chat.channels.has(id)) {
-    const response = (await api.post(`channels/join`, { id })) as IRChannel;
+    const response = (await POST(`channels/join`, { id })) as IRChannel;
     if (root.chat.pubs.has(id)) {
       root.chat.pubs.delete(id);
     }
@@ -72,7 +71,7 @@ export const joinChannelByExternalId = async (root: Root, externalId: string): P
   if (found) {
     root.ui.setRoute(`${Routes.Channels}/${found.id}`);
   } else {
-    const response = (await api.post(`channels/join-external/${externalId}`)) as IRChannel;
+    const response = (await POST(`channels/join-external/${externalId}`)) as IRChannel;
     root.chat.pubs.delete(response.id);
     root.chat.addChannels([response]);
     root.ui.setRoute(`${Routes.Channels}/${response.id}`);
@@ -88,7 +87,7 @@ export const redirectToInitial = (root: Root): Promise<void> | void => {
 };
 
 export const sendMessage = async (root: Root, channelId: string, text: string): Promise<void> => {
-  await api.post(`messages/send`, { channelId, text });
+  await POST(`messages/send`, { channelId, text });
   eventBus.emit(ListenerEventEnum.App, {
     event: EventBusEventEnum.MessageSent,
     data: {
@@ -98,7 +97,7 @@ export const sendMessage = async (root: Root, channelId: string, text: string): 
 };
 
 export const getSettings = async (root: Root, appId: string): Promise<void> => {
-  const settings = (await api.get(`applications/${appId}/settings`)) as Record<string, unknown>;
+  const settings = (await GET(`applications/${appId}/settings`)) as Record<string, unknown>;
   root.settings.setAll(settings);
 };
 

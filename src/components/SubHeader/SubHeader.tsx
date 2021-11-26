@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import React, { FC } from 'react';
 import ChevronLeftIcon from 'ui-kit/icons/ChevronLeftIcon';
 import { COLOURS } from '../../theme/consts';
@@ -16,13 +16,11 @@ const SubHeader: FC<ISubHeader> = (props) => {
   return (
     <div className={classes.header}>
       {onBack && (
-        <IconButton onClick={onBack}>
-          <Box m={2}>
-            <ChevronLeftIcon fill={COLOURS.BLACK_01} />
-          </Box>
+        <IconButton onClick={onBack} size="small" sx={{ position: 'absolute', left: 30 }}>
+          <ChevronLeftIcon fill={COLOURS.BLACK_01} />
         </IconButton>
       )}
-      <div className={classes.title}>{children}</div>
+      {children}
       {rightButton}
     </div>
   );

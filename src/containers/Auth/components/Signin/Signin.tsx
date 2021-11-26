@@ -91,7 +91,7 @@ const Signin: FC<ISigninProps> = observer((props) => {
           />
         </div>
         <div className={classes.footer}>
-          <Button disabled={!isFilledForm} variant="active" fullWidth size="large" onClick={onLogin}>
+          <Button disabled={!isFilledForm} variant="primary" fullWidth size="large" onClick={onLogin}>
             <FormattedMessage id="enterTheChat" />
           </Button>
         </div>

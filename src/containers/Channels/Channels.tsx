@@ -1,5 +1,3 @@
-import { Grid, Typography } from '@mui/material';
-import cls from 'classnames';
 import ChannelsList from 'components/ChannelList';
 import CreateChannelForm from 'components/CreateChannelForm';
 import DirectList from 'components/DirectList';
@@ -9,6 +7,8 @@ import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Routes from 'routes';
+import { Button } from 'ui-kit';
+import HeaderTitle from 'ui-kit/HeaderTitle';
 import intl from '../../utils/intl';
 import Footer from './components/Footer';
 import useStyles from './styles';
@@ -21,9 +21,9 @@ interface ITab {
 }
 
 const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = (props) => {
-  const classes = useStyles();
   const { channelTabType } = props;
   const { ui, settings } = useKeystone();
+  const classes = useStyles();
 
   const [isShowCreateChannel, setIsShowCreateChannel] = useState(false);
 
@@ -50,22 +50,13 @@ const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = 
     <>
       {settings.displayHeader && tabs.some((item) => item.show) && (
         <SubHeader>
-          <Grid container justifyContent="space-around" alignItems="center">
-            {tabs
-              .filter((item) => item.show)
-              .map((item: ITab) => (
-                <Grid
-                  item
-                  key={item.id}
-                  className={cls(classes.btn, { [classes.btnActive]: item.active })}
-                  onClick={onTabClick(item.id)}
-                >
-                  <Typography variant="h4" color="textPrimary">
-                    {item.title}
-                  </Typography>
-                </Grid>
-              ))}
-          </Grid>
+          {tabs
+            .filter((item) => item.show)
+            .map((item: ITab) => (
+              <Button key={item.id} variant="link" onClick={onTabClick(item.id)} className={classes.button}>
+                <HeaderTitle title={item.title} active={item.active} />
+              </Button>
+            ))}
         </SubHeader>
       )}
 
@@ -73,9 +64,9 @@ const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = 
         <>
           <ChannelsList />
           {settings.createChannelAllowed && (
-            <button className={classes.btnCreate} type="button" onClick={() => setIsShowCreateChannel(true)}>
+            <Button size="medium" variant="primary" onClick={() => setIsShowCreateChannel(true)}>
               <FormattedMessage id="createNewChannel" />
-            </button>
+            </Button>
           )}
 
           {isShowCreateChannel && <CreateChannelForm onClose={() => setIsShowCreateChannel(false)} />}

@@ -1,7 +1,7 @@
-import { Typography } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import HeaderTitle from 'ui-kit/HeaderTitle';
 import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
 import User from '../../keystone/chat/user';
@@ -23,9 +23,9 @@ const UsersListPage = () => {
   return (
     <>
       <SubHeader onBack={() => ui.back()}>
-        <Typography variant="h4">
+        <HeaderTitle>
           <FormattedMessage id="userList" />
-        </Typography>
+        </HeaderTitle>
       </SubHeader>
       <UserList users={users} />
     </>

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
 import PinnedMessageList from 'components/PinnedMessageList';
@@ -9,9 +9,9 @@ import React, { FC, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Routes from 'routes';
 import { Button } from 'ui-kit';
+import HeaderTitle from 'ui-kit/HeaderTitle';
 import { getDirectChannelName } from '../../components/DirectList/service';
 import { ChannelTypeEnum, UserRoleEnum } from '../../types/enums';
-import ChannelName from '../../ui-kit/ChannelName';
 import PollPortal from '../PollPortal';
 import { getPinnedMessages } from './service';
 
@@ -41,25 +41,25 @@ const ChannelPage: FC = observer(() => {
     ui.setRoute(`${Routes.Polls}/${channelId}`);
   };
 
+  const isModerator = auth.me.role === UserRoleEnum.Moderator;
+  const channelName =
+    currentChannel.type === ChannelTypeEnum.Direct
+      ? getDirectChannelName(root, currentChannel.id)
+      : currentChannel?.name;
+
   return (
     <>
       <SubHeader onBack={settings.displayChannelList ? () => ui.setRoute(backUrl) : undefined}>
-        <ChannelName
-          name={
-            currentChannel.type === ChannelTypeEnum.Direct
-              ? getDirectChannelName(root, currentChannel.id)
-              : currentChannel?.name
-          }
-        />
+        <HeaderTitle title={channelName} active sx={{ maxWidth: isModerator ? '40%' : '70%' }} />
 
-        {auth.me.role === UserRoleEnum.Moderator && (
-          <div style={{ marginLeft: 32 }}>
+        {isModerator && (
+          <Box ml={4}>
             <Button variant="link" onClick={onPollsClick}>
-              <Typography>
+              <HeaderTitle>
                 <FormattedMessage id="polls" />
-              </Typography>
+              </HeaderTitle>
             </Button>
-          </div>
+          </Box>
         )}
 
         {
@@ -81,7 +81,7 @@ const ChannelPage: FC = observer(() => {
       <PinnedMessageList />
       <MessageList messages={currentChannel.sortedMessages} />
 
-      <MessageInput channelId={channelId} />
+      <MessageInput channelId={channelId} isModerator={isModerator} />
 
       <PollPortal />
     </>

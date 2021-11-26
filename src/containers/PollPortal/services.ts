@@ -1,3 +1,5 @@
-import api from '../../api';
+import { POST } from '../../api';
 
-export const doVote = (payload: string[]): Promise<unknown> => api.post(`polls/vote`, { ids: payload.map(Number) });
+export const doVote = (payload: string[]): void => {
+  POST(`polls/vote`, { ids: payload.map(Number) });
+};

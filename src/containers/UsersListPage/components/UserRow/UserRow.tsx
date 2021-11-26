@@ -35,7 +35,7 @@ const UserRow: React.FC<IProps> = (props) => {
         name={user?.displayName}
         size="lg"
         src={user.avatarUrl}
-        avatarColor={user.avatarColor}
+        avatarColor={user.getAvatarColor}
       />
       <Grid item component={Typography} style={{ marginLeft: 9 }}>
         {user.displayName}

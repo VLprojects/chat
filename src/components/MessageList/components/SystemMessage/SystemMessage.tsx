@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Avatar } from 'ui-kit';
-import useCommonStyles from '../../styles';
 
 interface ISystemMessageProps {
   user: User;
@@ -17,20 +16,22 @@ const SystemMessage: FC<ISystemMessageProps> = (props) => {
 
   const userObserver = chat.users.get(user.id);
 
-  const commonClasses = useCommonStyles();
-
   return (
-    <Grid container alignItems="center">
+    <Grid
+      container
+      alignItems="center"
+      // sx={{ paddingBottom: '24px', paddingTop: '12px' }}
+    >
       <Grid
         item
         component={Avatar}
         name={userObserver?.displayName}
         src={userObserver?.avatarUrl}
         size="lg"
-        avatarColor={user?.avatarColor}
+        avatarColor={user?.getAvatarColor}
       />
 
-      <Grid item className={commonClasses.message}>
+      <Grid item marginLeft="8px">
         <Typography variant="body2" fontWeight={600} component="span">
           {userObserver?.displayName}
         </Typography>

@@ -21,7 +21,7 @@ const ActionBlock: FC<IProps> = (props) => {
 
   return (
     <>
-      <Button variant="active" fullWidth size="large" onClick={onClickButton}>
+      <Button variant="primary" fullWidth size="large" onClick={onClickButton}>
         {buttonText}
       </Button>
 
