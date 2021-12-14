@@ -3,37 +3,47 @@ import Tooltip from '@mui/material/Tooltip';
 import cls from 'classnames';
 import { format, formatDistance, isToday, subDays } from 'date-fns';
 import { enGB, ru } from 'date-fns/locale';
+import useKeystone from 'keystone';
+import Message from 'keystone/chat/message';
 import Linkify from 'linkify-react';
-import { observer } from 'mobx-react-lite';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { Avatar } from 'ui-kit';
-import User from '../../../../keystone/chat/user';
 import intl from '../../../../utils/intl';
-import useCommonStyles from '../../styles';
 import MessageActions from '../MessageActions';
 import useStyles from './styles';
 
 export interface IProps {
-  own?: boolean;
-  user: User;
-  message: string;
-  date: Date;
+  index: number;
+  message: Message;
   short?: boolean;
-  isModerator?: boolean;
-  messageId: number;
 }
 
 const UserMessage: FC<IProps> = (props) => {
-  const { own = false, user, message = '', date, short = false, isModerator, messageId } = props;
-  const classes = useStyles(props);
-  const commonClasses = useCommonStyles();
+  const { message, short, index } = props;
+  const { auth } = useKeystone();
+  const [open, setOpen] = useState(false);
+  const user = message?.user?.current;
+  const own = message?.user?.current.id === `${auth.me.id}`;
+  const messageCreatedAt = new Date(message.createdAt);
+
+  const { ref, inView } = useInView({
+    threshold: 1,
+  });
+
+  const classes = useStyles({ user });
 
   if (!user) return null;
 
   return (
     <>
       {!short && (
-        <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'}>
+        <Grid
+          container
+          alignItems="center"
+          direction={own ? 'row-reverse' : 'row'}
+          paddingTop={index ? '24px' : '10px'}
+        >
           <Grid
             item
             component={Avatar}
@@ -43,7 +53,7 @@ const UserMessage: FC<IProps> = (props) => {
             avatarColor={user?.getAvatarColor}
           />
           <Grid item marginLeft="8px" marginRight="12px">
-            <Typography variant="body2" fontWeight={600} component="span">
+            <Typography variant="body2" fontWeight={600}>
               {user?.displayName}
             </Typography>
           </Grid>
@@ -53,11 +63,11 @@ const UserMessage: FC<IProps> = (props) => {
             fontFamily="PTRootUIWebRegular"
             letterSpacing="0.01em"
             color="textSecondary"
-            title={format(date, 'MM/dd/yyyy, HH:mm')}
+            title={format(messageCreatedAt, 'MM/dd/yyyy, HH:mm')}
           >
-            {isToday(date)
-              ? format(date, 'HH:mm')
-              : formatDistance(subDays(date, 3), new Date(), {
+            {isToday(messageCreatedAt)
+              ? format(messageCreatedAt, 'HH:mm')
+              : formatDistance(subDays(messageCreatedAt, 3), new Date(), {
                   addSuffix: true,
                   locale: intl.locale === 'ru' ? ru : enGB,
                 })}
@@ -65,25 +75,32 @@ const UserMessage: FC<IProps> = (props) => {
         </Grid>
       )}
 
-      <Grid container alignItems="center" direction={own ? 'row-reverse' : 'row'}>
+      <Grid
+        container
+        alignItems="center"
+        direction={own ? 'row-reverse' : 'row'}
+        paddingTop={short ? '10px' : 0}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        ref={ref}
+      >
         <Tooltip
-          placement={own ? 'left' : 'right'}
-          title={isModerator ? <MessageActions messageId={messageId} /> : false}
+          disableHoverListener
+          placement={own ? 'right' : 'left'}
+          title={auth.isModerator ? <MessageActions messageId={+message.id} /> : false}
           classes={{ tooltip: classes.tooltip }}
+          open={inView && open}
         >
-          <Grid
-            item
+          <Typography
             data-qa="chat-msg"
-            className={cls(commonClasses.message, classes.userMessage, { [classes.userMessageOwn]: own })}
+            className={cls(classes.message, { [classes.ownMessage]: own, [classes.otherUserMessage]: !own })}
           >
-            <Typography>
-              <Linkify options={{ target: '_blank' }}>{message}</Linkify>
-            </Typography>
-          </Grid>
+            <Linkify options={{ target: '_blank' }}>{message.text}</Linkify>
+          </Typography>
         </Tooltip>
       </Grid>
     </>
   );
 };
 
-export default observer(UserMessage);
+export default UserMessage;

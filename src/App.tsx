@@ -46,7 +46,10 @@ const App: FC = () => {
   const classes = useStyles();
 
   useEffect(() => {
-    document.body.appendChild(getPortalElement());
+    const el = document.getElementById(POLL_CONTAINER);
+    if (!el) {
+      document.body.appendChild(getPortalElement());
+    }
   }, []);
 
   return (

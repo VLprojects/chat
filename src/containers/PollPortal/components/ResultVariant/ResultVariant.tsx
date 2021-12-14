@@ -30,10 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
     progressLine: {
       borderRadius: 10,
       margin: 0,
+      maxWidth: '100%',
     },
     text: {
-      padding: '2px 8px',
-      color: '#fff',
+      padding: '2px 25px 2px 8px',
     },
     totalCounter: {
       position: 'absolute',
@@ -66,11 +66,16 @@ const PollVariant: FC<IProps> = () => {
         return (
           <Box key={option.id} width="100%" bgcolor={option.isVoted ? 'green' : '#CCD3D9'} className={classes.progress}>
             <Box
-              width={`${(option.votesCount / countTotal) * 100}%`}
+              width={option.votesCount ? `${(option.votesCount / countTotal) * 100}%` : '100%'}
               bgcolor={option.votesCount ? bgColor : COLOURS.SURFACE_SECONDARY}
               className={classes.progressLine}
             >
-              <Typography variant="subtitle2" className={classes.text}>
+              <Typography
+                variant="subtitle2"
+                className={classes.text}
+                noWrap
+                color={option.votesCount ? '#fff' : 'black'}
+              >
                 {option.option}
               </Typography>
             </Box>

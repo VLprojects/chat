@@ -57,5 +57,8 @@
   "channelCreated": "Канал создан",
   "pinMessage": "Закрепить",
   "deleteMessage": "Удалить сообщение",
-  "deleteAllMessage": "Удалить все сообщения"
+  "deleteAllMessage": "Удалить все сообщения",
+  "systemMessageChangedName": "изменил имя на",
+  "systemMessageUserChangedChannelName": "изменил название канала на",
+  "systemMessageChangedChannelName": "изменено название канала на"
 }

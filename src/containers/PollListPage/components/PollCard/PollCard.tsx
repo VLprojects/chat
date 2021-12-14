@@ -36,6 +36,7 @@ const PollCard: FC<IProps> = (props) => {
             <MoreHoriz color="primary" className={classes.moreAction} />
           </IconButton>
         }
+        sx={{ wordBreak: 'break-all' }}
         title={poll.question}
       />
       <Menu id="poll-menu" anchorEl={anchorMenu} open={Boolean(anchorMenu)} onClose={handleMenuActionClose}>

@@ -1,6 +1,10 @@
 export const HEADER_HEIGHT = 68;
 export const CHAT_MESSAGE_SUBMIT_FOOTER_HEIGHT = 60;
 
+export const BREAKPOINTS = {
+  SM: 600,
+};
+
 export const zINDEX = {
   HEADER: 10,
 };

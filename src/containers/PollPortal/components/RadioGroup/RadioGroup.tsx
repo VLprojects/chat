@@ -22,7 +22,13 @@ const RadioButtonsGroup: FC<IProps> = (props) => {
         <RadioGroup value={value} onChange={handleChange} name="test">
           <>
             {poll.options.map((option) => (
-              <FormControlLabel key={option.id} value={`${option.id}`} control={<Radio />} label={option.option} />
+              <FormControlLabel
+                key={option.id}
+                value={`${option.id}`}
+                control={<Radio />}
+                label={option.option}
+                sx={{ wordBreak: 'break-all' }}
+              />
             ))}
           </>
         </RadioGroup>

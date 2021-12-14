@@ -10,7 +10,7 @@ enum SocketEventsEnum {
   UserUpdateProfile = 'user-update-profile',
   MessagePinned = 'message-pinned',
   DeleteMessages = 'delete-messages',
-  CleanChannelMessages = 'сlean-channel-messages',
+  CleanChannelMessages = 'clean-channel-messages',
 }
 
 export default SocketEventsEnum;

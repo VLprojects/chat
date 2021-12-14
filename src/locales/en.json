@@ -57,5 +57,9 @@
   "channelCreated": "Channel created",
   "pinMessage": "Pin message",
   "deleteMessage": "Delete message",
-  "deleteAllMessage": "Delete all messages"
+  "deleteAllMessage": "Delete all messages",
+  "systemMessageChangedName": "changed name to",
+  "systemMessageUserChangedChannelName": "changed channel name to",
+  "systemMessageChangedChannelName": "changed channel name to"
+
 }

@@ -1,8 +1,10 @@
 import { setToken } from 'api';
 import { model, Model, modelAction, prop } from 'mobx-keystone';
+import { computed } from 'mobx';
 import { IRUser } from '../types/serverResponses';
 import { storeAccessToken } from '../utils/auth';
 import User from './chat/user';
+import { UserRoleEnum } from '../types/enums';
 
 @model('Auth')
 export default class Auth extends Model({
@@ -20,6 +22,11 @@ export default class Auth extends Model({
     storeAccessToken(token);
   }
 
+  @computed
+  get isModerator(): boolean {
+    return this.me.role === UserRoleEnum.Moderator;
+  }
+
   @modelAction
   setMe(user: IRUser): void {
     const userModel = new User({
@@ -29,7 +36,7 @@ export default class Auth extends Model({
       avatarUrl: user.avatarUrl,
       role: user.role,
     });
-    
+
     this.me = userModel;
   }
 }

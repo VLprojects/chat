@@ -21,7 +21,7 @@ const PinnedMessageList: React.FC = () => {
   const pinnedMessage = currentChannel?.lastPinnedMessage;
   if (!pinnedMessage) return null;
 
-  const user = currentChannel.users.get(pinnedMessage.message.userId);
+  const user = chat.getUserLazy(pinnedMessage.message.userId);
   const date = new Date(pinnedMessage.message.createdAt);
 
   const onDeletePinnedMessage = () => deletePinnedMessage(pinnedMessage.id);
@@ -35,13 +35,23 @@ const PinnedMessageList: React.FC = () => {
   };
 
   return (
-    <Grid container className={classes.root} columnGap={1} alignItems="center" wrap="nowrap">
+    <Grid
+      container
+      className={classes.root}
+      columnGap={1}
+      alignItems="center"
+      wrap="nowrap"
+      sx={{
+        backgroundColor: 'white',
+        zIndex: 9999,
+      }}
+    >
       <Grid item xs>
         <PinnedIcon />
       </Grid>
       <Grid item xs={10} container sx={{ cursor: 'pointer' }} onClick={scrollToPinnedMessage}>
         <Typography variant="body2" fontWeight="bold">
-          {user?.current.displayName}
+          {user.displayName}
         </Typography>
         <Typography
           variant="body2"

@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import React, { ReactNode, useEffect } from 'react';
 import { GET } from '../../api';
 import useKeystone from '../../keystone';
-import { getSettings, getInitialData, redirectToInitial } from '../../keystone/service';
+import { getInitialData, redirectToInitial } from '../../keystone/service';
 import { getErrorMessage } from '../../utils/errors';
 
 interface Props {
@@ -21,7 +21,6 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
     autorun(async () => {
       if (!socket.isSocketConnected) {
         try {
-          await getSettings(root, root.auth.appId);
           const response = (await GET(`centrifuge-token`)) as { token: string };
           if (root.settings.socketUrl && response.token) {
             socket.connect(root.settings.socketUrl, response.token);

@@ -12,7 +12,8 @@ import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
 import { IEvents, ListenerEventEnum } from './utils/eventBus/types';
 import intl from './utils/intl';
-import { initializeApi } from './api'
+import { initializeApi } from './api';
+import { getSettings } from './keystone/service';
 
 export interface IChatProps {
   apiUrl?: string;
@@ -41,6 +42,10 @@ export const Chat: FC<IChatProps> = observer((props) => {
     initializeApi(apiUrlFromAttr || apiUrl || process.env.REACT_APP_API_BASEURL || '');
     if (channelIdFromAttr || channelId) {
       root.ui.setChannelId(channelIdFromAttr || channelId || '');
+    }
+
+    if (root.auth.appId) {
+      getSettings(root, root.auth.appId);
     }
 
     const token = userToken || getStoredAccessToken();

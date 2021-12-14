@@ -17,11 +17,12 @@ import { getPinnedMessages } from './service';
 
 // const MAX_USERS_ON_PREVIEW = 2;
 
-const ChannelPage: FC = observer(() => {
+const ChannelPage: FC = () => {
   // const classes = useStyles();
   const root = useKeystone();
   const { ui, chat, settings, auth } = root;
   const channelId = String(ui.params.id);
+
   const currentChannel = chat.channels.get(channelId);
 
   useEffect(() => {
@@ -86,6 +87,6 @@ const ChannelPage: FC = observer(() => {
       <PollPortal />
     </>
   );
-});
+};
 
-export default ChannelPage;
+export default observer(ChannelPage);

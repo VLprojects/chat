@@ -22,7 +22,7 @@ interface ITab {
 
 const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = (props) => {
   const { channelTabType } = props;
-  const { ui, settings } = useKeystone();
+  const { ui, settings, auth } = useKeystone();
   const classes = useStyles();
 
   const [isShowCreateChannel, setIsShowCreateChannel] = useState(false);
@@ -48,7 +48,7 @@ const Channels: React.FC<{ channelTabType: Routes.Channels | Routes.Direct }> = 
 
   return (
     <>
-      {settings.displayHeader && tabs.some((item) => item.show) && (
+      {(settings.displayHeader || auth.isModerator) && tabs.some((item) => item.show) && (
         <SubHeader>
           {tabs
             .filter((item) => item.show)

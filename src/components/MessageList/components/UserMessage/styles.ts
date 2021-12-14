@@ -1,32 +1,35 @@
 import { makeStyles } from '@mui/styles';
+import User from 'keystone/chat/user';
 import { COLOURS } from '../../../../theme/consts';
-import { IProps } from './UserMessage';
 
 export default makeStyles(
   {
-    userMessage: {
+    otherUserMessage: {
       backgroundColor: COLOURS.SURFACE_SECONDARY,
-      borderRadius: 10,
-      maxWidth: '80%',
-      marginTop: 6,
-      marginLeft: 40,
-      marginBottom: 6,
+      marginLeft: 40, // +list padding
     },
-    userMessageOwn: {
-      backgroundColor: (props: IProps) => COLOURS[props.user.getAvatarColor],
+    ownMessage: {
+      backgroundColor: (props: { user?: User }) => COLOURS[props?.user?.getAvatarColor || 'AVATAR2_RED'],
       color: COLOURS.WHITE,
-      maxWidth: '80%',
-      marginRight: 44,
+      marginRight: 35, // +list padding
     },
-    isNew: {},
+    message: {
+      padding: '6px 12px',
+      borderRadius: 10,
+      whiteSpace: 'pre-wrap',
+      wordWrap: 'break-word',
+      wordBreak: 'break-word',
+    },
     tooltipRoot: {
       width: 20,
       zIndex: 0,
     },
     tooltip: {
-      backgroundColor: COLOURS.WHITE,
+      backgroundColor: 'transparent',
       boxShadow: 'none',
       borderRadius: 'none',
+      marginLeft: '-10px!important',
+      marginRight: '-5px!important',
     },
   },
 

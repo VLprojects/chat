@@ -1,3 +1,4 @@
+import { getPollListForChannel } from '../containers/PollListPage/services';
 import { GET, POST, PATCH } from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
@@ -52,6 +53,15 @@ export const saveProfile = async (root: Root, displayName: string, avatar?: stri
   root.auth.setMe(user);
 };
 
+export const loadChannelPolls = async (root: Root, channelId: string): Promise<void> => {
+  const polls = await getPollListForChannel(Number(channelId));
+  polls.forEach((poll) => {
+    const channel = root.chat.channels.get(channelId);
+    channel?.addPoll(poll);
+    channel?.startPoll(convertServerPollToModel(poll));
+  });
+};
+
 export const joinChannel = async (root: Root, id: string): Promise<void> => {
   if (!root.chat.channels.has(id)) {
     const response = (await POST(`channels/join`, { id })) as IRChannel;
@@ -60,8 +70,7 @@ export const joinChannel = async (root: Root, id: string): Promise<void> => {
     }
 
     root.chat.addChannels([response]);
-    // to set poll data.
-    getInitialData(root);
+    await loadChannelPolls(root, id);
   }
 };
 
@@ -74,6 +83,7 @@ export const joinChannelByExternalId = async (root: Root, externalId: string): P
     const response = (await POST(`channels/join-external/${externalId}`)) as IRChannel;
     root.chat.pubs.delete(response.id);
     root.chat.addChannels([response]);
+    await loadChannelPolls(root, response.id);
     root.ui.setRoute(`${Routes.Channels}/${response.id}`);
   }
 };

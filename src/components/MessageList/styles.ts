@@ -2,16 +2,11 @@ import { makeStyles } from '@mui/styles';
 
 export default makeStyles(
   {
-    messages: {
-      flexGrow: 1,
-    },
-    message: {
-      padding: '6px 12px',
-      whiteSpace: 'pre-wrap',
-      wordWrap: 'break-word',
-    },
-    messageContainer: {
-      padding: '0 12px',
+    virtListWrapper: {
+      flex: '1 1 auto',
+      // marginTop: '10px',
+      // marginBottom: '5px',
+      overflow: 'hidden',
     },
   },
   { name: 'MessageList' },

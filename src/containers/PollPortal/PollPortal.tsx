@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import useKeystone from '../../keystone';
 import { POLL_CONTAINER } from '../../types/const';
 import { UserRoleEnum } from '../../types/enums';
-import { IPollStatus } from '../../types/types';
 import CloseButton from './components/CloseButton';
 import PollVariant from './components/PollVariant';
 import ResultVariant from './components/ResultVariant';
@@ -29,7 +28,6 @@ const PollPortal: FC = () => {
   const isModerator = auth.me.role === UserRoleEnum.Moderator;
 
   if (!poll) return null;
-  if (isModerator && poll.status !== IPollStatus.Done) return null;
 
   const isVoted = poll.options.find((option) => option.isVoted);
 
@@ -39,8 +37,10 @@ const PollPortal: FC = () => {
     <Portal container={ref.current}>
       <div className={classes.root}>
         <Grid container alignItems="flex-start" justifyContent="space-between" wrap="nowrap">
-          <Grid item component={Typography} variant="h4">
-            {poll?.question}
+          <Grid item>
+            <Typography variant="h4" sx={{ wordBreak: 'break-all', marginRight: '5px' }}>
+              {poll?.question}
+            </Typography>
           </Grid>
           <Grid item component={IconButton} style={{ padding: 0 }} onClick={onClose}>
             <CloseButton />

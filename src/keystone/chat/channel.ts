@@ -2,7 +2,7 @@ import { compareAsc } from 'date-fns';
 import { computed } from 'mobx';
 import { getRoot, model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
 import { IServerPoll } from '../../containers/CreatePollPage/types';
-import { ChannelTypeEnum } from '../../types/enums';
+import { ChannelTypeEnum, MessageTypeEnum } from '../../types/enums';
 import { IRChannelMessage, IRPinnedMessage } from '../../types/serverResponses';
 import { IPollStatus } from '../../types/types';
 import { convertServerPollToModel } from '../../utils/common';
@@ -26,14 +26,15 @@ export default class Channel extends Model({
   @modelAction
   addMessages(messages: IRChannelMessage[]): void {
     messages.forEach((message) => {
-      // temporarily ignore messages without user
-      if (message.userId) {
+      // temporary fix
+      if (!(message.type === MessageTypeEnum.System && !message.meta)) {
         const messageModel = new Message({
           id: message.id,
           text: message.text,
           type: message.type,
           createdAt: message.createdAt,
-          user: userRef(getRoot(this).chat.getUserLazy(message.userId)),
+          user: message.userId ? userRef(getRoot(this).chat.getUserLazy(message.userId)) : null,
+          meta: message.meta,
         });
 
         this.messages.set(message.id, messageModel);

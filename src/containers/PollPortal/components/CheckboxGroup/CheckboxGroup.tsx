@@ -28,6 +28,7 @@ const CheckboxGroup: FC<IProps> = (props) => {
               key={option.id}
               control={<Checkbox checked={state[option.id]} onChange={handleChange} name={`${option.id}`} />}
               label={option.option}
+              sx={{ wordBreak: 'break-all' }}
             />
           ))}
         </FormGroup>

@@ -16,6 +16,7 @@ export interface IRChannelMessage {
   type: MessageTypeEnum;
   userId: string;
   createdAt: string;
+  meta: Record<string, unknown>;
 }
 
 // Interface of Socket Event

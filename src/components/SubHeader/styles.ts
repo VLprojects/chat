@@ -10,6 +10,8 @@ export default makeStyles(
       borderBottom: `1px solid ${COLOURS.LIGHT_01}`,
       justifyContent: 'center',
       alignItems: 'center',
+      backgroundColor: 'white',
+      zIndex: 9999,
     },
   },
   { name: 'SubHeader' },
