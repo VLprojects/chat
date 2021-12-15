@@ -1,5 +1,5 @@
 import { computed } from 'mobx';
-import { Model, model, prop, rootRef } from 'mobx-keystone';
+import { detach, Model, model, prop, rootRef } from 'mobx-keystone';
 import { AvatarColorEnum } from 'theme/consts';
 import { UserRoleEnum } from '../../types/enums';
 
@@ -34,5 +34,12 @@ export default class User extends Model({
 export const userRef = rootRef<User>('User', {
   getId(maybeUser) {
     return maybeUser instanceof User ? maybeUser.id : undefined;
+  },
+  onResolvedValueChange(ref, newValue, oldValue) {
+    if (oldValue && !newValue) {
+      // if the todo value we were referencing disappeared then remove the reference
+      // from its parent
+      detach(ref)
+    }
   },
 });

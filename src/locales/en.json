@@ -1,4 +1,5 @@
 {
+  "globalError": "Something went wrong",
   "messageInputPlaceholder": "Enter your message",
   "channelName": "Channel name",
   "newChannel": "New channel",

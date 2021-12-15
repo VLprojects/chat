@@ -1,4 +1,5 @@
 {
+  "globalError": "Что-то пошло не так",
   "messageInputPlaceholder": "Введите сообщение",
   "channelName": "Название канала",
   "newChannel": "Новый канал",
