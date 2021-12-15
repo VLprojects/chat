@@ -53,7 +53,7 @@ const App: FC = () => {
   }, []);
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} data-version={process.env.REACT_APP_VERSION}>
       <SnackbarProvider maxSnack={3} autoHideDuration={3000} dense classes={{ root: classes.snackbar }}>
         <AuthLayout>
           <SocketLayout>

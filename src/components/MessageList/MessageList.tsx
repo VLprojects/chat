@@ -40,7 +40,7 @@ const MessageList: FC<MessageListProps> = (props) => {
       <Virtuoso
         ref={virtuosoRef}
         totalCount={messages.length}
-        itemContent={(idx) => <MessageRow data={messages} index={idx} />}
+        itemContent={(idx) => <MessageRow key={messages[idx].id} data={messages} index={idx} />}
         followOutput={() => 'smooth'}
 
         /* Do not use - break size height calculation */

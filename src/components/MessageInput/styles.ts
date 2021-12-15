@@ -9,7 +9,7 @@ export default makeStyles(
       padding: '14px 16px',
       borderTop: `1px solid ${COLOURS.LIGHT_01}`,
       background: COLOURS.WHITE,
-      zIndex: 9999,
+      zIndex: 1200,
     },
   },
   { name: 'MessageInput' },

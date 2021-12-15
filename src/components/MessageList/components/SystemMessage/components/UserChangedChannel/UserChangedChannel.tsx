@@ -1,25 +1,27 @@
 import { Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
+import Message from '../../../../../../keystone/chat/message';
 
 interface IUserChangedChannel {
-  userName?: string;
-  channelName?: string;
+  message: Message;
 }
 
 const UserChangedChannel: FC<IUserChangedChannel> = (props) => {
-  const { userName, channelName } = props;
+  const {
+    message: { systemData },
+  } = props;
 
   return (
     <>
       <Typography variant="body2" fontWeight={600} noWrap>
-        {userName}
+        {systemData?.whoRenamedChannel?.maybeCurrent?.displayName}
       </Typography>
       <Typography variant="body2" noWrap>
         <FormattedMessage id="systemMessageUserChangedChannelName" />
       </Typography>
       <Typography variant="body2" fontWeight={600} noWrap>
-        {channelName}
+        {systemData?.newName}
       </Typography>
     </>
   );

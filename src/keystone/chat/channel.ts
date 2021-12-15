@@ -6,7 +6,7 @@ import { ChannelTypeEnum, MessageTypeEnum } from '../../types/enums';
 import { IRChannelMessage, IRPinnedMessage } from '../../types/serverResponses';
 import { IPollStatus } from '../../types/types';
 import { convertServerPollToModel } from '../../utils/common';
-import Message from './message';
+import Message, { SystemMessageEnum } from './message';
 import PinnedMessage from './pinnedMessage';
 import Poll, { pollRef } from './poll';
 import User, { userRef } from './user';
@@ -35,7 +35,12 @@ export default class Channel extends Model({
           createdAt: message.createdAt,
           user: message.userId ? userRef(getRoot(this).chat.getUserLazy(message.userId)) : null,
           meta: message.meta,
+          systemData: null,
         });
+
+        if (message.type === MessageTypeEnum.System) {
+          messageModel.loadSystemData(getRoot(this), message.meta.event as SystemMessageEnum, message.meta.data)
+        }
 
         this.messages.set(message.id, messageModel);
       }

@@ -1,19 +1,23 @@
 import { Grid, Typography } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
+import Message from '../../../../../../keystone/chat/message';
 
 interface IUserJoined {
-  name?: string;
+  message: Message;
 }
 
 const UserJoined: FC<IUserJoined> = (props) => {
-  const { name } = props;
+  const {
+    message: { systemData },
+  } = props;
 
   return (
     <>
       <Grid item zeroMinWidth>
         <Typography variant="body2" fontWeight={600} noWrap>
-          {name}
+          {systemData?.whoJoined?.maybeCurrent?.displayName}
         </Typography>
       </Grid>
       <Typography variant="body2" noWrap>
@@ -23,4 +27,4 @@ const UserJoined: FC<IUserJoined> = (props) => {
   );
 };
 
-export default UserJoined;
+export default observer(UserJoined);

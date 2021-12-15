@@ -1,25 +1,27 @@
 import { Typography } from '@mui/material';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
+import Message from '../../../../../../keystone/chat/message';
 
 interface IUserChanged {
-  oldName?: string;
-  name?: string;
+  message: Message;
 }
 
 const UserChanged: FC<IUserChanged> = (props) => {
-  const { oldName, name } = props;
+  const {
+    message: { systemData },
+  } = props;
 
   return (
     <>
       <Typography variant="body2" fontWeight={600} noWrap>
-        {oldName}
+        {systemData?.oldDisplayName}
       </Typography>
       <Typography variant="body2" noWrap>
         <FormattedMessage id="systemMessageChangedName" />
       </Typography>
       <Typography variant="body2" fontWeight={600} noWrap>
-        {name}
+        {systemData?.newDisplayName}
       </Typography>
     </>
   );
