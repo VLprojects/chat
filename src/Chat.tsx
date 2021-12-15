@@ -1,9 +1,10 @@
 import CssBaseline from '@mui/material/CssBaseline';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { createGenerateClassName, StylesProvider } from '@mui/styles';
+import { ErrorBoundary } from 'react-error-boundary';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
-import { RawIntlProvider } from 'react-intl';
+import { RawIntlProvider, FormattedMessage } from 'react-intl';
 import App from './App';
 import useEventHook from './hooks/useEventHook';
 import useKeystone from './keystone';
@@ -58,15 +59,17 @@ export const Chat: FC<IChatProps> = observer((props) => {
   if (!tokenInit) return null;
 
   return (
-    <StyledEngineProvider injectFirst>
-      <StylesProvider generateClassName={generateClassName}>
-        <RawIntlProvider value={intl}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
-        </RawIntlProvider>
-      </StylesProvider>
-    </StyledEngineProvider>
+    <RawIntlProvider value={intl}>
+      <ErrorBoundary FallbackComponent={() => <FormattedMessage id="globalError" />}>
+        <StyledEngineProvider injectFirst>
+          <StylesProvider generateClassName={generateClassName}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <App />
+            </ThemeProvider>
+          </StylesProvider>
+        </StyledEngineProvider>
+      </ErrorBoundary>
+    </RawIntlProvider>
   );
 });
