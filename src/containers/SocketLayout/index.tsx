@@ -2,7 +2,8 @@ import { LinearProgress } from '@mui/material';
 import { autorun, reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import LoadingStatus from '../../components/LoadingStatus';
 import { GET } from '../../api';
 import useKeystone from '../../keystone';
 import { getInitialData, redirectToInitial } from '../../keystone/service';
@@ -13,9 +14,11 @@ interface Props {
 }
 
 const SocketLayout = observer(({ children }: Props): JSX.Element => {
-  const { socket, ui } = useKeystone();
+  const { socket } = useKeystone();
   const root = useKeystone();
   const { enqueueSnackbar } = useSnackbar();
+  const [initialDataReady, setInitialDataReady] = useState(false);
+
 
   useEffect(() =>
     autorun(async () => {
@@ -44,7 +47,7 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
               // await here if there any extra API join channel calls
               await redirectToInitial(root);
               // now we got everything to start render
-              ui.setInitialized(true);
+              setInitialDataReady(true);
             } catch (error) {
               enqueueSnackbar(getErrorMessage(error));
             }
@@ -54,10 +57,20 @@ const SocketLayout = observer(({ children }: Props): JSX.Element => {
     ),
   );
 
-  if (!ui.initialized) {
+  if (!socket.isSocketConnected) {
     return (
       <>
         <LinearProgress color="secondary" />
+        <LoadingStatus intlId="loadingSocket" />
+      </>
+    );
+  }
+
+  if (!initialDataReady) {
+    return (
+      <>
+        <LinearProgress color="secondary" />
+        <LoadingStatus intlId="loadingInitial" />
       </>
     );
   }

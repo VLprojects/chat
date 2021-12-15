@@ -1,4 +1,7 @@
 {
+  "loadingSocket": "Connecting websocket...",
+  "loadingInitial": "Loading messages...",
+  "loadingSettings": "Loading global settings...",
   "globalError": "Something went wrong",
   "messageInputPlaceholder": "Enter your message",
   "channelName": "Channel name",

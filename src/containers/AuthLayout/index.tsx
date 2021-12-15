@@ -34,8 +34,13 @@ const AuthLayout = observer(({ children }: Props): JSX.Element => {
     return children;
   }
 
+  // todo investigate use case of this and write results here
   if (root.auth.isAnonymousAllowed) {
-    return <LinearProgress />;
+    return (
+      <>
+        <LinearProgress color="secondary" />
+      </>
+    )
   }
 
   return <Auth />;

@@ -1,4 +1,7 @@
 {
+  "loadingSocket": "Подключение к вебсокету...",
+  "loadingInitial": "Загружаются сообщения...",
+  "loadingSettings": "Загружаются глобальные настройки...",
   "globalError": "Что-то пошло не так",
   "messageInputPlaceholder": "Введите сообщение",
   "channelName": "Название канала",

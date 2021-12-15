@@ -1,4 +1,5 @@
 import CssBaseline from '@mui/material/CssBaseline';
+import { LinearProgress } from '@mui/material';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { createGenerateClassName, StylesProvider } from '@mui/styles';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -15,6 +16,7 @@ import { IEvents, ListenerEventEnum } from './utils/eventBus/types';
 import intl from './utils/intl';
 import { initializeApi } from './api';
 import { getSettings } from './keystone/service';
+import LoadingStatus from './components/LoadingStatus';
 
 export interface IChatProps {
   apiUrl?: string;
@@ -26,7 +28,7 @@ export interface IChatProps {
 
 export const Chat: FC<IChatProps> = observer((props) => {
   const { apiUrl, appId, channelId, userToken, onEvent } = props;
-  const [tokenInit, setTokenInit] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const root = useKeystone();
   if (onEvent) {
@@ -38,25 +40,27 @@ export const Chat: FC<IChatProps> = observer((props) => {
   });
 
   useEffect(() => {
-    const { apiUrlFromAttr, appIdFromAttr, channelIdFromAttr } = findAppInitialData();
-    root.auth.setAppId(appIdFromAttr || appId || '');
-    initializeApi(apiUrlFromAttr || apiUrl || process.env.REACT_APP_API_BASEURL || '');
-    if (channelIdFromAttr || channelId) {
-      root.ui.setChannelId(channelIdFromAttr || channelId || '');
-    }
+    // Load global app settings first
+    (async () => {
+      const { apiUrlFromAttr, appIdFromAttr, channelIdFromAttr } = findAppInitialData();
+      root.auth.setAppId(appIdFromAttr || appId || '');
+      initializeApi(apiUrlFromAttr || apiUrl || process.env.REACT_APP_API_BASEURL || '');
+      if (channelIdFromAttr || channelId) {
+        root.ui.setChannelId(channelIdFromAttr || channelId || '');
+      }
 
-    if (root.auth.appId) {
-      getSettings(root, root.auth.appId);
-    }
+      if (root.auth.appId) {
+        await getSettings(root, root.auth.appId);
 
-    const token = userToken || getStoredAccessToken();
-    if (token) {
-      root.auth.setAccessToken(token);
-    }
-    setTokenInit(true);
+        const token = userToken || getStoredAccessToken();
+        if (token) {
+          root.auth.setAccessToken(token);
+        }
+
+        setIsReady(true);
+      }
+    })();
   }, []);
-
-  if (!tokenInit) return null;
 
   return (
     <RawIntlProvider value={intl}>
@@ -65,7 +69,14 @@ export const Chat: FC<IChatProps> = observer((props) => {
           <StylesProvider generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <App />
+              {isReady ? (
+                <App />
+              ) : (
+                <>
+                  <LinearProgress color="secondary" />
+                  <LoadingStatus intlId="loadingSettings" />
+                </>
+              )}
             </ThemeProvider>
           </StylesProvider>
         </StyledEngineProvider>
