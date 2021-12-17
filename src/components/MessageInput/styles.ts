@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { COLOURS } from 'theme/consts';
+import { COLOURS, zINDEX } from 'theme/consts';
 
 export default makeStyles(
   {
@@ -9,7 +9,7 @@ export default makeStyles(
       padding: '14px 16px',
       borderTop: `1px solid ${COLOURS.LIGHT_01}`,
       background: COLOURS.WHITE,
-      zIndex: 1200,
+      zIndex: zINDEX.HEADER,
     },
   },
   { name: 'MessageInput' },

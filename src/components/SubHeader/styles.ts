@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { COLOURS, HEADER_HEIGHT } from '../../theme/consts';
+import { COLOURS, HEADER_HEIGHT, zINDEX } from '../../theme/consts';
 
 export default makeStyles(
   {
@@ -11,7 +11,7 @@ export default makeStyles(
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'white',
-      zIndex: 9999,
+      zIndex: zINDEX.HEADER,
     },
   },
   { name: 'SubHeader' },

@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { COLOURS } from './consts';
+import { COLOURS, zINDEX } from './consts';
 import MuiCssBaseline from './muicssbaseline';
 
 const palette = {
@@ -72,6 +72,13 @@ const themeOptions = {
           '&.Mui-checked': {
             color: 'unset',
           },
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        popper: {
+          zIndex: zINDEX.TOOLTIP_POPPER,
         },
       },
     },

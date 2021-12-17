@@ -7,6 +7,7 @@ export const BREAKPOINTS = {
 
 export const zINDEX = {
   HEADER: 10,
+  TOOLTIP_POPPER: 9,
 };
 
 export enum AvatarColorEnum {
