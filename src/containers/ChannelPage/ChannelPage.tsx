@@ -55,7 +55,7 @@ const ChannelPage: FC = () => {
 
         {isModerator && (
           <Box ml={4}>
-            <Button variant="link" onClick={onPollsClick}>
+            <Button data-qa="pollStart" variant="link" onClick={onPollsClick}>
               <HeaderTitle>
                 <FormattedMessage id="polls" />
               </HeaderTitle>

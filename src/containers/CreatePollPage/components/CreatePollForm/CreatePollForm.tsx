@@ -72,6 +72,7 @@ const CreatePollForm: FC<IProps> = (props) => {
                       component={InputField}
                       rows={5}
                       multiline
+                      data-qa="enterYourQuestion"
                       placeholder={intl.formatMessage({ id: 'enterYourQuestion' })}
                       classes={{ root: classes.textInput }}
                       disableUnderline
@@ -84,7 +85,7 @@ const CreatePollForm: FC<IProps> = (props) => {
             <FormControl component="fieldset" fullWidth>
               <FormGroup>
                 <FormControlLabel
-                  control={<Field name="withAnswer" component={CheckboxField} />}
+                  control={<Field name="withAnswer" component={CheckboxField} data-qa="pollWithCorrectAnswer" />}
                   label={intl.formatMessage({ id: 'pollWithCorrectAnswer' })}
                 />
               </FormGroup>
@@ -113,6 +114,7 @@ const CreatePollForm: FC<IProps> = (props) => {
                             <Field
                               name={`${field}`}
                               component={InputField}
+                              data-qa={`enterOption-${idx}`}
                               placeholder={intl.formatMessage({ id: 'enterOption' })}
                               classes={{ root: classes.textInput }}
                               disableUnderline
@@ -144,6 +146,7 @@ const CreatePollForm: FC<IProps> = (props) => {
                     variant="flatTransparent"
                     fullWidth
                     size="large"
+                    data-qa="addOption"
                     onClick={() => fields.value.length < MAX_ADDED_OPTIONS && fields.push('')}
                   >
                     <Typography>

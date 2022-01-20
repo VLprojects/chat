@@ -25,6 +25,7 @@ const RadioButtonsGroup: FC<IProps> = (props) => {
               <FormControlLabel
                 key={option.id}
                 value={`${option.id}`}
+                data-qa={`poll-pick-${value}`}
                 control={<Radio />}
                 label={option.option}
                 sx={{ wordBreak: 'break-all' }}
@@ -34,7 +35,7 @@ const RadioButtonsGroup: FC<IProps> = (props) => {
         </RadioGroup>
       </FormControl>
 
-      <Button variant="submit" fullWidth disabled={!value} onClick={() => voteHandler([value])}>
+      <Button data-qa="deployReply" variant="submit" fullWidth disabled={!value} onClick={() => voteHandler([value])}>
         <FormattedMessage id="reply" />
       </Button>
     </>

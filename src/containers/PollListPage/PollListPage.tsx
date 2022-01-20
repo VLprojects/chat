@@ -54,6 +54,7 @@ const PollListPage: FC = () => {
           component={Button}
           variant="outlined"
           size="large"
+          data-qa="newPoll"
           onClick={onCreatePoll}
           style={{ marginBottom: 30 }}
         >
