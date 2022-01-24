@@ -39,7 +39,7 @@ export default class Channel extends Model({
         });
 
         if (message.type === MessageTypeEnum.System) {
-          messageModel.loadSystemData(getRoot(this), message.meta.event as SystemMessageEnum, message.meta.data)
+          messageModel.loadSystemData(getRoot(this), message.meta.event as SystemMessageEnum, message.meta.data);
         }
 
         this.messages.set(message.id, messageModel);
@@ -163,6 +163,12 @@ export default class Channel extends Model({
     return Array.from(this.messages.values()).sort((a: Message, b: Message) =>
       compareAsc(new Date(a.createdAt), new Date(b.createdAt)),
     );
+  }
+
+  findLastMessageForUser(msgIdx: number): Message | undefined {
+    return this.sortedMessages
+      .slice(msgIdx)
+      .find((msg, idx, arr) => arr[idx + 1]?.user?.current.id !== msg?.user?.current.id);
   }
 
   @computed

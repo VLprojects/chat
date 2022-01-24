@@ -21,11 +21,17 @@ export interface IProps {
 
 const UserMessage: FC<IProps> = (props) => {
   const { message, short, index } = props;
-  const { auth } = useKeystone();
+  const { auth, chat, ui } = useKeystone();
   const [open, setOpen] = useState(false);
   const user = message?.user?.current;
   const own = message?.user?.current.id === `${auth.me.id}`;
-  const messageCreatedAt = new Date(message.createdAt);
+
+  const channelId = String(ui.params.id);
+
+  const currentChannel = chat.channels.get(channelId);
+  const lastMessageDate = !short
+    ? new Date(currentChannel?.findLastMessageForUser(index)?.createdAt || message.createdAt)
+    : new Date(message.createdAt);
 
   const { ref, inView } = useInView({
     threshold: 1,
@@ -63,11 +69,11 @@ const UserMessage: FC<IProps> = (props) => {
             fontFamily="PTRootUIWebRegular"
             letterSpacing="0.01em"
             color="textSecondary"
-            title={format(messageCreatedAt, 'MM/dd/yyyy, HH:mm')}
+            title={format(lastMessageDate, 'MM/dd/yyyy, HH:mm')}
           >
-            {isToday(messageCreatedAt)
-              ? format(messageCreatedAt, 'HH:mm')
-              : formatDistance(subDays(messageCreatedAt, 3), new Date(), {
+            {isToday(lastMessageDate)
+              ? format(lastMessageDate, 'HH:mm')
+              : formatDistance(subDays(lastMessageDate, 3), new Date(), {
                   addSuffix: true,
                   locale: intl.locale === 'ru' ? ru : enGB,
                 })}

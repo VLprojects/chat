@@ -1,6 +1,6 @@
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 import Message from '../../keystone/chat/message';
 import MessageRow from './components/MessageRow';
@@ -26,14 +26,6 @@ const MessageList: FC<MessageListProps> = (props) => {
     }
   }, [ui.pinnedMessageIdx]);
 
-  const scrollToLastOnLoad = () =>
-    virtuosoRef?.current?.scrollIntoView({ index: messages.length - 1, behavior: 'smooth' });
-
-  useLayoutEffect(() => {
-    const timer = setTimeout(() => scrollToLastOnLoad(), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <div className={classes.virtListWrapper}>
       {/* do not use vertical margins in children, that will break calc of size height */}
@@ -42,9 +34,7 @@ const MessageList: FC<MessageListProps> = (props) => {
         totalCount={messages.length}
         itemContent={(idx) => <MessageRow key={messages[idx].id} data={messages} index={idx} />}
         followOutput={() => 'smooth'}
-
-        /* Do not use - break size height calculation */
-        // initialTopMostItemIndex={messages.length - 1}
+        initialTopMostItemIndex={messages.length ? messages.length - 1 : 0}
       />
     </div>
   );

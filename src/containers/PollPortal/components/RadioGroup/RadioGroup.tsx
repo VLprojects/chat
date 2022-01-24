@@ -19,13 +19,13 @@ const RadioButtonsGroup: FC<IProps> = (props) => {
   return (
     <>
       <FormControl style={{ flexGrow: 1 }}>
-        <RadioGroup value={value} onChange={handleChange} name="test">
+        <RadioGroup value={value} data-qa={`poll-group-${value}`} onChange={handleChange} name="test">
           <>
             {poll.options.map((option) => (
               <FormControlLabel
                 key={option.id}
                 value={`${option.id}`}
-                data-qa={`poll-pick-${value}`}
+                data-qa={`poll-pick-${option.option}`}
                 control={<Radio />}
                 label={option.option}
                 sx={{ wordBreak: 'break-all' }}
