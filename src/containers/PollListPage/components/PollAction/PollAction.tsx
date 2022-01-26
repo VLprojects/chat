@@ -65,19 +65,19 @@ const PollAction: FC<IProps> = (props) => {
   switch (pollStatus) {
     case IPollStatus.New:
       return (
-        <Button variant="submit" onClick={onPollStart}>
+        <Button variant="submit" onClick={onPollStart} data-qa="startPoll">
           <FormattedMessage id="startPoll" />
         </Button>
       );
     case IPollStatus.InProgress:
       return (
-        <Button variant="submit" onClick={onPollEnd}>
+        <Button variant="submit" onClick={onPollEnd} data-qa="completePoll">
           <FormattedMessage id="completePoll" />
         </Button>
       );
     case IPollStatus.Done:
       return (
-        <Button variant="submit" onClick={onPollResult}>
+        <Button variant="submit" onClick={onPollResult} data-qa="seeResults">
           <FormattedMessage id="seeResults" />
         </Button>
       );

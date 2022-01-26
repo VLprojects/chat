@@ -1,5 +1,4 @@
 import cookies from 'js-cookie';
-
 import { Cookie } from 'types/const';
 
 export const getStoredAccessToken = (): string | undefined => cookies.get(Cookie.ACCESS_TOKEN);
