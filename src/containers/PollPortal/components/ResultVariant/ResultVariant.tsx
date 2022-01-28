@@ -64,7 +64,8 @@ const PollVariant: FC<IProps> = () => {
         bgColor = !poll.withAnswer && option.isVoted ? votedColor : otherAnswerColor;
 
         return (
-          <Box key={option.id} width="100%" bgcolor={option.isVoted ? 'green' : '#CCD3D9'} className={classes.progress}>
+          <Box key={option.id} width="100%" bgcolor={option.isVoted ? 'green' : '#CCD3D9'} className={classes.progress}
+          data-qa-votes={option.votesCount} data-qa-option={option.option}>
             <Box
               width={option.votesCount ? `${(option.votesCount / countTotal) * 100}%` : '100%'}
               bgcolor={option.votesCount ? bgColor : COLOURS.SURFACE_SECONDARY}
