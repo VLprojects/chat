@@ -1,10 +1,11 @@
-import { Box, Theme, Typography } from '@mui/material';
+import { Box, Grid, Theme, Typography } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 import { observer } from 'mobx-react';
 import React, { FC } from 'react';
 import useKeystone from '../../../../keystone';
 import Poll from '../../../../keystone/chat/poll';
 import { COLOURS } from '../../../../theme/consts';
+import { FormattedMessage } from 'react-intl';
 
 interface IProps {
   poll: Poll;
@@ -56,16 +57,38 @@ const PollVariant: FC<IProps> = () => {
 
   const countTotal = poll.options.reduce((acc, curr) => acc + curr.votesCount, 0);
 
+  if (poll.isOpenEnded) {
+    return (
+      <Grid mt={4} container alignItems="center" direction="column" rowGap={2}>
+        <Typography variant="h2">
+          <FormattedMessage id="thanks" />
+        </Typography>
+        <Typography variant="body1">
+          <FormattedMessage id="answerAccepted" />
+        </Typography>
+      </Grid>
+    );
+  }
+
   return (
     <>
       {poll.options.map((option) => {
-        let bgColor = 'inherit';
-        bgColor = poll.withAnswer && option.valid ? successColor : errorColor;
-        bgColor = !poll.withAnswer && option.isVoted ? votedColor : otherAnswerColor;
+        let bgColor: string;
+        if (poll.withAnswer) {
+          bgColor = option.valid ? successColor : errorColor;
+        } else {
+          bgColor = option.isVoted ? votedColor : otherAnswerColor;
+        }
 
         return (
-          <Box key={option.id} width="100%" bgcolor={option.isVoted ? 'green' : '#CCD3D9'} className={classes.progress}
-          data-qa-votes={option.votesCount} data-qa-option={option.option}>
+          <Box
+            key={option.id}
+            width="100%"
+            bgcolor={option.isVoted ? 'green' : '#CCD3D9'}
+            className={classes.progress}
+            data-qa-votes={option.votesCount}
+            data-qa-option={option.option}
+          >
             <Box
               width={option.votesCount ? `${(option.votesCount / countTotal) * 100}%` : '100%'}
               bgcolor={option.votesCount ? bgColor : COLOURS.SURFACE_SECONDARY}

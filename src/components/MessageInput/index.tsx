@@ -15,11 +15,12 @@ import useStyles from './styles';
 interface IMessageInput {
   channelId: string;
   isModerator: boolean;
+  isPublic: boolean;
 }
 
 const MessageInput: FC<IMessageInput> = (props) => {
   const intl = useIntl();
-  const { channelId, isModerator } = props;
+  const { channelId, isModerator, isPublic } = props;
   const classes = useStyles();
 
   const [message, setMessage] = useState('');
@@ -33,7 +34,7 @@ const MessageInput: FC<IMessageInput> = (props) => {
   };
 
   const onMessageSubmit = async () => {
-    if (message.length) {
+    if (message.trim().length) {
       try {
         setLoading(true);
         await sendMessage(root, channelId, message);
@@ -56,12 +57,12 @@ const MessageInput: FC<IMessageInput> = (props) => {
   return (
     <div className={classes.root}>
       <Grid container alignItems="center" spacing={1.5} wrap="nowrap">
-        {isModerator && (
-          <Grid item alignSelf="baseline" sx={{ color: '#999999', cursor: 'pointer' }}>
+        {isModerator && isPublic && (
+          <Grid item alignSelf="baseline" sx={{ color: '#999999', cursor: 'pointer', paddingRight: '9px' }}>
             <MessageInputActions icon={<SettingsIcon fontSize="small" color="inherit" />} />
           </Grid>
         )}
-        <Grid item xs={10} sx={{ overflow: 'auto', paddingLeft: '9px' }}>
+        <Grid item xs={10} sx={{ overflow: 'auto' }}>
           <TextareaAutosize
             onKeyDown={onKeyDown}
             placeholder={intl.formatMessage({ id: 'messageInputPlaceholder' })}
@@ -82,7 +83,7 @@ const MessageInput: FC<IMessageInput> = (props) => {
             disableFocusRipple
             disableRipple
           >
-            <SubmitMessageIcon fill={!loading && message.length ? COLOURS.BLACK : COLOURS.LIGHT_01} />
+            <SubmitMessageIcon fill={!loading && message.trim().length ? COLOURS.BLACK : COLOURS.LIGHT_01} />
           </IconButton>
         </Grid>
       </Grid>

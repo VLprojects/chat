@@ -5,9 +5,13 @@ export default class UI extends Model({
   route: prop<string>(''),
   channelId: prop<string>('').withSetter(),
   params: prop<Record<string, unknown>>(() => ({})).withSetter(),
-  // pinnedMessageIdx: prop<number | undefined>().withSetter(),
-  pinnedMessageIdx: prop<Record<string, number>>(() => ({})).withSetter(),
 }) {
+  jumpToMessage: (index: number) => void = () => undefined;
+
+  setJumpToMessage(handler: (index: number) => void): void {
+    this.jumpToMessage = handler;
+  }
+  
   routeHistory: string[] = [];
 
   @modelAction

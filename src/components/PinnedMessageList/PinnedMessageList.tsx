@@ -2,14 +2,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Grid, IconButton, Typography } from '@mui/material';
 import { deletePinnedMessage } from 'containers/ChannelPage/service';
 import { format } from 'date-fns';
-import { enGB, ru } from 'date-fns/locale';
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { UserRoleEnum } from 'types/enums';
 import PinnedIcon from 'ui-kit/icons/PinnedIcon';
-import intl from 'utils/intl';
+import { checkDateWhen, formatDate } from 'utils/date';
 import useStyles from './styles';
+import { zINDEX } from 'theme/consts';
+import { fetchMessagesBefore } from 'keystone/service';
 
 const PinnedMessageList: React.FC = () => {
   const classes = useStyles();
@@ -26,11 +27,16 @@ const PinnedMessageList: React.FC = () => {
 
   const onDeletePinnedMessage = () => deletePinnedMessage(pinnedMessage.id);
 
-  const scrollToPinnedMessage = () => {
+  const scrollToPinnedMessage = async () => {
     const msgIdx = currentChannel.findMessageIdx(pinnedMessage.messageId);
 
-    if (msgIdx !== -1) {
-      ui.setPinnedMessageIdx({ msgIdx });
+    if (msgIdx > -1) {
+      ui.jumpToMessage(msgIdx);
+    } else {
+      await fetchMessagesBefore(root, Number(channelId), Number(currentChannel.sortedMessages[0].id), {
+        until: Number(pinnedMessage.messageId),
+      });
+      setTimeout(() => {ui.jumpToMessage(0);}, 1000);
     }
   };
 
@@ -43,7 +49,7 @@ const PinnedMessageList: React.FC = () => {
       wrap="nowrap"
       sx={{
         backgroundColor: 'white',
-        zIndex: 9999,
+        zIndex: zINDEX,
       }}
     >
       <Grid item xs>
@@ -61,9 +67,10 @@ const PinnedMessageList: React.FC = () => {
           title={format(date, 'MM/dd/yyyy, HH:mm')}
           marginLeft="8px"
         >
-          {format(new Date(), 'dd MMMM HH:mm', {
-            locale: intl.locale === 'ru' ? ru : enGB,
-          })}
+          {formatDate(
+            pinnedMessage.message.createdAt,
+            `dd MMMM ${!checkDateWhen(pinnedMessage.message.createdAt, 'year') ? 'yyyy' : ''} HH:mm`,
+          )}
         </Typography>
 
         <Grid item xs={12}>

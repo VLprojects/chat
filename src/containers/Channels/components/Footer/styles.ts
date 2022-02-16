@@ -9,7 +9,7 @@ export default makeStyles(
       justifyContent: 'center',
       alignItems: 'center',
       height: HEADER_HEIGHT,
-      boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
+      boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.07)',
       width: '100%',
     },
     buttonWrapper: {

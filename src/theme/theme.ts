@@ -6,6 +6,7 @@ const palette = {
   text: {
     primary: COLOURS.BLACK_01,
     secondary: COLOURS.BLACK_03,
+    secondary2: COLOURS.GREY,
     white: COLOURS.WHITE,
     black: COLOURS.BLACK,
     pollPrimary: COLOURS.POLL_TEXT_PRIMARY,
@@ -29,6 +30,12 @@ const typography = {
     fontFamily: 'PTRootUIWebBold',
     fontSize: 22,
     lineHeight: '28px',
+    fontWeight: 700,
+  },
+  h3: {
+    fontFamily: 'PTRootUIWebBold',
+    fontSize: 18,
+    lineHeight: '20px',
     fontWeight: 700,
   },
   h4: {
@@ -60,8 +67,10 @@ const themeOptions = {
     MuiFormLabel: {
       styleOverrides: {
         root: {
+          fontSize: 14,
+          color: COLOURS.BLACK_01,
           '&.Mui-focused': {
-            color: COLOURS.BLACK_03,
+            color: COLOURS.BLACK_01,
           },
         },
       },

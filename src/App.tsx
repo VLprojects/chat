@@ -13,6 +13,7 @@ import UsersListPage from './containers/UsersListPage';
 import Routes from './routes';
 import { COLOURS } from './theme/consts';
 import { POLL_CONTAINER } from './types/const';
+import PollResultDetailPage from './containers/PollResultDetailPage';
 
 const useStyles = makeStyles(
   {
@@ -78,8 +79,11 @@ const App: FC = () => {
             <Router route={`${Routes.Polls}/:id`}>
               <PollListPage />
             </Router>
-            <Router route={`${Routes.CreatePoll}/:id`}>
+            <Router route={`${Routes.CreatePoll}/:id/:pollId`}>
               <CreatePollPage />
+            </Router>
+            <Router route={`${Routes.PollResultDetail}/:id/:pollId`}>
+              <PollResultDetailPage />
             </Router>
           </SocketLayout>
         </AuthLayout>

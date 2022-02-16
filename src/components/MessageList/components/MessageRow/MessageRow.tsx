@@ -1,3 +1,4 @@
+import { Box } from '@mui/system';
 import Message from 'keystone/chat/message';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -6,24 +7,23 @@ import SystemMessage from '../SystemMessage';
 import UserMessage from '../UserMessage';
 
 interface IProps {
-  data: Message[];
+  message: Message;
+  short: boolean;
+  last: boolean;
+  showLineTime: boolean;
   index: number;
 }
+
 const MessageRow: React.FC<IProps> = (props) => {
-  const { data, index } = props;
-  const message = data[index];
-  const prevMessage = data[index - 1] || {};
-  const short =
-    message?.user?.current.id === prevMessage?.user?.current.id && prevMessage.type !== MessageTypeEnum.System;
+  const { message, short, last, index, showLineTime } = props;
+  const style = { paddingLeft: '24px', paddingRight: '8px', paddingBottom: last ? '5px' : '0' };
 
   switch (message.type) {
     case MessageTypeEnum.User:
       return (
-        <div
-          style={{ paddingLeft: '24px', paddingRight: '8px', paddingBottom: data.length - 1 === index ? '5px' : '0' }}
-        >
-          <UserMessage short={short} message={message} index={index} />
-        </div>
+        <Box sx={style}>
+          <UserMessage short={short} message={message} index={index} showLineTime={showLineTime} />
+        </Box>
       );
     case MessageTypeEnum.System:
       return (

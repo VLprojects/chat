@@ -1,5 +1,5 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Poll from '../../../../keystone/chat/poll';
 import { Button } from '../../../../ui-kit';
@@ -10,9 +10,9 @@ interface IProps {
 }
 const RadioButtonsGroup: FC<IProps> = (props) => {
   const { poll, voteHandler } = props;
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = useState('');
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
   };
 

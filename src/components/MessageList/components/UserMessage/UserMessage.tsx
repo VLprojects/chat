@@ -1,43 +1,40 @@
-import { Grid, Typography } from '@mui/material';
-import Tooltip from '@mui/material/Tooltip';
+import { Box, ClickAwayListener, Grid, Typography } from '@mui/material';
 import cls from 'classnames';
-import { format, formatDistance, isToday, subDays } from 'date-fns';
-import { enGB, ru } from 'date-fns/locale';
 import useKeystone from 'keystone';
 import Message from 'keystone/chat/message';
 import Linkify from 'linkify-react';
-import React, { FC, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React, { FC, memo, useState } from 'react';
+import { COLOURS } from 'theme/consts';
+import { ChannelTypeEnum } from 'types/enums';
 import { Avatar } from 'ui-kit';
-import intl from '../../../../utils/intl';
+import MoreHoriz from 'ui-kit/icons/MoreHoriz';
+import { formatDate, getPreparedDate } from 'utils/date';
 import MessageActions from '../MessageActions';
+import UserMessageDisplayName from './components/UserMessageDisplayName';
 import useStyles from './styles';
 
 export interface IProps {
   index: number;
   message: Message;
   short?: boolean;
+  showLineTime: boolean;
 }
 
 const UserMessage: FC<IProps> = (props) => {
-  const { message, short, index } = props;
+  const { message, short, index, showLineTime } = props;
   const { auth, chat, ui } = useKeystone();
   const [open, setOpen] = useState(false);
+  const [hover, setHover] = useState(false);
   const user = message?.user?.current;
   const own = message?.user?.current.id === `${auth.me.id}`;
 
   const channelId = String(ui.params.id);
 
   const currentChannel = chat.channels.get(channelId);
-  const lastMessageDate = !short
-    ? new Date(currentChannel?.findLastMessageForUser(index)?.createdAt || message.createdAt)
-    : new Date(message.createdAt);
-
-  const { ref, inView } = useInView({
-    threshold: 1,
-  });
+  const isPublic = currentChannel?.type === ChannelTypeEnum.Public;
 
   const classes = useStyles({ user });
+  const showActionButtons = auth.isModerator && isPublic && open;
 
   if (!user) return null;
 
@@ -59,25 +56,8 @@ const UserMessage: FC<IProps> = (props) => {
             avatarColor={user?.getAvatarColor}
           />
           <Grid item marginLeft="8px" marginRight="12px">
-            <Typography variant="body2" fontWeight={600}>
-              {user?.displayName}
-            </Typography>
+            <UserMessageDisplayName user={user} />
           </Grid>
-
-          <Typography
-            variant="body2"
-            fontFamily="PTRootUIWebRegular"
-            letterSpacing="0.01em"
-            color="textSecondary"
-            title={format(lastMessageDate, 'MM/dd/yyyy, HH:mm')}
-          >
-            {isToday(lastMessageDate)
-              ? format(lastMessageDate, 'HH:mm')
-              : formatDistance(subDays(lastMessageDate, 3), new Date(), {
-                  addSuffix: true,
-                  locale: intl.locale === 'ru' ? ru : enGB,
-                })}
-          </Typography>
         </Grid>
       )}
 
@@ -88,25 +68,61 @@ const UserMessage: FC<IProps> = (props) => {
         paddingTop={short ? '10px' : 0}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
-        ref={ref}
       >
-        <Tooltip
-          disableHoverListener
-          placement={own ? 'right' : 'left'}
-          title={auth.isModerator ? <MessageActions messageId={+message.id} /> : false}
-          classes={{ tooltip: classes.tooltip }}
-          open={inView && open}
+        <Grid
+          item
+          container
+          className={cls(classes.message, { [classes.ownMessage]: own, [classes.otherUserMessage]: !own })}
+          position="relative"
+          width="auto"
+          alignItems="center"
+          columnGap={0.8}
+          wrap="nowrap"
         >
-          <Typography
-            data-qa="chat-msg"
-            className={cls(classes.message, { [classes.ownMessage]: own, [classes.otherUserMessage]: !own })}
-          >
+          <Grid item component={Typography} xs data-qa="chat-msg">
             <Linkify options={{ target: '_blank' }}>{message.text}</Linkify>
+          </Grid>
+          <Typography
+            alignSelf="end"
+            variant="subtitle2"
+            fontFamily="PTRootUIWebRegular"
+            letterSpacing="0.01em"
+            component="span"
+            sx={{ color: own ? COLOURS.MESSAGE_DATE_COLOR_OWN : COLOURS.MESSAGE_DATE_COLOR }}
+          >
+            {formatDate(message.createdAt)}
           </Typography>
-        </Tooltip>
+          {showActionButtons && (
+            <ClickAwayListener onClickAway={() => setOpen(false)}>
+              <Box
+                position="absolute"
+                width="24px"
+                height="24px"
+                display="flex"
+                right="-12px"
+                top="-4px"
+                sx={{
+                  justifyContent: 'center',
+                  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.07)',
+                  backgroundColor: '#fff',
+                  borderRadius: '12px',
+                }}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+              >
+                <MessageActions messageId={+message.id} icon={<MoreHoriz fill={hover ? 'black' : COLOURS.GREY} />} />
+              </Box>
+            </ClickAwayListener>
+          )}
+        </Grid>
       </Grid>
+      {showLineTime && (
+        <Typography color="textSecondary" variant="body2" textAlign="center" marginTop="24px">
+          {getPreparedDate(message.createdAt)}
+        </Typography>
+      )}
     </>
   );
 };
 
-export default UserMessage;
+export default memo(UserMessage);

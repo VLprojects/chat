@@ -4,11 +4,11 @@ import React, { FC, useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import useKeystone from '../../keystone';
 import { POLL_CONTAINER } from '../../types/const';
-import { UserRoleEnum } from '../../types/enums';
 import CloseButton from './components/CloseButton';
 import PollVariant from './components/PollVariant';
 import ResultVariant from './components/ResultVariant';
 import useStyles from './styles';
+import { IPollStatus } from '../../types/types';
 
 const PollPortal: FC = () => {
   const classes = useStyles();
@@ -25,11 +25,10 @@ const PollPortal: FC = () => {
   if (!currentChannel) return null;
 
   const poll = currentChannel.getActivePoll;
-  const isModerator = auth.me.role === UserRoleEnum.Moderator;
 
   if (!poll) return null;
 
-  const isVoted = poll.options.find((option) => option.isVoted);
+  const isVoted = poll.options.find((option) => option.isVoted) || poll.isVoted;
 
   const onClose = () => currentChannel.closePollPortal();
 
@@ -49,7 +48,11 @@ const PollPortal: FC = () => {
         <Typography color="text.pollSecondary">
           <FormattedMessage id="poll" />
         </Typography>
-        {isVoted || isModerator ? <ResultVariant poll={poll} /> : <PollVariant poll={poll} channel={currentChannel} />}
+        {isVoted || (auth.isModerator && poll.status === IPollStatus.Done) ? (
+          <ResultVariant poll={poll} />
+        ) : (
+          <PollVariant poll={poll} channel={currentChannel} />
+        )}
       </div>
     </Portal>
   );

@@ -4,6 +4,7 @@ import Poll from '../../../../keystone/chat/poll';
 import { doVote } from '../../services';
 import CheckboxGroup from '../CheckboxGroup';
 import RadioGroup from '../RadioGroup';
+import Textarea from '../Textarea';
 
 interface IProps {
   poll: Poll;
@@ -13,20 +14,24 @@ interface IProps {
 const PollVariant: FC<IProps> = (props) => {
   const { poll, channel } = props;
 
-  const voteHandler = (payload: string[]) => {
-    doVote(payload);
-    channel.setPollVoted(payload);
+  const voteHandler = async (payload: string[]) => {
+    const responseOptions = await doVote(poll, payload);
+    channel.setPollVoted(payload, responseOptions);
   };
 
-  return (
-    <>
-      {poll.withAnswer ? (
-        <CheckboxGroup poll={poll} voteHandler={voteHandler} />
-      ) : (
-        <RadioGroup poll={poll} voteHandler={voteHandler} />
-      )}
-    </>
-  );
+  const renderVariant = (poll: Poll) => {
+    if (poll.isOpenEnded) {
+      return <Textarea voteHandler={voteHandler} />;
+    }
+
+    if (poll.withAnswer) {
+      return <RadioGroup poll={poll} voteHandler={voteHandler} />;
+    } else {
+      return <CheckboxGroup poll={poll} voteHandler={voteHandler} />;
+    }
+  };
+
+  return renderVariant(poll);
 };
 
 export default PollVariant;

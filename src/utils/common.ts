@@ -16,8 +16,8 @@ export const findAppInitialData = (): {
   return { channelIdFromAttr, appIdFromAttr, apiUrlFromAttr };
 };
 
+// TODO Refactor - we work only with model since it converted and created from server data only once
 export const convertServerPollToModel = (poll: IServerPoll): Poll => {
-  if (!poll) throw new Error('No poll');
   const options: IServerPollOption[] = [];
   const validOptions: string[] = [];
   let withAnswer = false;
@@ -29,6 +29,8 @@ export const convertServerPollToModel = (poll: IServerPoll): Poll => {
       withAnswer = true;
     }
   });
+
+  withAnswer = poll.withAnswer;
 
   return new Poll({ ...poll, id: `${poll.id}`, options, validOptions, withAnswer });
 };

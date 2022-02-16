@@ -1,0 +1,2 @@
+export const MIN_SOCKET_RECONNECT_TIME = 1500;
+export const MAX_CHANNEL_MESSAGES = 150000;

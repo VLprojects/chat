@@ -40,10 +40,11 @@ export default makeStyles(
       },
       outlined: {
         borderRadius: 10,
-        color: COLOURS.BLACK_01,
-        boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
+        color: COLOURS.BLUE_01,
+        fontWeight: 700,
+        boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.07)',
         '&:hover': {
-          color: COLOURS.BLACK_01,
+          color: COLOURS.BLUE_01,
         },
         '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
       },

@@ -3,6 +3,8 @@ import intl from '../../../../utils/intl';
 
 const MIN_NUMBER_OF_VALID_OPTIONS = 1;
 const MIN_NUMBER_OF_WRITTEN_OPTIONS = 2;
+const MIN_NUMBER_OF_QUESTION_LENGTH = 1;
+const MAX_NUMBER_OF_QUESTION_LENGTH = 220;
 
 // https://stackoverflow.com/questions/36144406/how-to-early-break-reduce-method
 function findNumberOfFilledOptions(options: string[], min_number: number): number {
@@ -38,15 +40,22 @@ export default (values: ICreatePollForm): IReturnProps => {
     errors.all.push(intl.formatMessage({ id: 'questionNotBeEmpty' }));
   }
 
-  if (values?.question?.trim().length < 3) {
-    errors.all.push(intl.formatMessage({ id: 'questionValidateLongerLetters' }));
+  if (values?.question?.trim().length < MIN_NUMBER_OF_QUESTION_LENGTH) {
+    errors.all.push(
+      intl.formatMessage({ id: 'questionValidateLongerLetters' }, { length: MIN_NUMBER_OF_QUESTION_LENGTH }),
+    );
   }
 
-  if (values?.question?.trim().length > 150) {
-    errors.all.push(intl.formatMessage({ id: 'questionValidateNotLongerLetters' }));
+  if (values?.question?.trim().length > MAX_NUMBER_OF_QUESTION_LENGTH) {
+    errors.all.push(
+      intl.formatMessage({ id: 'questionValidateNotLongerLetters' }, { length: MAX_NUMBER_OF_QUESTION_LENGTH }),
+    );
   }
 
-  if (findNumberOfFilledOptions(values.options, MIN_NUMBER_OF_WRITTEN_OPTIONS) < MIN_NUMBER_OF_WRITTEN_OPTIONS) {
+  if (
+    !values?.isOpenEnded &&
+    findNumberOfFilledOptions(values.options, MIN_NUMBER_OF_WRITTEN_OPTIONS) < MIN_NUMBER_OF_WRITTEN_OPTIONS
+  ) {
     errors.all.push(intl.formatMessage({ id: 'questionValidateWriteLeastTwoAnswerOptions' }));
   }
 

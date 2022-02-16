@@ -25,11 +25,6 @@ export interface ISEMessage {
   message: IRChannelMessage;
 }
 
-export interface ISENewChannelUser {
-  channelId: string;
-  userId: string;
-}
-
 export interface IRChannel {
   id: string;
   name: string;
@@ -37,6 +32,7 @@ export interface IRChannel {
   type: ChannelTypeEnum;
   userIds: string[];
   messages: IRChannelMessage[];
+  polls: IServerPoll[];
 }
 
 export interface IRPub {
@@ -49,7 +45,6 @@ export interface IRGetInitial {
   user: IRUser;
   users: IRUser[];
   settings: Record<string, unknown>;
-  polls: (IServerPoll & { channelId: number })[];
 }
 
 export interface IRLogin {

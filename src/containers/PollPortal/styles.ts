@@ -14,7 +14,7 @@ export default makeStyles(
       left: 20,
       bottom: 20,
       backgroundColor: '#fff',
-      boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
+      boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.07)',
       borderRadius: 10,
       padding: 14,
       zIndex: 999999,

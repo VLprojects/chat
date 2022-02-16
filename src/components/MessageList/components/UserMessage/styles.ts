@@ -5,7 +5,7 @@ import { COLOURS } from '../../../../theme/consts';
 export default makeStyles(
   {
     otherUserMessage: {
-      backgroundColor: COLOURS.SURFACE_SECONDARY,
+      backgroundColor: '#F6F6F9',
       marginLeft: 40, // +list padding
     },
     ownMessage: {
@@ -20,16 +20,18 @@ export default makeStyles(
       wordWrap: 'break-word',
       wordBreak: 'break-word',
     },
-    tooltipRoot: {
-      width: 20,
-      zIndex: 0,
-    },
     tooltip: {
       backgroundColor: 'transparent',
       boxShadow: 'none',
       borderRadius: 'none',
       marginLeft: '-10px!important',
       marginRight: '-5px!important',
+      maxWidth: 'none',
+    },
+    icon: {
+      '& :hover': {
+        fill: 'red',
+      },
     },
   },
 

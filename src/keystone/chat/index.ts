@@ -106,6 +106,7 @@ export default class Chat extends Model({
   @modelAction
   addChannels(channels: IRChannel[]): void {
     channels.forEach((channel) => {
+      const { polls } = channel;
       const channelModel = new Channel({
         id: String(channel.id),
         name: channel.name,
@@ -115,7 +116,10 @@ export default class Chat extends Model({
 
       this.channels.set(channel.id, channelModel);
       channelModel.addMessages(channel.messages);
-      channelModel.addUsers(channel.userIds);
+      polls.forEach((poll) => {
+        const pollModel = channelModel.addPoll(poll);
+        channelModel.startPoll(pollModel);
+      });
     });
   }
 

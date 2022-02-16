@@ -1,24 +1,16 @@
-import { getPollListForChannel } from '../containers/PollListPage/services';
-import { GET, POST, PATCH } from '../api';
+import { GET, PATCH, POST } from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
-import { convertServerPollToModel } from '../utils/common';
 import eventBus from '../utils/eventBus/eventBus';
 import { EventBusEventEnum, ListenerEventEnum } from '../utils/eventBus/types';
 import { Root } from './index';
 
 export const getInitialData = async (root: Root): Promise<void> => {
   const initial = (await GET(`get-initial`)) as IRGetInitial;
-  const { publics, user, users, channels, polls } = initial;
-  root.chat.addUsers(users); // users first to prevent auto-fetch
+  const { publics, user, channels } = initial;
   root.chat.addChannels(channels);
   root.chat.addPubs(publics);
   root.auth.setMe(user);
-  polls.forEach((poll) => {
-    const channel = root.chat.channels.get(`${poll.channelId}`);
-    channel?.addPoll(poll);
-    channel?.startPoll(convertServerPollToModel(poll));
-  });
 };
 
 export const login = async (root: Root, username: string, password?: string): Promise<void> => {
@@ -53,15 +45,6 @@ export const saveProfile = async (root: Root, displayName: string, avatar?: stri
   root.auth.setMe(user);
 };
 
-export const loadChannelPolls = async (root: Root, channelId: string): Promise<void> => {
-  const polls = await getPollListForChannel(Number(channelId));
-  polls.forEach((poll) => {
-    const channel = root.chat.channels.get(channelId);
-    channel?.addPoll(poll);
-    channel?.startPoll(convertServerPollToModel(poll));
-  });
-};
-
 export const joinChannel = async (root: Root, id: string): Promise<void> => {
   if (!root.chat.channels.has(id)) {
     const response = (await POST(`channels/join`, { id })) as IRChannel;
@@ -70,7 +53,6 @@ export const joinChannel = async (root: Root, id: string): Promise<void> => {
     }
 
     root.chat.addChannels([response]);
-    await loadChannelPolls(root, id);
   }
 };
 
@@ -83,9 +65,31 @@ export const joinChannelByExternalId = async (root: Root, externalId: string): P
     const response = (await POST(`channels/join-external/${externalId}`)) as IRChannel;
     root.chat.pubs.delete(response.id);
     root.chat.addChannels([response]);
-    await loadChannelPolls(root, response.id);
     root.ui.setRoute(`${Routes.Channels}/${response.id}`);
   }
+};
+
+export const fetchMessagesBefore = async (
+  root: Root,
+  channelId: number,
+  messageId: number,
+  options?: { limit?: number; until?: number },
+): Promise<number> => {
+  const { limit, until } = options || {};
+  const response = (await GET(`channels/${channelId}/messages`, {
+    before: messageId,
+    limit,
+    until,
+  })) as any;
+  const channel = root.chat.channels.get(String(channelId));
+  if (channel) {
+    const message = channel.messages.get(String(messageId));
+    if (message) {
+      return channel.addMessages(response);
+    }
+  }
+
+  return 0;
 };
 
 export const redirectToInitial = (root: Root): Promise<void> | void => {

@@ -1,9 +1,10 @@
 import Centrifuge from 'centrifuge';
 import { getPinnedMessages } from 'containers/ChannelPage/service';
 import { getRoot, model, Model, prop } from 'mobx-keystone';
+import { MIN_SOCKET_RECONNECT_TIME } from 'utils/consts';
 import { IServerPoll } from '../containers/CreatePollPage/types';
 import CentrifugeEventsEnum from '../types/centrifugeEvents';
-import { IRChannel, ISEMessage, ISENewChannelUser } from '../types/serverResponses';
+import { IRChannel, ISEMessage } from '../types/serverResponses';
 import SocketEventsEnum from '../types/socketEvents';
 import { convertServerPollToModel } from '../utils/common';
 import { Root } from './index';
@@ -21,13 +22,6 @@ export default class SocketStore extends Model({
       const channel = root.chat.channels.get(channelId);
       if (channel) {
         channel.addMessages([message]);
-      }
-    };
-
-    const onNewChannelUser = ({ channelId, userId }: ISENewChannelUser): void => {
-      const channel = root.chat.channels.get(channelId);
-      if (channel) {
-        channel.addUsers([userId]);
       }
     };
 
@@ -49,10 +43,10 @@ export default class SocketStore extends Model({
       channel.stopPoll(convertServerPollToModel(poll));
     };
 
-    const onPollVote = (data: { channelId: number; pollOptionsIds: number[] }) => {
+    const onPollVote = (data: { channelId: number; pollOptionsIds?: number[]; pollId: number }) => {
       const { channelId, pollOptionsIds } = data;
       const channel = root.chat.channels.get(`${channelId}`);
-      if (!channel) return;
+      if (!channel || !pollOptionsIds) return;
       channel.updateVotesCounter(pollOptionsIds);
     };
 
@@ -85,15 +79,24 @@ export default class SocketStore extends Model({
       this.setIsSocketConnected(true);
     });
 
+    centrifuge.on(CentrifugeEventsEnum.Disconnect, (ctx) => {
+      this.setIsSocketConnected(false);
+
+      const intervalId = setInterval(() => {
+        if (centrifuge.isConnected()) {
+          clearInterval(intervalId);
+        } else {
+          centrifuge.connect();
+        }
+      }, MIN_SOCKET_RECONNECT_TIME);
+    });
+
     centrifuge.on(CentrifugeEventsEnum.Publish, (ctx) => {
       const { event, payload } = ctx.data;
       switch (event) {
         case SocketEventsEnum.SystemMessage:
         case SocketEventsEnum.Message:
           onMessage(payload);
-          break;
-        case SocketEventsEnum.NewChannelUser:
-          onNewChannelUser(payload);
           break;
         case SocketEventsEnum.NewDirect:
           onNewDirect(payload);

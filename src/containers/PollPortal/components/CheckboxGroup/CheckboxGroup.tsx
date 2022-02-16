@@ -1,5 +1,5 @@
 import { Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Poll from '../../../../keystone/chat/poll';
 import { Button } from '../../../../ui-kit';
@@ -10,12 +10,12 @@ interface IProps {
 }
 const CheckboxGroup: FC<IProps> = (props) => {
   const { poll, voteHandler } = props;
-  const [state, setState] = React.useState<Record<string, boolean>>(
+  const [state, setState] = useState<Record<string, boolean>>(
     poll.options.reduce((acc, option) => ({ ...acc, [option.id]: false }), {}),
   );
   const disabled = !Object.values(state).find((value) => value);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
 

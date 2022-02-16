@@ -7,6 +7,7 @@ enum Routes {
   Users = 'users',
   Polls = 'polls',
   CreatePoll = 'create_poll',
+  PollResultDetail = 'poll_result_detail',
 }
 
 export default Routes;

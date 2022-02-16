@@ -31,6 +31,10 @@ const PollAction: FC<IProps> = (props) => {
     return null;
   }
 
+  const goRoutePollDetail = () => {
+    ui.setRoute(`${Routes.PollResultDetail}/${channelId}/${poll.id}`);
+  };
+
   const onPollStart = async () => {
     try {
       const response = await startPoll(+poll.id);
@@ -77,7 +81,11 @@ const PollAction: FC<IProps> = (props) => {
       );
     case IPollStatus.Done:
       return (
-        <Button variant="submit" onClick={onPollResult} data-qa="seeResults">
+        <Button
+          variant="submit"
+          onClick={() => (poll.isOpenEnded ? goRoutePollDetail() : onPollResult())}
+          data-qa="seeResults"
+        >
           <FormattedMessage id="seeResults" />
         </Button>
       );

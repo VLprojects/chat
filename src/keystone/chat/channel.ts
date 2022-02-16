@@ -1,7 +1,7 @@
 import { compareAsc } from 'date-fns';
 import { computed } from 'mobx';
 import { getRoot, model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
-import { IServerPoll } from '../../containers/CreatePollPage/types';
+import { IServerPoll, IServerPollOption } from '../../containers/CreatePollPage/types';
 import { ChannelTypeEnum, MessageTypeEnum } from '../../types/enums';
 import { IRChannelMessage, IRPinnedMessage } from '../../types/serverResponses';
 import { IPollStatus } from '../../types/types';
@@ -24,10 +24,16 @@ export default class Channel extends Model({
   pinnedMessages: prop<PinnedMessage[]>(() => []),
 }) {
   @modelAction
-  addMessages(messages: IRChannelMessage[]): void {
-    messages.forEach((message) => {
-      // temporary fix
+  addMessages(messages: IRChannelMessage[]): number {
+    let newMessages = 0;
+    messages.forEach((message, index, array) => {
+      // temporary fix 
+      // upd: TODO investigate and remove this fix
       if (!(message.type === MessageTypeEnum.System && !message.meta)) {
+        if (!this.messages.has(message.id)) {
+          newMessages += 1;
+        }
+
         const messageModel = new Message({
           id: message.id,
           text: message.text,
@@ -45,25 +51,22 @@ export default class Channel extends Model({
         this.messages.set(message.id, messageModel);
       }
     });
-  }
 
-  @modelAction
-  addUsers(userIds: string[]): void {
-    userIds.forEach((userId) => {
-      this.users.set(userId, userRef(getRoot(this).chat.getUserLazy(userId)));
-    });
+    return newMessages;
   }
 
   @modelAction
   setPollList(items: IServerPoll[]): void {
-    const pollModels = items.map(convertServerPollToModel);
-    this.polls = pollModels;
+    const serverPolls = items.map(convertServerPollToModel).filter((item) => !this.polls.find((x) => x.id === item.id));
+    this.polls = [...serverPolls, ...this.polls];
   }
 
   @modelAction
-  addPoll(poll: IServerPoll): void {
+  addPoll(poll: IServerPoll): Poll {
     const pollModel = convertServerPollToModel(poll);
     this.polls.push(pollModel);
+
+    return pollModel;
   }
 
   @modelAction
@@ -92,7 +95,15 @@ export default class Channel extends Model({
   }
 
   @modelAction
-  setPollVoted(payload: string[]): void {
+  setPollVoted(payload: string[], options: IServerPollOption[]): void {
+    if (!this.activePoll) return;
+
+    if (this.activePoll.current.isOpenEnded) {
+      this.activePoll.current.isVoted = true;
+      return;
+    }
+    this.activePoll.current.options = options;
+
     payload.forEach((voteId) => {
       this.activePoll?.current.options.forEach((option) => {
         if (+option.id === +voteId) {
@@ -169,6 +180,11 @@ export default class Channel extends Model({
     return this.sortedMessages
       .slice(msgIdx)
       .find((msg, idx, arr) => arr[idx + 1]?.user?.current.id !== msg?.user?.current.id);
+  }
+
+  @computed
+  get lastMessage(): Message | undefined {
+    return [...this.sortedMessages].reverse().find((m) => m.type !== MessageTypeEnum.System);
   }
 
   @computed
