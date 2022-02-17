@@ -7,12 +7,12 @@ import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
 import Poll from '../../keystone/chat/poll';
 import Routes from '../../routes';
+import { COLOURS } from '../../theme/consts';
 import { Button } from '../../ui-kit';
+import EmptyPollIcon from '../../ui-kit/icons/EmptyPollIcon';
 import PollPortal from '../PollPortal';
 import PollCard from './components/PollCard';
 import { deletePoll, getPollListForChannel } from './services';
-import { COLOURS } from '../../theme/consts';
-import EmptyPollIcon from '../../ui-kit/icons/EmptyPollIcon';
 
 const PollListPage: FC = () => {
   const root = useKeystone();
@@ -24,7 +24,9 @@ const PollListPage: FC = () => {
   useEffect(() => {
     async function getList() {
       const response = await getPollListForChannel(+channelId);
-      currentChannel?.setPollList(response);
+      if (response) {
+        currentChannel?.setPollList(response);
+      }
     }
 
     getList();

@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/react';
 import { GET, PATCH, POST } from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
@@ -6,29 +7,41 @@ import { EventBusEventEnum, ListenerEventEnum } from '../utils/eventBus/types';
 import { Root } from './index';
 
 export const getInitialData = async (root: Root): Promise<void> => {
-  const initial = (await GET(`get-initial`)) as IRGetInitial;
-  const { publics, user, channels } = initial;
-  root.chat.addChannels(channels);
-  root.chat.addPubs(publics);
-  root.auth.setMe(user);
+  try {
+    const initial = (await GET(`get-initial`)) as IRGetInitial;
+    const { publics, user, channels } = initial;
+    root.chat.addChannels(channels);
+    root.chat.addPubs(publics);
+    root.auth.setMe(user);
+  } catch (e) {
+    Sentry.captureException(e);
+  }
 };
 
 export const login = async (root: Root, username: string, password?: string): Promise<void> => {
-  const response = (await POST(`login`, {
-    app_id: root.auth.appId,
-    username,
-    password,
-  })) as IRLogin;
-  root.auth.setAccessToken(response.access_token);
+  try {
+    const response = (await POST(`login`, {
+      app_id: root.auth.appId,
+      username,
+      password,
+    })) as IRLogin;
+    root.auth.setAccessToken(response.access_token);
+  } catch (e) {
+    Sentry.captureException(e);
+  }
 };
 
 export const signup = async (root: Root, username: string, password?: string): Promise<void> => {
-  const response = (await POST(`signup`, {
-    app_id: root.auth.appId,
-    username,
-    password,
-  })) as IRLogin;
-  root.auth.setAccessToken(response.access_token);
+  try {
+    const response = (await POST(`signup`, {
+      app_id: root.auth.appId,
+      username,
+      password,
+    })) as IRLogin;
+    root.auth.setAccessToken(response.access_token);
+  } catch (e) {
+    Sentry.captureException(e);
+  }
 };
 
 export const saveProfile = async (root: Root, displayName: string, avatar?: string): Promise<void> => {
@@ -40,19 +53,26 @@ export const saveProfile = async (root: Root, displayName: string, avatar?: stri
   if (avatar) {
     sendData.avatarUrl = avatar;
   }
-
-  const user = (await PATCH(`profile`, sendData)) as IRUser;
-  root.auth.setMe(user);
+  try {
+    const user = (await PATCH(`profile`, sendData)) as IRUser;
+    root.auth.setMe(user);
+  } catch (e) {
+    Sentry.captureException(e);
+  }
 };
 
 export const joinChannel = async (root: Root, id: string): Promise<void> => {
   if (!root.chat.channels.has(id)) {
-    const response = (await POST(`channels/join`, { id })) as IRChannel;
-    if (root.chat.pubs.has(id)) {
-      root.chat.pubs.delete(id);
-    }
+    try {
+      const response = (await POST(`channels/join`, { id })) as IRChannel;
+      if (root.chat.pubs.has(id)) {
+        root.chat.pubs.delete(id);
+      }
 
-    root.chat.addChannels([response]);
+      root.chat.addChannels([response]);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   }
 };
 
@@ -62,10 +82,14 @@ export const joinChannelByExternalId = async (root: Root, externalId: string): P
   if (found) {
     root.ui.setRoute(`${Routes.Channels}/${found.id}`);
   } else {
-    const response = (await POST(`channels/join-external/${externalId}`)) as IRChannel;
-    root.chat.pubs.delete(response.id);
-    root.chat.addChannels([response]);
-    root.ui.setRoute(`${Routes.Channels}/${response.id}`);
+    try {
+      const response = (await POST(`channels/join-external/${externalId}`)) as IRChannel;
+      root.chat.pubs.delete(response.id);
+      root.chat.addChannels([response]);
+      root.ui.setRoute(`${Routes.Channels}/${response.id}`);
+    } catch (e) {
+      Sentry.captureException(e);
+    }
   }
 };
 
@@ -76,17 +100,21 @@ export const fetchMessagesBefore = async (
   options?: { limit?: number; until?: number },
 ): Promise<number> => {
   const { limit, until } = options || {};
-  const response = (await GET(`channels/${channelId}/messages`, {
-    before: messageId,
-    limit,
-    until,
-  })) as any;
-  const channel = root.chat.channels.get(String(channelId));
-  if (channel) {
-    const message = channel.messages.get(String(messageId));
-    if (message) {
-      return channel.addMessages(response);
+  try {
+    const response = (await GET(`channels/${channelId}/messages`, {
+      before: messageId,
+      limit,
+      until,
+    })) as any;
+    const channel = root.chat.channels.get(String(channelId));
+    if (channel) {
+      const message = channel.messages.get(String(messageId));
+      if (message) {
+        return channel.addMessages(response);
+      }
     }
+  } catch (e) {
+    Sentry.captureException(e);
   }
 
   return 0;
@@ -111,8 +139,12 @@ export const sendMessage = async (root: Root, channelId: string, text: string): 
 };
 
 export const getSettings = async (root: Root, appId: string): Promise<void> => {
-  const settings = (await GET(`applications/${appId}/settings`)) as Record<string, unknown>;
-  root.settings.setAll(settings);
+  try {
+    const settings = (await GET(`applications/${appId}/settings`)) as Record<string, unknown>;
+    root.settings.setAll(settings);
+  } catch (e) {
+    Sentry.captureException(e);
+  }
 };
 
 export default {};

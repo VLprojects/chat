@@ -1,7 +1,7 @@
 {
   "name": "@vlprojects-chat/chat",
   "author": "vlprojects",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "description": "chat",
   "license": "ISC",
   "main": "dist/index.js",
@@ -30,6 +30,8 @@
     "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "dependencies": {
+    "@sentry/react": "^6.17.7",
+    "@sentry/tracing": "^6.17.7",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.4",

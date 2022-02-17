@@ -36,12 +36,10 @@ const PollAction: FC<IProps> = (props) => {
   };
 
   const onPollStart = async () => {
-    try {
-      const response = await startPoll(+poll.id);
+    const response = await startPoll(+poll.id);
+    if (response) {
       poll.status = response.status;
       currentChannel.startPoll(poll);
-    } catch (e) {
-      // show error
     }
   };
 

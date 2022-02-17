@@ -1,5 +1,6 @@
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Grid, IconButton, TextareaAutosize } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
 import React, { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
@@ -40,6 +41,7 @@ const MessageInput: FC<IMessageInput> = (props) => {
         await sendMessage(root, channelId, message);
         setMessage('');
       } catch (error) {
+        Sentry.captureException(error);
         enqueueSnackbar(getErrorMessage(error as Error));
       } finally {
         setLoading(false);
