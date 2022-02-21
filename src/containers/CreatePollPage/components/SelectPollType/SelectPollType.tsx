@@ -57,6 +57,7 @@ const SelectPollType: FC<IProps> = (props) => {
                 }}
                 fullWidth
                 variant="outlined"
+                data-qa={`${idx}`}
                 onClick={() => onSelectPollType(button.type)}
               >
                 <Grid container spacing={1.5} columnSpacing={1.5}>

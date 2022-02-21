@@ -47,7 +47,7 @@ const ChannelPageHeader: FC<IProps> = (props) => {
 
       {isModerator && isPublic && (
         <Box ml={4}>
-          <Button variant="link" onClick={onPollsClick}>
+          <Button data-qa="pollStart" variant="link" onClick={onPollsClick}>
             <HeaderTitle>
               <Typography>
                 <FormattedMessage id="polls" />
@@ -59,7 +59,7 @@ const ChannelPageHeader: FC<IProps> = (props) => {
       {displayDirect && isPublic && (
         <Box ml={4}>
           <HeaderTitle>
-            <Button variant="link" onClick={onDirectClick}>
+            <Button data-qa="onDirectClick" variant="link" onClick={onDirectClick}>
               <Typography>
                 <FormattedMessage id="menu.direct" />
               </Typography>

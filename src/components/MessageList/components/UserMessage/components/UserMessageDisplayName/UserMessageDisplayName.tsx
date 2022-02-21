@@ -3,16 +3,17 @@ import cls from 'classnames';
 import { createOrOpenDirectChat } from 'containers/UsersListPage/services';
 import useKeystone from 'keystone';
 import User from 'keystone/chat/user';
-import React, { FC, memo } from 'react';
+import React, { FC } from 'react';
 import { ChannelTypeEnum } from 'types/enums';
 import useStyles from './styles';
 
 interface IProps {
   user: User;
+  own: boolean;
 }
 
 const UserMessageDisplayName: FC<IProps> = (props) => {
-  const { user } = props;
+  const { user, own } = props;
   const classes = useStyles();
 
   const root = useKeystone();
@@ -22,9 +23,8 @@ const UserMessageDisplayName: FC<IProps> = (props) => {
 
   const directAllowed = settings.displayDirect;
   const publicChannel = currentChannel?.type === ChannelTypeEnum.Public;
-  const selfMessage = +user.id === +auth.me.id;
 
-  const directMessageConditions = directAllowed && publicChannel && !selfMessage;
+  const directMessageConditions = directAllowed && publicChannel && !own;
 
   const openNewChat = () => {
     if (directMessageConditions) {
@@ -44,4 +44,4 @@ const UserMessageDisplayName: FC<IProps> = (props) => {
   );
 };
 
-export default memo(UserMessageDisplayName);
+export default UserMessageDisplayName;

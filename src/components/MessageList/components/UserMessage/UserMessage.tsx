@@ -2,8 +2,9 @@ import { Box, ClickAwayListener, Grid, Typography } from '@mui/material';
 import cls from 'classnames';
 import useKeystone from 'keystone';
 import Message from 'keystone/chat/message';
+import User from 'keystone/chat/user';
 import Linkify from 'linkify-react';
-import React, { FC, memo, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { COLOURS } from 'theme/consts';
 import { ChannelTypeEnum } from 'types/enums';
 import { Avatar } from 'ui-kit';
@@ -16,17 +17,18 @@ import useStyles from './styles';
 export interface IProps {
   index: number;
   message: Message;
+  user?: User;
   short?: boolean;
   showLineTime: boolean;
 }
 
 const UserMessage: FC<IProps> = (props) => {
-  const { message, short, index, showLineTime } = props;
+  const { message, short, index, showLineTime, user } = props;
   const { auth, chat, ui } = useKeystone();
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
-  const user = message?.user?.current;
-  const own = message?.user?.current.id === `${auth.me.id}`;
+
+  const own = user?.id === `${auth.me.id}`;
 
   const channelId = String(ui.params.id);
 
@@ -56,7 +58,7 @@ const UserMessage: FC<IProps> = (props) => {
             avatarColor={user?.getAvatarColor}
           />
           <Grid item marginLeft="8px" marginRight="12px">
-            <UserMessageDisplayName user={user} />
+            <UserMessageDisplayName user={user} own={own} />
           </Grid>
         </Grid>
       )}
@@ -125,4 +127,4 @@ const UserMessage: FC<IProps> = (props) => {
   );
 };
 
-export default memo(UserMessage);
+export default UserMessage;

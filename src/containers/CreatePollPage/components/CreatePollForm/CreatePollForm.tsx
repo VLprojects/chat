@@ -200,7 +200,7 @@ const CreatePollForm: FC<IProps> = (props) => {
           <Box>
             <ErrorMessage style={{ fontSize: 14, paddingTop: 10 }} message={errors?.all[0]} />
           </Box>
-          <Button type="submit" variant="submit" fullWidth size="large" disabled={errors?.all[0]}>
+          <Button data-qa="createPoll" type="submit" variant="submit" fullWidth size="large" disabled={errors?.all[0]}>
             <Typography>
               <FormattedMessage id="createPoll" />
             </Typography>

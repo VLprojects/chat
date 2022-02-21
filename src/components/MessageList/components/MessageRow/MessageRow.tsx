@@ -18,11 +18,12 @@ const MessageRow: React.FC<IProps> = (props) => {
   const { message, short, last, index, showLineTime } = props;
   const style = { paddingLeft: '24px', paddingRight: '8px', paddingBottom: last ? '5px' : '0' };
 
+  const user = message.user?.current;
   switch (message.type) {
     case MessageTypeEnum.User:
       return (
         <Box sx={style}>
-          <UserMessage short={short} message={message} index={index} showLineTime={showLineTime} />
+          <UserMessage short={short} user={user} message={message} index={index} showLineTime={showLineTime} />
         </Box>
       );
     case MessageTypeEnum.System:
