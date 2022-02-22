@@ -63,7 +63,7 @@
   "deleteAllMessage": "Удалить все сообщения",
   "systemMessageChangedName": "изменил имя на",
   "systemMessageUserChangedChannelName": "изменил название канала на",
-  "selectPollType": "Выберете тип опроса",
+  "selectPollType": "Выберите тип опроса",
   "multipleAnswerOptions": "Несколько вариантов ответа",
   "pollOpenEnded": "Свободный ответ",
   "thanks": "Спасибо!",

@@ -28,6 +28,8 @@ const CheckboxGroup: FC<IProps> = (props) => {
               key={option.id}
               control={<Checkbox checked={state[option.id]} onChange={handleChange} name={`${option.id}`} />}
               label={option.option}
+              // Used by Automation tests
+              data-qa={`poll-pick-${option.option}`}
               sx={{ wordBreak: 'break-all' }}
             />
           ))}
@@ -37,6 +39,8 @@ const CheckboxGroup: FC<IProps> = (props) => {
         variant="submit"
         fullWidth
         disabled={disabled}
+        // Used by Automation tests
+        data-qa="submitPollAnswer"
         onClick={() => voteHandler(Object.keys(state).filter((key) => state[key]))}
       >
         <FormattedMessage id="reply" />
