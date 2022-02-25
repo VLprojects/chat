@@ -10,9 +10,9 @@ export const getInitialData = async (root: Root): Promise<void> => {
   try {
     const initial = (await GET(`get-initial`)) as IRGetInitial;
     const { publics, user, channels } = initial;
+    root.chat.addUsers([user]);
     root.chat.addChannels(channels);
     root.chat.addPubs(publics);
-    root.chat.addUsers([user]);
     root.auth.setMe(user);
   } catch (e) {
     Sentry.captureException(e);

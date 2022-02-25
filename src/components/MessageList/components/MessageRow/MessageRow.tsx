@@ -16,7 +16,7 @@ interface IProps {
 
 const MessageRow: React.FC<IProps> = (props) => {
   const { message, short, last, index, showLineTime } = props;
-  const style = { paddingLeft: '24px', paddingRight: '8px', paddingBottom: last ? '5px' : '0' };
+  const style = { paddingLeft: '24px', paddingRight: '8px', paddingBottom: last ? '35px' : '0' };
 
   const user = message.user?.current;
   switch (message.type) {

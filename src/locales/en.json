@@ -75,6 +75,7 @@
   "menu.direct": "Direct",
   "time.dayBefore": "The day before",
   "time.yesterday": "Yesterday",
+  "time.today": "Today",
   "pollValidateAnswerLongerLetters": "Answer must be longer than {length} letters",
   "pollValidateAnswerNotLongerLetters": "Answer couldn't be longer then {length} letters",
   "restart": "Restart",

@@ -22,7 +22,7 @@ const PinnedMessageList: React.FC = () => {
   const pinnedMessage = currentChannel?.lastPinnedMessage;
   if (!pinnedMessage) return null;
 
-  const user = chat.getUserLazy(pinnedMessage.message.userId);
+  const user = pinnedMessage.user.current;
   const date = new Date(pinnedMessage.message.createdAt);
 
   const onDeletePinnedMessage = () => deletePinnedMessage(pinnedMessage.id);

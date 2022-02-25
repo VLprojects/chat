@@ -59,7 +59,7 @@ export default class Message extends Model({
     switch (event) {
       case SystemMessageEnum.UserJoinedEvent: {
         const { userId } = data as UserJoinedPayload;
-        this.systemData.whoJoined = userRef(root.chat.getUserLazy(userId));
+        this.systemData.whoJoined = root.chat.createUserRef(userId);
         break;
       }
       case SystemMessageEnum.UserChangedEvent: {
@@ -70,7 +70,7 @@ export default class Message extends Model({
       }
       case SystemMessageEnum.UserChangedChannelEvent: {
         const { userId, newName } = data as UserChangedChannelPayload;
-        this.systemData.whoRenamedChannel = userRef(root.chat.getUserLazy(userId));
+        this.systemData.whoRenamedChannel = root.chat.createUserRef(userId);
         this.systemData.newName = newName;
         break;
       }

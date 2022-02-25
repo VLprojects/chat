@@ -74,6 +74,7 @@
   "menu.direct": "Директ",
   "time.dayBefore": "Позавчера",
   "time.yesterday": "Вчера",
+  "time.today": "Сегодня",
   "pollValidateAnswerLongerLetters": "Ответ должен быть длиннее {length} символов",
   "pollValidateAnswerNotLongerLetters": "Ответ не должен быть длиннее {length} символов",
   "restart": "Перезапустить",

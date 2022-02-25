@@ -42,6 +42,11 @@ const UserMessage: FC<IProps> = (props) => {
 
   return (
     <>
+      {showLineTime && (
+        <Typography color="textSecondary" variant="body2" textAlign="center" marginTop="24px">
+          {getPreparedDate(message.createdAt, true)}
+        </Typography>
+      )}
       {!short && (
         <Grid
           container
@@ -118,11 +123,6 @@ const UserMessage: FC<IProps> = (props) => {
           )}
         </Grid>
       </Grid>
-      {showLineTime && (
-        <Typography color="textSecondary" variant="body2" textAlign="center" marginTop="24px">
-          {getPreparedDate(message.createdAt)}
-        </Typography>
-      )}
     </>
   );
 };

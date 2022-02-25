@@ -2,11 +2,11 @@ import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
+import { MAX_CHANNEL_MESSAGES } from 'utils/consts';
+import { checkDateWhen, checkDayInterval } from 'utils/date';
+import { fetchMessagesBefore } from '../../keystone/service';
 import MessageRow from './components/MessageRow';
 import useStyles from './styles';
-import { fetchMessagesBefore } from '../../keystone/service';
-import { checkDateWhen } from 'utils/date';
-import { MAX_CHANNEL_MESSAGES } from 'utils/consts';
 
 interface MessageListProps {
   channelId: string;
@@ -58,6 +58,7 @@ const MessageList: FC<MessageListProps> = (props) => {
     <div className={classes.virtListWrapper}>
       {/* do not use vertical margins in children, that will break calc of size height */}
       <Virtuoso
+        style={{ overflow: 'hidden auto' }}
         ref={virtuosoRef}
         firstItemIndex={firstItemIndex}
         startReached={fetchMore}
@@ -67,16 +68,16 @@ const MessageList: FC<MessageListProps> = (props) => {
         itemContent={(virtuosoIndex, message) => {
           const index = virtuosoIndex - firstItemIndex;
           let short = false;
+          let prevMessage = null;
           if (index > 0) {
-            const prevMessage = messages[index - 1];
+            prevMessage = messages[index - 1];
             short = message?.user?.current.id === prevMessage?.user?.current.id;
           }
 
           const last = index === messages.length - 1;
-          const nextMessage = messages[index + 1] || {};
-          const showLineTime =
-            (last && !checkDateWhen(message.createdAt, 'today')) ||
-            (checkDateWhen(nextMessage.createdAt, 'today') && !checkDateWhen(message.createdAt, 'today'));
+
+          const showLineTime = prevMessage && checkDayInterval(message.createdAt, prevMessage?.createdAt || '0') >= 1;
+          const showLineTimeInTheBegining = index === 0 && !checkDateWhen(message.createdAt, 'today');
 
           return (
             <MessageRow
@@ -85,7 +86,7 @@ const MessageList: FC<MessageListProps> = (props) => {
               index={index}
               short={short}
               last={last}
-              showLineTime={showLineTime}
+              showLineTime={showLineTime || showLineTimeInTheBegining}
             />
           );
         }}

@@ -1,11 +1,15 @@
 import { differenceInDays, format, isThisYear, isToday, isYesterday, parseISO } from 'date-fns';
+import { enGB, ru } from 'date-fns/locale';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import intl from './intl';
 
 export const formatDate = (date?: string | null, formatString: string = 'HH:mm') => {
   if (!date) return '';
 
-  return format(parseISO(date), formatString);
+  return format(parseISO(date), formatString, {
+    locale: intl.locale === 'ru' ? ru : enGB,
+  });
 };
 
 export const checkDayInterval = (dateLeft: string, dateRight: string) =>
@@ -24,10 +28,10 @@ export const checkDateWhen = (date: string, when: 'today' | 'yesterday' | 'year'
   }
 };
 
-export const getPreparedDate = (date?: string) => {
+export const getPreparedDate = (date?: string, withToday?: boolean) => {
   if (!date) return null;
 
-  if (checkDateWhen(date, 'today')) return formatDate(date, 'HH:mm');
+  if (checkDateWhen(date, 'today')) return withToday ? <FormattedMessage id="time.today" /> : formatDate(date, 'HH:mm');
   if (!checkDateWhen(date, 'year')) return formatDate(date, 'dd MMMM yyyy');
   if (checkDateWhen(date, 'yesterday')) return <FormattedMessage id="time.yesterday" />;
 

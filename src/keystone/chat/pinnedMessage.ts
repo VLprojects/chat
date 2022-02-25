@@ -1,5 +1,6 @@
-import { Model, model, prop, rootRef } from 'mobx-keystone';
+import { Model, model, prop, rootRef, Ref } from 'mobx-keystone';
 import { IRChannelMessage } from 'types/serverResponses';
+import User from './user';
 
 @model('PinnedMessage')
 export default class PinnedMessage extends Model({
@@ -7,6 +8,7 @@ export default class PinnedMessage extends Model({
   channelId: prop<number>(),
   messageId: prop<number>(),
   message: prop<IRChannelMessage>(),
+  user: prop<Ref<User>>(),
 }) {}
 
 export const pinnedMessageRef = rootRef<PinnedMessage>('PinnedMessageRef', {

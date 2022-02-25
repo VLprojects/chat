@@ -27,7 +27,7 @@ export default class Channel extends Model({
   addMessages(messages: IRChannelMessage[]): number {
     let newMessages = 0;
     messages.forEach((message, index, array) => {
-      // temporary fix 
+      // temporary fix
       // upd: TODO investigate and remove this fix
       if (!(message.type === MessageTypeEnum.System && !message.meta)) {
         if (!this.messages.has(message.id)) {
@@ -39,7 +39,7 @@ export default class Channel extends Model({
           text: message.text,
           type: message.type,
           createdAt: message.createdAt,
-          user: message.userId ? userRef(getRoot(this).chat.getUserLazy(message.userId)) : null,
+          user: message.userId ? getRoot(this).chat.createUserRef(message.userId) : null,
           meta: message.meta,
           systemData: null,
         });
@@ -148,9 +148,14 @@ export default class Channel extends Model({
   }
 
   @modelAction
-  setPinnedMessages(items: Array<IRPinnedMessage | PinnedMessage>): void {
-    this.pinnedMessages = items.map((item) =>
-      item instanceof PinnedMessage ? item : new PinnedMessage({ ...item, id: `${item.id}` }),
+  setPinnedMessages(items: IRPinnedMessage[]): void {
+    this.pinnedMessages = items.map(
+      (item) =>
+        new PinnedMessage({
+          ...item,
+          id: `${item.id}`,
+          user: getRoot(this).chat.createUserRef(item.message.userId),
+        }),
     );
   }
 

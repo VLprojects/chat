@@ -75,5 +75,26 @@ export default {
         outline: none;
       }
     }
+
+    /* Works on Firefox */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #fff #DEE3E7;
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: #fff;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background-color: #DEE3E7;
+      border-radius: 50px;
+
+    }
   `,
 };
