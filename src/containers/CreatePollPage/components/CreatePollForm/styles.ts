@@ -11,7 +11,7 @@ export default makeStyles({
   textInput: {
     border: '1px solid #B8B6C2',
     borderRadius: 10,
-    padding: '16px 8px',
+    padding: '14px 16px',
     width: '100%',
   },
 });

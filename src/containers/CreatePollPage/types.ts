@@ -6,7 +6,7 @@ export interface ICreatePollForm {
   withAnswer: boolean;
   isOpenEnded: boolean;
   options: string[];
-  validOptions: string[];
+  validOptions: boolean[];
   templateId?: number | null;
 }
 

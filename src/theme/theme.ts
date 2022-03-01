@@ -5,8 +5,10 @@ import MuiCssBaseline from './muicssbaseline';
 const palette = {
   text: {
     primary: COLOURS.BLACK_01,
+    black02: COLOURS.BLACK_02,
     secondary: COLOURS.BLACK_03,
-    secondary2: COLOURS.GREY,
+    light02: COLOURS.LIGHT_02,
+    secondary6: COLOURS.BLACK_06,
     white: COLOURS.WHITE,
     black: COLOURS.BLACK,
     pollPrimary: COLOURS.POLL_TEXT_PRIMARY,
@@ -63,6 +65,7 @@ const typography = {
 const themeOptions = {
   palette,
   typography,
+  spacing: 4,
   components: {
     MuiFormLabel: {
       styleOverrides: {
@@ -88,6 +91,16 @@ const themeOptions = {
       styleOverrides: {
         popper: {
           zIndex: zINDEX.TOOLTIP_POPPER,
+        },
+      },
+    },
+    MuiInput: {
+      styleOverrides: {
+        input: {
+          padding: 0,
+          fontSize: '15px',
+          lineHeight: '19px',
+          color: COLOURS.BLACK_01,
         },
       },
     },

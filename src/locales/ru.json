@@ -63,9 +63,10 @@
   "deleteAllMessage": "Удалить все сообщения",
   "systemMessageChangedName": "изменил имя на",
   "systemMessageUserChangedChannelName": "изменил название канала на",
-  "selectPollType": "Выберите тип опроса",
+  "selectPollType": "Выберите тип опроса: ",
   "multipleAnswerOptions": "Несколько вариантов ответа",
   "pollOpenEnded": "Свободный ответ",
+  "test": "Тест",
   "thanks": "Спасибо!",
   "answerAccepted": "Ваш ответ принят",
   "listEmpty": "Список пуст",
@@ -80,5 +81,6 @@
   "restart": "Перезапустить",
   "edit": "Редактировать",
   "delete": "Удалить",
-  "templates": "Шаблоны"
+  "templates": "Шаблоны",
+  "addOptionsNumber": "Вы можете добавить еще {number, plural, =5 {# опций} =4 {# опции} one {# опцию} other {# опции}}"
 }

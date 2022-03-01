@@ -1,79 +1,91 @@
-import React, { FC, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/system/Box';
+import { ICreatePollForm, PollTypeEnum } from 'containers/CreatePollPage/types';
+import { FormApi } from 'final-form';
+import React, { FC, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
-import useStyles from './styles';
-import { Grid, Typography } from '@mui/material';
-import { Button } from '../../../../ui-kit';
-import CheckIcon from '../../../../ui-kit/icons/CheckIcon';
-import CheckDoubleIcon from '../../../../ui-kit/icons/CheckDoubleIcon';
-import TalkIcon from '../../../../ui-kit/icons/TalkIcon';
-import { PollTypeEnum } from '../../types';
-import { COLOURS } from '../../../../theme/consts';
+import { COLOURS } from 'theme/consts';
+import PollOption1 from 'ui-kit/icons/PollOption1';
+
+interface IPropsCard {
+  title: string;
+  onClick: () => void;
+  active: boolean;
+}
+
+const PollTypeCard: React.FC<IPropsCard> = (props) => {
+  const { title, onClick: onClickFromProps, active } = props;
+  const ref = useRef<HTMLDivElement>(null);
+
+  const clickHandler = () => {
+    ref.current?.scrollIntoView();
+    onClickFromProps();
+  };
+  const opacity = active ? '1' : '0.5';
+
+  return (
+    <Grid
+      item
+      xs
+      minWidth="139px"
+      onClick={clickHandler}
+      ref={ref}
+      sx={{
+        '& > svg': { opacity },
+        '& > svg:hover': {
+          opacity: 1,
+        },
+      }}
+    >
+      <PollOption1 fill={active ? COLOURS.BLUE_02 : ''} />
+      <Typography mb={1} color={active ? 'text.primary' : 'text.secondary6'}>
+        <FormattedMessage id={title} />
+      </Typography>
+    </Grid>
+  );
+};
 
 interface IProps {
-  onSelectedType?: (type: PollTypeEnum) => void;
+  form: FormApi<ICreatePollForm>;
+  selectedPollType: PollTypeEnum;
 }
 
 const SelectPollType: FC<IProps> = (props) => {
-  const { onSelectedType } = props;
-  const classes = useStyles();
+  const { form, selectedPollType } = props;
 
-  const pollButtonTypes = [
-    {
-      type: PollTypeEnum.OneAnswer,
-      icon: <CheckIcon />,
-      text: <FormattedMessage id="pollWithCorrectAnswer" />,
-    },
-    {
-      type: PollTypeEnum.MultipleAnswer,
-      icon: <CheckDoubleIcon />,
-      text: <FormattedMessage id="multipleAnswerOptions" />,
-    },
-    {
-      type: PollTypeEnum.OpenEndedAnswer,
-      icon: <TalkIcon />,
-      text: <FormattedMessage id="pollOpenEnded" />,
-    },
-  ];
-  const [selectedPollType, setSelectedPollType] = useState<PollTypeEnum>(pollButtonTypes[0].type);
-
-  const onSelectPollType = (type: PollTypeEnum) => {
-    setSelectedPollType(type);
-    onSelectedType?.(type);
+  const clickHandler = (name: 'withAnswer' | 'isOpenEnded', value: boolean) => () => {
+    form.batch(() => {
+      form.reset();
+      form.change(name, value);
+    });
   };
 
   return (
-    <Grid item xs={12} mb={2.5}>
-      <Typography variant="body2" mb={1}>
+    <>
+      <Typography mb={3} mt={6}>
         <FormattedMessage id="selectPollType" />
       </Typography>
-      <Grid container direction="column" rowSpacing={1.3}>
-        {pollButtonTypes.map((button, idx) => {
-          return (
-            <Grid key={idx} item>
-              <Button
-                className={classes.button}
-                style={{
-                  borderColor: selectedPollType === button.type && COLOURS.BLUE_02,
-                }}
-                fullWidth
-                variant="outlined"
-                data-qa={`${idx}`}
-                onClick={() => onSelectPollType(button.type)}
-              >
-                <Grid container spacing={1.5} columnSpacing={1.5}>
-                  <Grid style={{ paddingTop: '10px' }} item>
-                    {button.icon}
-                  </Grid>
-                  <Grid style={{ paddingTop: '10px' }} item>
-                    {button.text}
-                  </Grid>
-                </Grid>
-              </Button>
-            </Grid>
-          );
-        })}
-      </Grid>
-    </Grid>
+      <Box>
+        <Grid container wrap="nowrap" columnGap={3} mb={5} overflow="auto" paddingRight="24px">
+          <PollTypeCard
+            title="poll"
+            onClick={clickHandler('withAnswer', false)}
+            active={selectedPollType === PollTypeEnum.MultipleAnswer}
+          />
+          <PollTypeCard
+            title="test"
+            onClick={clickHandler('withAnswer', true)}
+            active={selectedPollType === PollTypeEnum.OneAnswer}
+          />
+          <PollTypeCard
+            title="pollOpenEnded"
+            onClick={clickHandler('isOpenEnded', true)}
+            active={selectedPollType === PollTypeEnum.OpenEndedAnswer}
+          />
+        </Grid>
+      </Box>
+    </>
   );
 };
 

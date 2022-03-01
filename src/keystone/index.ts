@@ -1,10 +1,11 @@
-import { createContext, useContext } from 'react';
+import { computed } from 'mobx';
 import { model, Model, onSnapshot, prop, registerRootStore } from 'mobx-keystone';
-import UI from './ui';
+import { createContext, useContext } from 'react';
 import Auth from './auth';
+import Chat from './chat';
 import Settings from './settings';
 import SocketStore from './socket';
-import Chat from './chat';
+import UI from './ui';
 
 @model('Root')
 export class Root extends Model({
@@ -13,7 +14,12 @@ export class Root extends Model({
   socket: prop<SocketStore>(() => new SocketStore({})),
   ui: prop<UI>(() => new UI({})),
   settings: prop<Settings>(() => new Settings({})),
-}) {}
+}) {
+  @computed
+  get currentChannel() {
+    return this.chat.channels.get(this.ui.params.id as string);
+  }
+}
 
 export const createRootStore = (): Root => {
   const store = new Root({});

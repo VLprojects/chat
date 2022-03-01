@@ -1,13 +1,13 @@
+import intl from 'utils/intl';
 import { ICreatePollForm } from '../../types';
-import intl from '../../../../utils/intl';
 
 const MIN_NUMBER_OF_VALID_OPTIONS = 1;
 const MIN_NUMBER_OF_WRITTEN_OPTIONS = 2;
 const MIN_NUMBER_OF_QUESTION_LENGTH = 1;
-const MAX_NUMBER_OF_QUESTION_LENGTH = 220;
+export const MAX_NUMBER_OF_QUESTION_LENGTH = 250;
 
 // https://stackoverflow.com/questions/36144406/how-to-early-break-reduce-method
-function findNumberOfFilledOptions(options: string[], min_number: number): number {
+function findNumberOfFilledOptions<T>(options: T[], min_number: number): number {
   return options.slice(0).reduce(
     (acc, curr, i, arr) =>
       // @ts-ignore
@@ -16,7 +16,7 @@ function findNumberOfFilledOptions(options: string[], min_number: number): numbe
   ) as unknown as number;
 }
 
-function checkValidOptionsIsNotEmpty(validOptions: string[], options: string[]) {
+function checkValidOptionsIsNotEmpty<T>(validOptions: T[], options: string[]) {
   let result = true;
   validOptions.forEach((item, idx) => {
     if (item && !options[idx]) {

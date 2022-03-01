@@ -5,60 +5,50 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Grid,
   IconButton,
   Input as InputMui,
   Radio,
-  RadioGroup,
   Typography,
 } from '@mui/material';
 import arrayMutators from 'final-form-arrays';
 import FieldHOC from 'hoc/FieldHOC';
-import React, { FC, useEffect, useState } from 'react';
-import { Field, FieldInputProps, Form } from 'react-final-form';
-import { FieldArray, FieldArrayProps } from 'react-final-form-arrays';
+import useKeystone from 'keystone';
+import Channel from 'keystone/chat/channel';
+import React, { FC } from 'react';
+import { Field, Form } from 'react-final-form';
+import { FieldArray } from 'react-final-form-arrays';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Button } from 'ui-kit';
 import CloseIcon from 'ui-kit/icons/CloseIcon';
-import useKeystone from '../../../../keystone';
-import Channel from '../../../../keystone/chat/channel';
-import { Button } from '../../../../ui-kit';
 import { createPoll } from '../../services';
 import { ICreatePollForm, PollTypeEnum } from '../../types';
-import ErrorMessage from '../ErrorMessage';
+import SelectPollType from '../SelectPollType';
 import useStyles from './styles';
-import validate from './validate';
+import validate, { MAX_NUMBER_OF_QUESTION_LENGTH } from './validate';
 
 interface IProps {
   channel: Channel;
-  selectedPollType: PollTypeEnum;
 }
 
 const InputField = FieldHOC(InputMui);
 const CheckboxField = FieldHOC(Checkbox);
-const MAX_ADDED_OPTIONS = 10;
-const MAX_OPTION_LENGTH = 150;
-const EMPTY_POLL = { question: '', options: ['', ''], withAnswer: false, validOptions: [], templateId: null };
+
+const MAX_ADDED_OPTIONS = 8;
+
+const initialValues: ICreatePollForm = {
+  withAnswer: false,
+  isOpenEnded: false,
+  question: '',
+  options: ['', '', ''],
+  validOptions: [],
+};
 
 const CreatePollForm: FC<IProps> = (props) => {
   const intl = useIntl();
-  const { channel, selectedPollType } = props;
+  const { channel } = props;
   const { ui } = useKeystone();
   const classes = useStyles();
-
-  const POLL_TYPE_STATE = {
-    withAnswer: selectedPollType === PollTypeEnum.OneAnswer,
-    isOpenEnded: selectedPollType === PollTypeEnum.OpenEndedAnswer,
-  };
-  const [createPollData, setCreatePollData] = useState<ICreatePollForm>({
-    ...EMPTY_POLL,
-    ...POLL_TYPE_STATE,
-  });
-
-  useEffect(() => {
-    setCreatePollData({
-      ...EMPTY_POLL,
-      ...POLL_TYPE_STATE,
-    });
-  }, [selectedPollType]);
 
   const onSubmit = async (values: ICreatePollForm) => {
     try {
@@ -74,139 +64,153 @@ const CreatePollForm: FC<IProps> = (props) => {
     }
   };
 
-  const onChangeRadio = (idx: number, fields: FieldArrayProps<FieldInputProps<unknown>, any>, values: any) => {
-    const resArr = [];
-    for (let i = 0; i < fields.length; i++) {
-      resArr.push(i === idx);
-    }
-
-    setCreatePollData({
-      ...values,
-      validOptions: resArr,
-    });
-  };
-
   return (
-    <Form onSubmit={onSubmit} initialValues={createPollData} mutators={{ ...arrayMutators }} validate={validate}>
-      {({ handleSubmit, values, errors }) => (
-        <form onSubmit={handleSubmit} className={classes.form}>
-          <FormControl component="fieldset" fullWidth>
-            <FormLabel component="legend" style={{ marginBottom: 4 }}>
-              <FormattedMessage id="pollQuestion" />
-            </FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                sx={{ m: 0 }}
-                control={
-                  <Field
-                    name="question"
-                    component={InputField}
-                    rows={3}
-                    multiline
-                    data-qa="enterYourQuestion"
-                    placeholder={intl.formatMessage({ id: 'enterYourQuestion' })}
-                    classes={{ root: classes.textInput }}
-                    disableUnderline
-                  />
-                }
-                label=""
-              />
-            </FormGroup>
-          </FormControl>
+    <Form onSubmit={onSubmit} initialValues={initialValues} mutators={{ ...arrayMutators }} validate={validate}>
+      {({ handleSubmit, values, errors, form }) => {
+        /*
+          multipleAnswer: withAnswer = false, isOpenEnded = false;
+          oneAnswer: withAnswer = true;
+          OpenEndedAnswer: isOpenEnded = true;
+        */
+        const selectedPollType = values.withAnswer
+          ? PollTypeEnum.OneAnswer
+          : values.isOpenEnded
+          ? PollTypeEnum.OpenEndedAnswer
+          : PollTypeEnum.MultipleAnswer;
 
-          {selectedPollType !== PollTypeEnum.OpenEndedAnswer && (
-            <>
-              <FormControl component="fieldset" fullWidth sx={{ mt: 1, mb: 0.5 }}>
-                <FormLabel component="legend">
-                  <FormattedMessage id="pollOptions" />
+        return (
+          <form onSubmit={handleSubmit} className={classes.form}>
+            <SelectPollType form={form} selectedPollType={selectedPollType} />
+            <Box paddingRight="24px">
+              <FormControl component="fieldset" fullWidth>
+                <FormLabel component="legend" style={{ marginBottom: 4 }}>
+                  <FormattedMessage id="pollQuestion" />
                 </FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    sx={{ m: 0 }}
+                    control={
+                      <Field
+                        name="question"
+                        component={InputField}
+                        rows={3}
+                        multiline
+                        data-qa="enterYourQuestion"
+                        placeholder={intl.formatMessage({ id: 'enterYourQuestion' })}
+                        classes={{ root: classes.textInput }}
+                        disableUnderline
+                        inputProps={{ maxLength: MAX_NUMBER_OF_QUESTION_LENGTH }}
+                      />
+                    }
+                    label=""
+                  />
+                </FormGroup>
+                <Typography variant="body2" color="text.light02">
+                  {values.question?.length || 0} / {MAX_NUMBER_OF_QUESTION_LENGTH}
+                </Typography>
               </FormControl>
 
-              <FieldArray name="options">
-                {({ fields }) => (
-                  <>
-                    <RadioGroup>
-                      {fields.map((field, idx) => (
-                        <FormControl component="fieldset" fullWidth key={field} style={{ marginBottom: 16 }}>
-                          <FormGroup row>
-                            {selectedPollType === PollTypeEnum.OneAnswer && (
-                              <FormControlLabel
-                                name={`validOptions.${idx}`}
-                                value={`validOptions.${idx}`}
-                                control={<Radio onChange={() => onChangeRadio(idx, fields, values)} />}
-                                label=""
-                              />
-                            )}
-                            {selectedPollType === PollTypeEnum.MultipleAnswer && (
-                              <FormControlLabel
-                                control={
-                                  <Field name={`validOptions.${idx}`} type="checkbox" component={CheckboxField} />
-                                }
-                                label=""
-                              />
-                            )}
-                            <FormControlLabel
-                              sx={{ margin: 0, flexGrow: 1 }}
-                              control={
+              {selectedPollType !== PollTypeEnum.OpenEndedAnswer && (
+                <>
+                  <Box sx={{ mt: 5, mb: 3 }}>
+                    <Typography color="text.black02">
+                      <FormattedMessage id="pollOptions" />
+                    </Typography>
+                  </Box>
+
+                  <FieldArray name="options">
+                    {({ fields }) => (
+                      <>
+                        <Grid container rowGap={2} justifyContent="center">
+                          {fields.map((field, idx) => (
+                            <Grid
+                              item
+                              xs={12}
+                              container
+                              wrap="nowrap"
+                              className={classes.textInput}
+                              alignItems="center"
+                              key={idx}
+                            >
+                              {selectedPollType === PollTypeEnum.OneAnswer && (
+                                <Radio
+                                  checked={!!values.validOptions[idx]}
+                                  onChange={() =>
+                                    form.change(
+                                      'validOptions',
+                                      values.options.map((_, arrIdx) => arrIdx === idx),
+                                    )
+                                  }
+                                />
+                              )}
+                              {selectedPollType === PollTypeEnum.MultipleAnswer && (
+                                <Field name={`validOptions.${idx}`} type="checkbox" component={CheckboxField} />
+                              )}
+                              <Grid item xs>
                                 <Field
                                   name={`${field}`}
                                   component={InputField}
                                   data-qa={`enterOption-${idx}`}
                                   placeholder={intl.formatMessage({ id: 'enterOption' })}
-                                  classes={{ root: classes.textInput }}
                                   disableUnderline
                                   inputProps={{
-                                    maxLength: MAX_OPTION_LENGTH,
+                                    maxLength: MAX_NUMBER_OF_QUESTION_LENGTH,
                                   }}
                                 />
-                              }
-                              label=""
-                            />
-                            <FormControlLabel
-                              control={
-                                <IconButton
-                                  onClick={() => {
-                                    if (values.options.length > 2) fields.remove(idx);
-                                  }}
-                                  style={{ marginLeft: 12 }}
-                                >
-                                  <CloseIcon />
-                                </IconButton>
-                              }
-                              label=""
-                            />
-                          </FormGroup>
-                        </FormControl>
-                      ))}
+                              </Grid>
+                              <IconButton
+                                onClick={() => {
+                                  if (values.options.length > 2) fields.remove(idx);
+                                }}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </Grid>
+                          ))}
+                          {MAX_ADDED_OPTIONS - values.options.length !== 0 && (
+                            <Typography color="text.light02" variant="body2" textAlign="center">
+                              <FormattedMessage
+                                id="addOptionsNumber"
+                                values={{ number: MAX_ADDED_OPTIONS - values.options.length }}
+                              />
+                            </Typography>
+                          )}
+                          <Button
+                            variant="link"
+                            fullWidth
+                            data-qa="addOption"
+                            onClick={() => fields.value.length < MAX_ADDED_OPTIONS && fields.push('')}
+                          >
+                            <Typography>
+                              <FormattedMessage id="addOption" />
+                            </Typography>
+                          </Button>
+                        </Grid>
+                      </>
+                    )}
+                  </FieldArray>
+                </>
+              )}
 
-                      <Button
-                        variant="flatTransparent"
-                        fullWidth
-                        size="large"
-                        data-qa="addOption"
-                        onClick={() => fields.value.length < MAX_ADDED_OPTIONS && fields.push('')}
-                      >
-                        <Typography>
-                          <FormattedMessage id="addOption" />
-                        </Typography>
-                      </Button>
-                    </RadioGroup>
-                  </>
-                )}
-              </FieldArray>
-            </>
-          )}
-
-          <Box>
-            <ErrorMessage style={{ fontSize: 14, paddingTop: 10 }} message={errors?.all[0]} />
-          </Box>
-          <Button data-qa="createPoll" type="submit" variant="submit" fullWidth size="large" disabled={errors?.all[0]}>
-            <Typography>
-              <FormattedMessage id="createPoll" />
-            </Typography>
-          </Button>
-        </form>
-      )}
+              <Typography color="text.light02" variant="body2" textAlign="center" mt={3} mb={3}>
+                {errors?.all[0]}
+              </Typography>
+              <Button
+                data-qa="createPoll"
+                type="submit"
+                variant="primary"
+                fullWidth
+                size="large"
+                disabled={errors?.all[0]}
+              >
+                <Typography>
+                  <FormattedMessage id="createPoll" />
+                </Typography>
+              </Button>
+            </Box>
+          </form>
+        );
+      }}
     </Form>
   );
 };

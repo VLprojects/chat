@@ -76,6 +76,8 @@ export default {
       }
     }
 
+
+
     /* Works on Firefox */
     * {
       scrollbar-width: thin;
@@ -85,6 +87,7 @@ export default {
     /* Works on Chrome, Edge, and Safari */
     *::-webkit-scrollbar {
       width: 5px;
+      height: 5px;
     }
 
     *::-webkit-scrollbar-track {

@@ -9,7 +9,7 @@ import { convertServerPollToModel } from '../../utils/common';
 import Message, { SystemMessageEnum } from './message';
 import PinnedMessage from './pinnedMessage';
 import Poll, { pollRef } from './poll';
-import User, { userRef } from './user';
+import User from './user';
 
 @model('Channel')
 export default class Channel extends Model({

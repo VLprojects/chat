@@ -26,6 +26,7 @@
   "createAccount": "Create an account",
   "polls": "Polls",
   "poll": "Poll",
+  "test": "Test",
   "profile": "Profile",
   "users": "Users",
   "createNewChannel": "Create a new channel",
@@ -64,7 +65,7 @@
   "deleteAllMessage": "Delete all messages",
   "systemMessageChangedName": "changed name to",
   "systemMessageUserChangedChannelName": "changed channel name to",
-  "selectPollType": "Select poll type",
+  "selectPollType": "Select poll type: ",
   "multipleAnswerOptions": "Multiple answer options",
   "pollOpenEnded": "Open ended",
   "thanks": "Thanks!",
@@ -81,5 +82,6 @@
   "restart": "Restart",
   "edit": "Edit",
   "delete": "Delete",
-  "templates": "Templates"
+  "templates": "Templates",
+  "addOptionsNumber": "You can add {number} more options"
 }

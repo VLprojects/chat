@@ -22,8 +22,10 @@ export enum AvatarColorEnum {
 }
 
 export const COLOURS = {
-  BLACK_01: '#333333',
+  BLACK_01: '#060A2D',
+  BLACK_02: '#1A2558',
   BLACK_03: '#999999',
+  BLACK_06: '#7A7D98',
   WHITE: '#FFF',
   BLACK: '#000',
   GREY: '#A1A4BC',
@@ -39,7 +41,7 @@ export const COLOURS = {
 
   BG_FOR_SLOT: '#EEF1F3',
   LIGHT_01: '#DEE3E7',
-  LIGHT_02: '#A1B0BC',
+  LIGHT_02: '#A1A4BC',
   LIGHT_03: '#E8E8E9',
   LIGHT_04: '#F6F6F9',
   LIGHT_05: '#A1A4BC',

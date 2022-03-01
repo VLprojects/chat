@@ -1,10 +1,12 @@
 import Centrifuge from 'centrifuge';
+import { observable, runInAction } from 'mobx';
+import { chunkProcessor, IDisposer } from 'mobx-utils';
 import { getPinnedMessages } from 'containers/ChannelPage/service';
 import { getRoot, model, Model, prop } from 'mobx-keystone';
 import { MIN_SOCKET_RECONNECT_TIME } from 'utils/consts';
 import { IServerPoll } from '../containers/CreatePollPage/types';
 import CentrifugeEventsEnum from '../types/centrifugeEvents';
-import { IRChannel, ISEMessage } from '../types/serverResponses';
+import { IRChannel, IRChannelMessage, ISEMessage } from 'types/serverResponses';
 import SocketEventsEnum from '../types/socketEvents';
 import { convertServerPollToModel } from '../utils/common';
 import { Root } from './index';
@@ -15,14 +17,63 @@ import { joinChannel } from './service';
 export default class SocketStore extends Model({
   isSocketConnected: prop<boolean>(false).withSetter(),
 }) {
+  @observable messageChunk: { channelId: string; message: IRChannelMessage }[] = [];
+
+  messageRate = 0;
+
+  private startMessageProcessing(): IDisposer {
+    const root: Root = getRoot(this);
+    const processMessages = (chunk: { channelId: string; message: IRChannelMessage }[]) => {
+      const messagesByChannels = new Map<string, IRChannelMessage[]>();
+
+      chunk.forEach(({ channelId, message }) => {
+        if (!messagesByChannels.has(channelId)) {
+          messagesByChannels.set(channelId, []);
+        }
+
+        messagesByChannels.get(channelId)?.push(message);
+      });
+
+      messagesByChannels.forEach((messages, channelId) => {
+        const channel = root.chat.channels.get(channelId);
+        if (channel) {
+          channel.addMessages(messages);
+        }
+      });
+    };
+
+    return chunkProcessor(
+      this.messageChunk,
+      (chunk) => {
+        processMessages(chunk);
+      },
+      300, // ms
+      1000, // size
+    );
+  }
+
+  onAttachedToRootStore(): () => void {
+    const messageProcessingDisposer = this.startMessageProcessing();
+
+    const messageRateInterval = setInterval(() => {
+      // TODO remove. for debug in production environments
+      (window as any).chatRate = this.messageRate;
+
+      this.messageRate = 0;
+    }, 1000);
+
+    return () => {
+      messageProcessingDisposer();
+      clearInterval(messageRateInterval);
+    };
+  }
+
   connect(socketUrl: string, accessToken: string): void {
     const root: Root = getRoot(this);
 
     const onMessage = ({ channelId, message }: ISEMessage) => {
-      const channel = root.chat.channels.get(channelId);
-      if (channel) {
-        channel.addMessages([message]);
-      }
+      this.messageRate += 1;
+      runInAction(() => this.messageChunk.push({ channelId, message }));
     };
 
     const onNewDirect = (channel: IRChannel): void => {
