@@ -31,6 +31,7 @@ const PollTypeCard: React.FC<IPropsCard> = (props) => {
       minWidth="139px"
       onClick={clickHandler}
       ref={ref}
+      data-qa={title}
       sx={{
         '& > svg': { opacity },
         '& > svg:hover': {
