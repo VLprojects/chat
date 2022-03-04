@@ -102,7 +102,7 @@ export const fetchMessagesBefore = async (
 ): Promise<number> => {
   const { limit, until } = options || {};
   try {
-    const response = (await GET(`channels/${channelId}/messages`, {
+    const response = (await GET(`channels/${channelId}/messa1ges`, {
       before: messageId,
       limit,
       until,

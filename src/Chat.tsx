@@ -4,7 +4,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { LinearProgress } from '@mui/material';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { createGenerateClassName, StylesProvider } from '@mui/styles';
-import { ErrorBoundary } from 'react-error-boundary';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { RawIntlProvider, FormattedMessage } from 'react-intl';
@@ -77,7 +76,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
 
   return (
     <RawIntlProvider value={intl}>
-      <ErrorBoundary FallbackComponent={() => <FormattedMessage id="globalError" />}>
+      <Sentry.ErrorBoundary fallback={() => <FormattedMessage id="globalError" />}>
         <StyledEngineProvider injectFirst>
           <StylesProvider generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
@@ -93,7 +92,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
             </ThemeProvider>
           </StylesProvider>
         </StyledEngineProvider>
-      </ErrorBoundary>
+      </Sentry.ErrorBoundary>
     </RawIntlProvider>
   );
 });
