@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react';
 import { DELETE, GET, POST } from '../../api';
 import { IServerPoll } from '../CreatePollPage/types';
+import Sentry from 'sentry';
 
 export const getPollListForChannel = async (channelId: number): Promise<IServerPoll[] | undefined> => {
   try {
@@ -33,6 +33,7 @@ export const startPoll = async (pollId: number): Promise<IServerPoll | undefined
     Sentry.captureException(e);
   }
 };
+
 export const stopPoll = async (pollId: number): Promise<IServerPoll | undefined> => {
   try {
     return (await POST(`polls/${pollId}/stop`)) as Promise<IServerPoll>;

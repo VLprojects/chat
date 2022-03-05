@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react';
 import { Root } from 'keystone/index';
 import { POST } from '../../api';
 import Channel from '../../keystone/chat/channel';
@@ -6,6 +5,7 @@ import User from '../../keystone/chat/user';
 import { joinChannel } from '../../keystone/service';
 import Routes from '../../routes';
 import { IRChannel } from '../../types/serverResponses';
+import Sentry from 'sentry';
 
 export const createNewDirectChannel = async (root: Root, chatWithUser: User): Promise<IRChannel | undefined> => {
   try {

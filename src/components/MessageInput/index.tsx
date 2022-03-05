@@ -1,6 +1,5 @@
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Grid, IconButton, TextareaAutosize } from '@mui/material';
-import * as Sentry from '@sentry/react';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
 import React, { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
@@ -12,6 +11,7 @@ import { sendMessage } from '../../keystone/service';
 import { getErrorMessage } from '../../utils/errors';
 import MessageInputActions from './components/MessageInputActions';
 import useStyles from './styles';
+import Sentry from 'sentry';
 
 interface IMessageInput {
   channelId: string;

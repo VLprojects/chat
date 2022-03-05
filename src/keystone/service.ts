@@ -1,10 +1,10 @@
-import * as Sentry from '@sentry/react';
 import { GET, PATCH, POST } from '../api';
 import Routes from '../routes';
 import { IRChannel, IRGetInitial, IRLogin, IRUser } from '../types/serverResponses';
 import eventBus from '../utils/eventBus/eventBus';
 import { EventBusEventEnum, ListenerEventEnum } from '../utils/eventBus/types';
 import { Root } from './index';
+import Sentry from 'sentry';
 
 export const getInitialData = async (root: Root): Promise<void> => {
   try {
@@ -102,7 +102,7 @@ export const fetchMessagesBefore = async (
 ): Promise<number> => {
   const { limit, until } = options || {};
   try {
-    const response = (await GET(`channels/${channelId}/messa1ges`, {
+    const response = (await GET(`channels/${channelId}/messages`, {
       before: messageId,
       limit,
       until,

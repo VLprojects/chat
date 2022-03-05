@@ -1,5 +1,4 @@
-import * as Sentry from '@sentry/react';
-import { BrowserTracing } from '@sentry/tracing';
+import { ErrorBoundary } from '@sentry/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { LinearProgress } from '@mui/material';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
@@ -18,17 +17,6 @@ import intl from './utils/intl';
 import { initializeApi } from './api';
 import { getSettings } from './keystone/service';
 import LoadingStatus from './components/LoadingStatus';
-
-if (process.env.NODE_ENV === 'production') {
-  Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    release: process.env.REACT_APP_VERSION || 'unknown',
-    environment: process.env.NODE_ENV || 'unknown',
-    ignoreErrors: ['ResizeObserver loop limit exceeded'],
-    integrations: [new BrowserTracing()],
-    tracesSampleRate: 1.0,
-  });
-}
 
 export interface IChatProps {
   apiUrl?: string;
@@ -76,7 +64,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
 
   return (
     <RawIntlProvider value={intl}>
-      <Sentry.ErrorBoundary fallback={() => <FormattedMessage id="globalError" />}>
+      <ErrorBoundary fallback={() => <FormattedMessage id="globalError" />}>
         <StyledEngineProvider injectFirst>
           <StylesProvider generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
@@ -92,7 +80,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
             </ThemeProvider>
           </StylesProvider>
         </StyledEngineProvider>
-      </Sentry.ErrorBoundary>
+      </ErrorBoundary>
     </RawIntlProvider>
   );
 });
