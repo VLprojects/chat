@@ -7,6 +7,8 @@ import { checkDateWhen, checkDayInterval } from 'utils/date';
 import { fetchMessagesBefore } from '../../keystone/service';
 import MessageRow from './components/MessageRow';
 import useStyles from './styles';
+import useEventHook from '../../hooks/useEventHook';
+import { EventBusEventEnum, ListenerEventEnum } from '../../utils/eventBus/types';
 
 interface MessageListProps {
   channelId: string;
@@ -27,17 +29,23 @@ const MessageList: FC<MessageListProps> = (props) => {
     return <>Channel not found</>;
   }
 
-  const messages = channel.sortedMessages;
+  const sortedMessages = channel.sortedMessages;
 
   // watching for messages length changes to prevent scroll when more messages are being loaded
   // https://virtuoso.dev/prepend-items/
   useEffect(() => {
-    const diff = messages.length - prevMessagesLength;
-    setPrevMessagesLength(messages.length);
+    const diff = sortedMessages.length - prevMessagesLength;
+    setPrevMessagesLength(sortedMessages.length);
     if (diff) {
       setFirstItemIndex(firstItemIndex - diff);
     }
-  }, [messages.length]);
+  }, [channel.sortedMessages.length]);
+
+  useEventHook(ListenerEventEnum.App, ({ event }) => {
+    if (event === EventBusEventEnum.MessageSent) {
+      virtuosoRef.current?.scrollToIndex({ index: channel.sortedMessages.length - 1, behavior: 'smooth' });
+    }
+  });
 
   useEffect(() => {
     ui.setJumpToMessage((index) => {
@@ -47,12 +55,12 @@ const MessageList: FC<MessageListProps> = (props) => {
 
   const fetchMore = useCallback(async () => {
     if (!isFullyFetched) {
-      const newMessages = await fetchMessagesBefore(root, Number(channelId), Number(messages[0]?.id));
+      const newMessages = await fetchMessagesBefore(root, Number(channelId), Number(sortedMessages[0]?.id));
       if (!newMessages) {
         setIsFullyFetched(true);
       }
     }
-  }, [messages[0]?.id, isFullyFetched]);
+  }, [sortedMessages[0]?.id, isFullyFetched]);
 
   return (
     <div className={classes.virtListWrapper}>
@@ -61,23 +69,24 @@ const MessageList: FC<MessageListProps> = (props) => {
         style={{ overflow: 'hidden auto' }}
         ref={virtuosoRef}
         firstItemIndex={firstItemIndex}
+        overscan={100}
         startReached={fetchMore}
-        initialTopMostItemIndex={Math.max(messages.length - 1, 0)}
-        totalCount={messages.length}
-        data={messages}
+        initialTopMostItemIndex={Math.max(sortedMessages.length - 1, 0)}
+        totalCount={sortedMessages.length}
+        data={sortedMessages}
         itemContent={(virtuosoIndex, message) => {
           const index = virtuosoIndex - firstItemIndex;
           let short = false;
           let prevMessage = null;
           if (index > 0) {
-            prevMessage = messages[index - 1];
+            prevMessage = sortedMessages[index - 1];
             short = message?.user?.current.id === prevMessage?.user?.current.id;
           }
 
-          const last = index === messages.length - 1;
+          const last = index === sortedMessages.length - 1;
 
           const showLineTime = prevMessage && checkDayInterval(message.createdAt, prevMessage?.createdAt || '0') >= 1;
-          const showLineTimeInTheBegining = index === 0 && !checkDateWhen(message.createdAt, 'today');
+          const showLineTimeInTheBeginning = index === 0 && !checkDateWhen(message.createdAt, 'today');
 
           return (
             <MessageRow
@@ -86,7 +95,7 @@ const MessageList: FC<MessageListProps> = (props) => {
               index={index}
               short={short}
               last={last}
-              showLineTime={showLineTime || showLineTimeInTheBegining}
+              showLineTime={showLineTime || showLineTimeInTheBeginning}
             />
           );
         }}

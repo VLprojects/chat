@@ -65,7 +65,7 @@ const LastMessage: FC<IProps> = (props) => {
         )}
 
         <Grid item xs zeroMinWidth>
-          <Typography variant="subtitle2" color="textSecondary" noWrap>
+          <Typography pl={1} variant="subtitle2" color="textSecondary" noWrap>
             {lastMessage?.text || <FormattedMessage id="channelCreated" />}
           </Typography>
         </Grid>

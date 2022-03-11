@@ -1,8 +1,7 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import React, { ChangeEvent, FC, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { Grid } from '@mui/material';
+import React, { FC } from 'react';
 import Poll from '../../../../keystone/chat/poll';
-import { Button } from '../../../../ui-kit';
+import OptionBox from '../OptionBox';
 
 interface IProps {
   poll: Poll;
@@ -10,34 +9,23 @@ interface IProps {
 }
 const RadioButtonsGroup: FC<IProps> = (props) => {
   const { poll, voteHandler } = props;
-  const [value, setValue] = useState('');
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue((event.target as HTMLInputElement).value);
+  const handleChange = (id: string) => () => {
+    voteHandler([id]);
   };
 
   return (
     <>
-      <FormControl style={{ flexGrow: 1 }}>
-        <RadioGroup value={value} data-qa={`poll-group-${value}`} onChange={handleChange} name="test">
-          <>
-            {poll.options.map((option) => (
-              <FormControlLabel
-                key={option.id}
-                value={`${option.id}`}
-                data-qa={`poll-pick-${option.option}`}
-                control={<Radio />}
-                label={option.option}
-                sx={{ wordBreak: 'break-all' }}
-              />
-            ))}
-          </>
-        </RadioGroup>
-      </FormControl>
-
-      <Button data-qa="deployReply" variant="submit" fullWidth disabled={!value} onClick={() => voteHandler([value])}>
-        <FormattedMessage id="reply" />
-      </Button>
+      <Grid container direction="column" rowGap={2}>
+        {poll.options.map((option) => (
+          <OptionBox
+            key={option.id}
+            dataQA={`poll-pick-${option.option}`}
+            onChange={handleChange(`${option.id}`)}
+            option={option}
+          />
+        ))}
+      </Grid>
     </>
   );
 };

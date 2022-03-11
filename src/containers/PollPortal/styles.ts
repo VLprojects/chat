@@ -14,9 +14,9 @@ export default makeStyles(
       left: 20,
       bottom: 20,
       backgroundColor: '#fff',
-      boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.07)',
+      boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.15)',
       borderRadius: 10,
-      padding: 14,
+      padding: 24,
       zIndex: 999999,
     },
     [`@media (max-width:${BREAKPOINTS.SM}px)`]: {

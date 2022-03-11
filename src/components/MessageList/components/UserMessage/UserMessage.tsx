@@ -93,9 +93,11 @@ const UserMessage: FC<IProps> = (props) => {
             alignSelf="end"
             variant="subtitle2"
             fontFamily="PTRootUIWebRegular"
+            fontSize={11}
+            pl={0.5}
             letterSpacing="0.01em"
             component="span"
-            sx={{ color: own ? COLOURS.MESSAGE_DATE_COLOR_OWN : COLOURS.MESSAGE_DATE_COLOR }}
+            sx={{ color: own ? COLOURS.LIGHT_03 : COLOURS.MESSAGE_DATE_COLOR }}
           >
             {formatDate(message.createdAt)}
           </Typography>
@@ -105,19 +107,21 @@ const UserMessage: FC<IProps> = (props) => {
                 position="absolute"
                 width="24px"
                 height="24px"
-                display="flex"
-                right="-12px"
-                top="-4px"
+                right="-10px"
+                top="-8px"
                 sx={{
                   justifyContent: 'center',
                   boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.07)',
-                  backgroundColor: '#fff',
-                  borderRadius: '12px',
+                  backgroundColor: COLOURS.WHITE,
+                  borderRadius: '50px',
                 }}
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
               >
-                <MessageActions messageId={+message.id} icon={<MoreHoriz fill={hover ? 'black' : COLOURS.GREY} />} />
+                <MessageActions
+                  messageId={+message.id}
+                  icon={<MoreHoriz fill={hover ? COLOURS.BLACK : COLOURS.GREY} />}
+                />
               </Box>
             </ClickAwayListener>
           )}

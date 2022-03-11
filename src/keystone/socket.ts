@@ -81,13 +81,18 @@ export default class SocketStore extends Model({
     };
 
     const onPollStart = (poll: IServerPoll & { channelId: number }) => {
+      if (root.auth.isModerator) return;
+
       const channel = root.chat.channels.get(`${poll.channelId}`);
       if (!channel) return;
 
-      channel.startPoll(convertServerPollToModel(poll));
+      const pollModel = channel.addPoll(poll);
+      channel.startPoll(pollModel);
     };
 
     const onPollStop = (poll: IServerPoll & { channelId: number }) => {
+      if (root.auth.isModerator) return;
+
       const channel = root.chat.channels.get(`${poll.channelId}`);
       if (!channel) return;
 

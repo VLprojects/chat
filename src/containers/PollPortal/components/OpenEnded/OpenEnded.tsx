@@ -1,9 +1,8 @@
+import { Input, Typography } from '@mui/material';
 import React, { ChangeEvent, FC, useState } from 'react';
-import { FormControl, FormControlLabel, Input, Typography } from '@mui/material';
-import { FormattedMessage } from 'react-intl';
-import { Button } from 'ui-kit';
-import useStyles from './styles';
 import intl from 'utils/intl';
+import SubmitPollButton from '../SubmitPollButton';
+import useStyles from './styles';
 
 interface IProps {
   voteHandler: (payload: string[]) => void;
@@ -12,7 +11,7 @@ interface IProps {
 const MIN_INPUT_LENGTH = 1;
 const MAX_INPUT_LENGTH = 200;
 
-const Textarea: FC<IProps> = (props) => {
+const OpenEnded: FC<IProps> = (props) => {
   const { voteHandler } = props;
   const classes = useStyles();
   const [value, setValue] = useState('');
@@ -42,26 +41,17 @@ const Textarea: FC<IProps> = (props) => {
 
   return (
     <>
-      <FormControl style={{ flexGrow: 1 }}>
-        <FormControlLabel
-          sx={{
-            margin: 0,
-          }}
-          data-qa="poll-pick-textarea"
-          control={
-            <Input
-              type="text"
-              className={classes.input}
-              fullWidth
-              disableUnderline
-              rows={3}
-              onChange={handleChange}
-              multiline
-            />
-          }
-          label=""
-        />
-      </FormControl>
+      <Input
+        type="text"
+        className={classes.input}
+        fullWidth
+        disableUnderline
+        rows={3}
+        onChange={handleChange}
+        multiline
+        data-qa="poll-pick-textarea"
+        placeholder={intl.formatMessage({ id: 'your.reply' })}
+      />
 
       {validationErrorText && (
         <Typography textAlign="center" py={1.5}>
@@ -69,17 +59,9 @@ const Textarea: FC<IProps> = (props) => {
         </Typography>
       )}
 
-      <Button
-        data-qa="deployReply"
-        variant="submit"
-        fullWidth
-        disabled={!isValidInput}
-        onClick={() => voteHandler([value])}
-      >
-        <FormattedMessage id="reply" />
-      </Button>
+      <SubmitPollButton disabled={!isValidInput} onSubmit={() => voteHandler([value])} dataQA="deployReply" />
     </>
   );
 };
 
-export default Textarea;
+export default OpenEnded;

@@ -1,6 +1,7 @@
 import { compareAsc } from 'date-fns';
 import { computed } from 'mobx';
 import { getRoot, model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
+import { sortPollDesc } from 'utils/helper';
 import { IServerPoll, IServerPollOption } from '../../containers/CreatePollPage/types';
 import { ChannelTypeEnum, MessageTypeEnum } from '../../types/enums';
 import { IRChannelMessage, IRPinnedMessage } from '../../types/serverResponses';
@@ -20,7 +21,7 @@ export default class Channel extends Model({
   messages: prop(() => objectMap<Message>()),
   users: prop(() => objectMap<Ref<User>>()),
   polls: prop<Poll[]>(() => []),
-  activePoll: prop<Ref<Poll> | undefined>(() => undefined),
+  activePoll: prop<Ref<Poll> | undefined>(() => undefined).withSetter(),
   pinnedMessages: prop<PinnedMessage[]>(() => []),
 }) {
   @modelAction
@@ -64,7 +65,7 @@ export default class Channel extends Model({
   @modelAction
   addPoll(poll: IServerPoll): Poll {
     const pollModel = convertServerPollToModel(poll);
-    this.polls.push(pollModel);
+    this.polls = [...this.polls, pollModel];
 
     return pollModel;
   }
@@ -76,22 +77,23 @@ export default class Channel extends Model({
   }
 
   @modelAction
-  startPoll(poll: Poll): void {
-    if (poll) {
-      let find = false;
+  startPoll(poll?: Poll): void {
+    if (!poll) return;
+    // if (poll) {
+    //   let find = false;
 
-      this.polls.forEach((p) => {
-        if (p.id === poll.id) {
-          // poll exist
-          p.status = poll.status;
-          find = true;
-        }
-      });
+    //   this.polls.forEach((p) => {
+    //     if (p.id === poll.id) {
+    //       // poll exist
+    //       p.changeStatus(poll.status);
+    //       find = true;
+    //     }
+    //   });
 
-      if (!find) this.polls.push(poll);
-    }
+    //   if (!find) this.polls.push(poll);
+    // }
 
-    this.activePoll = poll ? pollRef(poll) : undefined;
+    this.setActivePoll(pollRef(poll));
   }
 
   @modelAction
@@ -125,9 +127,8 @@ export default class Channel extends Model({
   }
 
   @modelAction
-  stopPoll(poll: Poll): void {
-    if (this.activePoll && poll) this.activePoll.current.status = poll.status;
-
+  stopPoll(poll?: Poll): void {
+    if (!poll) return;
     this.activePoll = undefined;
 
     this.polls.forEach((p) => {
@@ -174,6 +175,24 @@ export default class Channel extends Model({
     });
   }
 
+  @modelAction
+  getLastPollByTemplateId(templateId?: string) {
+    if (!templateId) return undefined;
+
+    return this.polls.filter((p) => p.templateId === +templateId).sort(sortPollDesc)![0];
+  }
+  @modelAction
+  findPollById(pollId?: string) {
+    if (!pollId) return undefined;
+    return this.polls.find((p) => p.id === pollId);
+  }
+  @modelAction
+  getPollListByTemplateId(templatePoll?: Poll) {
+    if (!templatePoll) return undefined;
+
+    return this.polls.filter((p) => `${p.templateId}` === templatePoll?.id).sort(sortPollDesc);
+  }
+
   @computed
   get sortedMessages(): Message[] {
     return Array.from(this.messages.values()).sort((a: Message, b: Message) =>
@@ -216,6 +235,16 @@ export default class Channel extends Model({
   get lastPinnedMessage(): PinnedMessage {
     const pinnedMessages = this.getPinnedMessages;
     return pinnedMessages[pinnedMessages.length - 1];
+  }
+
+  @computed
+  get getPollTemplates(): Poll[] {
+    return this.polls.filter((poll) => poll.templateId === null).sort(sortPollDesc);
+  }
+
+  @computed
+  get getPollList(): Poll[] {
+    return this.polls;
   }
 
   @modelAction

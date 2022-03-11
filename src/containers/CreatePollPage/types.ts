@@ -35,8 +35,10 @@ export interface IServerPoll {
   isOpenEnded: boolean;
   status: IPollStatus;
   options: IServerPollOption[];
-  votes?: IServerPollVote[];
+  votes: IServerPollVote[];
   templateId?: number | null;
+  createdAt: string;
+  stoppedAt: string;
 }
 
 export interface IServerPollVotesUser {

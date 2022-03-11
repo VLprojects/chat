@@ -1,14 +1,18 @@
-import { Grid, IconButton, Portal, Typography } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Portal from '@mui/material/Portal';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/system/Box';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
+import CloseCircleIcon from 'ui-kit/icons/CloseCircleIcon';
+import { getPollType } from 'utils/helper';
 import useKeystone from '../../keystone';
 import { POLL_CONTAINER } from '../../types/const';
-import CloseButton from './components/CloseButton';
+import { IPollStatus } from '../../types/types';
 import PollVariant from './components/PollVariant';
 import ResultVariant from './components/ResultVariant';
 import useStyles from './styles';
-import { IPollStatus } from '../../types/types';
 
 const PollPortal: FC = () => {
   const classes = useStyles();
@@ -21,7 +25,7 @@ const PollPortal: FC = () => {
     ref.current = document.getElementById(POLL_CONTAINER);
   }, []);
 
-  const currentChannel = chat.channels.get(`${ui.params.id}`);
+  const currentChannel = root.currentChannel;
   if (!currentChannel) return null;
 
   const poll = currentChannel.getActivePoll;
@@ -32,27 +36,29 @@ const PollPortal: FC = () => {
 
   const onClose = () => currentChannel.closePollPortal();
 
+  if (auth.isModerator) return null;
+
   return (
     <Portal container={ref.current}>
       <div className={classes.root}>
-        <Grid container alignItems="flex-start" justifyContent="space-between" wrap="nowrap">
-          <Grid item>
-            <Typography variant="h4" sx={{ wordBreak: 'break-all', marginRight: '5px' }}>
-              {poll?.question}
-            </Typography>
-          </Grid>
-          <Grid item component={IconButton} style={{ padding: 0 }} onClick={onClose}>
-            <CloseButton />
-          </Grid>
-        </Grid>
-        <Typography color="text.pollSecondary">
-          <FormattedMessage id="poll" />
-        </Typography>
-        {isVoted || (auth.isModerator && poll.status === IPollStatus.Done) ? (
-          <ResultVariant poll={poll} />
-        ) : (
-          <PollVariant poll={poll} channel={currentChannel} />
-        )}
+        <Box position="relative">
+          <Typography variant="h2" sx={{ wordBreak: 'break-all', marginRight: '5px' }}>
+            {poll?.question}
+          </Typography>
+
+          <IconButton onClick={onClose} sx={{ position: 'absolute', right: -60, top: -30 }}>
+            <CloseCircleIcon />
+          </IconButton>
+
+          <Typography color="text.pollSecondary" marginBottom="16px">
+            <FormattedMessage id={getPollType(poll)} />
+          </Typography>
+          {isVoted || (auth.isModerator && poll.status === IPollStatus.Done) ? (
+            <ResultVariant poll={poll} />
+          ) : (
+            <PollVariant poll={poll} channel={currentChannel} />
+          )}
+        </Box>
       </div>
     </Portal>
   );

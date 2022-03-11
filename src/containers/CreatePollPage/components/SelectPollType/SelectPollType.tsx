@@ -1,6 +1,5 @@
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/system/Box';
 import { ICreatePollForm, PollTypeEnum } from 'containers/CreatePollPage/types';
 import { FormApi } from 'final-form';
 import React, { FC, useRef } from 'react';
@@ -67,25 +66,23 @@ const SelectPollType: FC<IProps> = (props) => {
       <Typography mb={3} mt={6}>
         <FormattedMessage id="selectPollType" />
       </Typography>
-      <Box>
-        <Grid container wrap="nowrap" columnGap={3} mb={5} overflow="auto" paddingRight="24px">
-          <PollTypeCard
-            title="poll"
-            onClick={clickHandler('withAnswer', false)}
-            active={selectedPollType === PollTypeEnum.MultipleAnswer}
-          />
-          <PollTypeCard
-            title="test"
-            onClick={clickHandler('withAnswer', true)}
-            active={selectedPollType === PollTypeEnum.OneAnswer}
-          />
-          <PollTypeCard
-            title="pollOpenEnded"
-            onClick={clickHandler('isOpenEnded', true)}
-            active={selectedPollType === PollTypeEnum.OpenEndedAnswer}
-          />
-        </Grid>
-      </Box>
+      <Grid container wrap="nowrap" columnGap={3} mb={5} overflow="auto" paddingRight="24px">
+        <PollTypeCard
+          title="poll"
+          onClick={clickHandler('withAnswer', false)}
+          active={selectedPollType === PollTypeEnum.MultipleAnswer}
+        />
+        <PollTypeCard
+          title="test"
+          onClick={clickHandler('withAnswer', true)}
+          active={selectedPollType === PollTypeEnum.OneAnswer}
+        />
+        <PollTypeCard
+          title="pollOpenEnded"
+          onClick={clickHandler('isOpenEnded', true)}
+          active={selectedPollType === PollTypeEnum.OpenEndedAnswer}
+        />
+      </Grid>
     </>
   );
 };

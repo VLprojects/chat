@@ -43,7 +43,7 @@ const Signup: FC<ISignupProps> = observer((props) => {
   return (
     <div className={classes.container}>
       <Typography variant="h2">
-        <FormattedMessage id="signUpinTheChat" />
+        <FormattedMessage id="signUpInTheChat" />
       </Typography>
       <div className={classes.formLabel}>
         <span>

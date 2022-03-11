@@ -11,12 +11,12 @@ import { getPinnedMessages } from './service';
 
 const ChannelPage: FC = () => {
   const root = useKeystone();
-  const { ui, chat, auth } = root;
-  const channelId = String(ui.params.id);
-  const currentChannel = chat.channels.get(channelId);
+  const { auth } = root;
+
+  const currentChannel = root.currentChannel;
 
   useEffect(() => {
-    getPinnedMessages(root, channelId);
+    currentChannel?.id && getPinnedMessages(root, currentChannel?.id);
   }, []);
 
   if (!currentChannel) {
@@ -30,9 +30,9 @@ const ChannelPage: FC = () => {
     <>
       <ChannelPageHeader currentChannel={currentChannel} isModerator={isModerator} />
       {isPublic && <PinnedMessageList />}
-      <MessageList channelId={channelId} />
+      <MessageList channelId={currentChannel?.id} />
 
-      <MessageInput channelId={channelId} isModerator={isModerator} isPublic={isPublic} />
+      <MessageInput channelId={currentChannel?.id} isModerator={isModerator} isPublic={isPublic} />
 
       <PollPortal />
     </>

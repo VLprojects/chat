@@ -12,7 +12,7 @@ type IInjected = {
 };
 
 function MoreButton<T>(DropMenuItems: FC<T & IInjected>): FC<IMoreButtonHOCProps<T>> {
-  const MoreButtonComponent: FC<IMoreButtonHOCProps<T>> = (props) => {
+  return (props) => {
     const { icon, ...rest } = props;
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -30,14 +30,7 @@ function MoreButton<T>(DropMenuItems: FC<T & IInjected>): FC<IMoreButtonHOCProps
 
     return (
       <>
-        <IconButton
-          onClick={openMenu}
-          size="small"
-          disableRipple
-          disableFocusRipple
-          edge="end"
-          sx={{ zIndex: 1, boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.07)' }}
-        >
+        <IconButton onClick={openMenu} size="small" disableRipple disableFocusRipple edge="end" sx={{ zIndex: 1 }}>
           {icon || <MoreHoriz style={{ fill: '#7D7D80' }} />}
         </IconButton>
 
@@ -47,8 +40,6 @@ function MoreButton<T>(DropMenuItems: FC<T & IInjected>): FC<IMoreButtonHOCProps
       </>
     );
   };
-
-  return MoreButtonComponent;
 }
 
 export default MoreButton;

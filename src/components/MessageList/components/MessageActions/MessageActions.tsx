@@ -1,7 +1,7 @@
 import { deleteMessage, pinMessage } from 'containers/ChannelPage/service';
 import MoreButton from 'hoc/MoreButtonHOC';
 import useKeystone from 'keystone';
-import React from 'react';
+import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { DropMenuItem } from 'ui-kit/components/DropMenu';
 
@@ -10,7 +10,7 @@ interface IProps {
   onClose?: () => void;
 }
 
-const MessageActions: React.FC<IProps> = (props) => {
+const MessageActions: FC<IProps> = (props) => {
   const { onClose } = props;
 
   const root = useKeystone();

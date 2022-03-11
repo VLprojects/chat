@@ -1,8 +1,8 @@
-import { Checkbox, FormControl, FormControlLabel, FormGroup } from '@mui/material';
-import React, { ChangeEvent, FC, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
-import Poll from '../../../../keystone/chat/poll';
-import { Button } from '../../../../ui-kit';
+import { Grid } from '@mui/material';
+import Poll from 'keystone/chat/poll';
+import React, { FC, useState } from 'react';
+import OptionBox from '../OptionBox';
+import SubmitPollButton from '../SubmitPollButton';
 
 interface IProps {
   poll: Poll;
@@ -10,41 +10,34 @@ interface IProps {
 }
 const CheckboxGroup: FC<IProps> = (props) => {
   const { poll, voteHandler } = props;
-  const [state, setState] = useState<Record<string, boolean>>(
+  const [checked, setChecked] = useState<Record<string, boolean>>(
     poll.options.reduce((acc, option) => ({ ...acc, [option.id]: false }), {}),
   );
-  const disabled = !Object.values(state).find((value) => value);
+  const disabled = !Object.values(checked).find((value) => value);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
+  const handleChange = (name: string) => () => {
+    setChecked((state) => ({ ...state, [name]: !state[name] }));
   };
 
   return (
     <>
-      <FormControl style={{ flexGrow: 1 }}>
-        <FormGroup>
-          {poll.options.map((option) => (
-            <FormControlLabel
-              key={option.id}
-              control={<Checkbox checked={state[option.id]} onChange={handleChange} name={`${option.id}`} />}
-              label={option.option}
-              // Used by Automation tests
-              data-qa={`poll-pick-${option.option}`}
-              sx={{ wordBreak: 'break-all' }}
-            />
-          ))}
-        </FormGroup>
-      </FormControl>
-      <Button
-        variant="submit"
-        fullWidth
+      <Grid container direction="column" rowGap={2}>
+        {poll.options.map((option) => (
+          <OptionBox
+            key={option.id}
+            onChange={handleChange(`${option.id}`)}
+            checked={checked[option.id]}
+            option={option}
+            dataQA={`poll-pick-${option.option}`}
+          />
+        ))}
+      </Grid>
+
+      <SubmitPollButton
         disabled={disabled}
-        // Used by Automation tests
-        data-qa="submitPollAnswer"
-        onClick={() => voteHandler(Object.keys(state).filter((key) => state[key]))}
-      >
-        <FormattedMessage id="reply" />
-      </Button>
+        onSubmit={() => voteHandler(Object.keys(checked).filter((key) => checked[key]))}
+        dataQA="submitPollAnswer"
+      />
     </>
   );
 };

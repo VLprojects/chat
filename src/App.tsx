@@ -1,4 +1,6 @@
 import { makeStyles } from '@mui/styles';
+import PollModeratorResultPage from 'containers/PollModeratorResultPage';
+import PollResultOpenEndedDetailPage from 'containers/PollResultOpenEndedDetailPage';
 import { SnackbarProvider } from 'notistack';
 import React, { FC, useEffect } from 'react';
 import { Router } from './components/Router';
@@ -13,7 +15,6 @@ import UsersListPage from './containers/UsersListPage';
 import Routes from './routes';
 import { COLOURS } from './theme/consts';
 import { POLL_CONTAINER } from './types/const';
-import PollResultDetailPage from './containers/PollResultDetailPage';
 
 const useStyles = makeStyles(
   {
@@ -83,7 +84,10 @@ const App: FC = () => {
               <CreatePollPage />
             </Router>
             <Router route={`${Routes.PollResultDetail}/:id/:pollId`}>
-              <PollResultDetailPage />
+              <PollModeratorResultPage />
+            </Router>
+            <Router route={`${Routes.PollResultOpenEndedDetail}/:id/:pollId`}>
+              <PollResultOpenEndedDetailPage />
             </Router>
           </SocketLayout>
         </AuthLayout>

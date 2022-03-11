@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export default (props: IProps): ReactElement => {
-  const { className, fill = '#A1A4BC', width = 16, height = 16, style } = props;
+  const { className, fill = '#A1A4BC', width = 18, height = 18, style } = props;
 
   return (
     <svg
@@ -17,7 +17,7 @@ export default (props: IProps): ReactElement => {
       width={width}
       height={height}
       className={className}
-      viewBox="0 0 16 16"
+      viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >

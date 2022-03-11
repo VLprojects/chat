@@ -2,7 +2,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { Grid, IconButton, TextareaAutosize } from '@mui/material';
 import { observer } from 'mobx-react-lite';
 import { useSnackbar } from 'notistack';
-import React, { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, FC, KeyboardEvent, MutableRefObject, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { COLOURS } from 'theme/consts';
 import SubmitMessageIcon from 'ui-kit/icons/SubmitMessageIcon';
@@ -28,7 +28,7 @@ const MessageInput: FC<IMessageInput> = (props) => {
   const [loading, setLoading] = useState(false);
   const root = useKeystone();
   const { enqueueSnackbar } = useSnackbar();
-  const inputRef = useRef() as React.MutableRefObject<HTMLTextAreaElement>;
+  const inputRef = useRef() as MutableRefObject<HTMLTextAreaElement>;
 
   const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
@@ -49,6 +49,7 @@ const MessageInput: FC<IMessageInput> = (props) => {
       }
     }
   };
+
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -56,11 +57,12 @@ const MessageInput: FC<IMessageInput> = (props) => {
       onMessageSubmit();
     }
   };
+
   return (
     <div className={classes.root}>
-      <Grid container alignItems="center" spacing={1.5} wrap="nowrap">
+      <Grid container alignItems="center" spacing={1} wrap="nowrap">
         {isModerator && isPublic && (
-          <Grid item alignSelf="baseline" sx={{ color: '#999999', cursor: 'pointer', paddingRight: '9px' }}>
+          <Grid item alignSelf="baseline" sx={{ color: '#999999', cursor: 'pointer', paddingRight: '7px' }}>
             <MessageInputActions icon={<SettingsIcon fontSize="small" color="inherit" />} />
           </Grid>
         )}

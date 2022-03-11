@@ -105,7 +105,7 @@ const CreatePollForm: FC<IProps> = (props) => {
                     label=""
                   />
                 </FormGroup>
-                <Typography variant="body2" color="text.light02">
+                <Typography variant="body2" mt={1} color="text.light02">
                   {values.question?.length || 0} / {MAX_NUMBER_OF_QUESTION_LENGTH}
                 </Typography>
               </FormControl>

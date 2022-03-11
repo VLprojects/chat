@@ -5,6 +5,7 @@ export default makeStyles(
   {
     header: {
       height: HEADER_HEIGHT,
+      minHeight: HEADER_HEIGHT,
       display: 'flex',
       position: 'relative',
       borderBottom: `1px solid ${COLOURS.LIGHT_01}`,

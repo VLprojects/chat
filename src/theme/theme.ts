@@ -13,6 +13,7 @@ const palette = {
     black: COLOURS.BLACK,
     pollPrimary: COLOURS.POLL_TEXT_PRIMARY,
     pollSecondary: COLOURS.POLL_TEXT_SECONDARY,
+    error: COLOURS.ERROR,
   },
   primary: {
     main: '#535FC4',
@@ -94,6 +95,13 @@ const themeOptions = {
         },
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        rounded: {
+          borderRadius: 10,
+        },
+      },
+    },
     MuiInput: {
       styleOverrides: {
         input: {
@@ -101,6 +109,37 @@ const themeOptions = {
           fontSize: '15px',
           lineHeight: '19px',
           color: COLOURS.BLACK_01,
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          overflow: 'visible',
+        },
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          wordBreak: 'break-all' as const,
+          padding: 0,
+          marginBottom: 12,
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+          '&:last-child': { paddingBottom: 0 },
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none!important',
         },
       },
     },

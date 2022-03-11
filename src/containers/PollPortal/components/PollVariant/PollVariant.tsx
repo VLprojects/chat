@@ -1,10 +1,10 @@
+import Channel from 'keystone/chat/channel';
+import Poll from 'keystone/chat/poll';
 import React, { FC } from 'react';
-import Channel from '../../../../keystone/chat/channel';
-import Poll from '../../../../keystone/chat/poll';
 import { doVote } from '../../services';
 import CheckboxGroup from '../CheckboxGroup';
+import OpenEnded from '../OpenEnded';
 import RadioGroup from '../RadioGroup';
-import Textarea from '../Textarea';
 
 interface IProps {
   poll: Poll;
@@ -21,7 +21,7 @@ const PollVariant: FC<IProps> = (props) => {
 
   const renderVariant = (poll: Poll) => {
     if (poll.isOpenEnded) {
-      return <Textarea voteHandler={voteHandler} />;
+      return <OpenEnded voteHandler={voteHandler} />;
     }
 
     if (poll.withAnswer) {

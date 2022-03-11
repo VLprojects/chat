@@ -1,54 +1,39 @@
-import { Box, Grid, Theme, Typography } from '@mui/material';
+import { Box, Grid, lighten, Theme, Typography } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 import { observer } from 'mobx-react';
 import React, { FC } from 'react';
+import { FormattedMessage } from 'react-intl';
 import useKeystone from '../../../../keystone';
 import Poll from '../../../../keystone/chat/poll';
 import { COLOURS } from '../../../../theme/consts';
-import { FormattedMessage } from 'react-intl';
 
 interface IProps {
   poll: Poll;
 }
-const successColor = '#23BE33';
-const errorColor = '#FC2F2F';
-const votedColor = '#A836AF';
-const otherAnswerColor = '#CCD3D9';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     progress: {
+      border: `1px solid #F3F2F9`,
       borderRadius: 10,
-      background: COLOURS.SURFACE_SECONDARY,
+
       padding: 0,
       margin: 0,
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(3),
       position: 'relative',
       display: 'flex',
       alignItems: 'center',
     },
     progressLine: {
       borderRadius: 10,
-      margin: 0,
-      maxWidth: '100%',
-    },
-    text: {
-      padding: '2px 25px 2px 8px',
-    },
-    totalCounter: {
-      position: 'absolute',
-      right: 10,
     },
   }),
 );
 
 const PollVariant: FC<IProps> = () => {
   const root = useKeystone();
-  const { ui, chat } = root;
+  const { auth } = root;
 
-  const channelId = String(ui.params.id);
-  const currentChannel = chat.channels.get(channelId);
+  const currentChannel = root.currentChannel;
   const poll = currentChannel?.getActivePoll;
 
   const classes = useStyles();
@@ -72,41 +57,55 @@ const PollVariant: FC<IProps> = () => {
 
   return (
     <>
-      {poll.options.map((option) => {
-        let bgColor: string;
-        if (poll.withAnswer) {
-          bgColor = option.valid ? successColor : errorColor;
-        } else {
-          bgColor = option.isVoted ? votedColor : otherAnswerColor;
-        }
+      <Grid container direction="column" rowGap={2}>
+        {poll.options.map((option) => {
+          const bgColorOfScale = () => {
+            if (option.valid) {
+              return COLOURS.GREEN;
+            } else if (option.isVoted) {
+              return COLOURS[auth.me.getAvatarColor];
+            } else {
+              return COLOURS.LIGHT;
+            }
+          };
 
-        return (
-          <Box
-            key={option.id}
-            width="100%"
-            bgcolor={option.isVoted ? 'green' : '#CCD3D9'}
-            className={classes.progress}
-            data-qa-votes={option.votesCount}
-            data-qa-option={option.option}
-          >
-            <Box
-              width={option.votesCount ? `${(option.votesCount / countTotal) * 100}%` : '100%'}
-              bgcolor={option.votesCount ? bgColor : COLOURS.SURFACE_SECONDARY}
-              className={classes.progressLine}
+          const getMainBgColor = (color: string) => {
+            return color === COLOURS.LIGHT ? COLOURS.WHITE : lighten(color, 0.5);
+          };
+
+          return (
+            <Grid
+              item
+              xs
+              key={option.id}
+              className={classes.progress}
+              data-qa-votes={option.votesCount}
+              data-qa-option={option.option}
+              bgcolor={getMainBgColor(bgColorOfScale())}
             >
               <Typography
-                variant="subtitle2"
-                className={classes.text}
-                noWrap
-                color={option.votesCount ? '#fff' : 'black'}
+                component="span"
+                color={option.isVoted || option.valid ? COLOURS.WHITE : COLOURS.BLACK_01}
+                fontWeight={500}
+                padding="8px 25px 8px 12px"
+                zIndex="10"
               >
                 {option.option}
               </Typography>
-            </Box>
-            <span className={classes.totalCounter}>{option.votesCount}</span>
-          </Box>
-        );
-      })}
+              <Box
+                width={option.votesCount ? `${(option.votesCount / countTotal) * 100}%` : '100%'}
+                bgcolor={bgColorOfScale()}
+                position="absolute"
+                minHeight="100%"
+                borderRadius="10px"
+              ></Box>
+              <Typography component="span" variant="body2" position="absolute" right="10px">
+                {option.votesCount}
+              </Typography>
+            </Grid>
+          );
+        })}
+      </Grid>
     </>
   );
 };

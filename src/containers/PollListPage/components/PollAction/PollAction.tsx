@@ -1,87 +1,71 @@
-import { AxiosError } from 'axios';
-import { autorun } from 'mobx';
-import React, { FC, useState } from 'react';
+import useKeystone from 'keystone';
+import Poll from 'keystone/chat/poll';
+import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
+import Routes from 'routes';
 import { IPollStatus } from 'types/types';
 import { Button } from 'ui-kit';
-import useKeystone from '../../../../keystone';
-import Poll from '../../../../keystone/chat/poll';
-import Routes from '../../../../routes';
-import { startPoll, stopPoll } from '../../services';
+import { onPollEndHandler, onPollStartHandler } from '../../services';
+import useStyles from './styles';
 
 interface IProps {
-  poll: Poll;
+  templatePoll: Poll;
+  lastActivePoll?: Poll;
 }
+
 const PollAction: FC<IProps> = (props) => {
-  const { poll } = props;
-  const [pollStatus, setPollStatus] = useState(poll.status);
+  const { templatePoll, lastActivePoll } = props;
+
   const root = useKeystone();
-  const { ui, chat } = root;
+  const { ui } = root;
+  const classes = useStyles();
 
-  autorun(() => {
-    if (pollStatus !== poll.status) {
-      setPollStatus(poll.status);
-    }
-  });
+  const currentChannel = root.currentChannel;
 
-  const channelId = String(ui.params.id);
-
-  const currentChannel = chat.channels.get(channelId);
-  if (!currentChannel) {
-    return null;
-  }
+  const pollStatus = lastActivePoll ? lastActivePoll.status : templatePoll.status;
 
   const goRoutePollDetail = () => {
-    ui.setRoute(`${Routes.PollResultDetail}/${channelId}/${poll.id}`);
+    ui.setRoute(`${Routes.PollResultDetail}/${currentChannel?.id}/${templatePoll?.id}`);
   };
 
-  const onPollStart = async () => {
-    const response = await startPoll(+poll.id);
-    if (response) {
-      poll.status = response.status;
-      currentChannel.startPoll(poll);
-    }
+  const onPollStart = () => {
+    onPollStartHandler({ channel: currentChannel, templatePoll: templatePoll });
   };
 
-  const onPollEnd = async () => {
-    try {
-      await stopPoll(+poll.id);
-      currentChannel.stopPoll(poll);
-    } catch (e) {
-      const err = e as AxiosError;
-      switch (err?.response?.status) {
-        case 409:
-          currentChannel.stopPoll(poll);
-          break;
-        default:
-          ui.setRoute(`/${Routes.Polls}`);
-          break;
-      }
-    }
-  };
-
-  const onPollResult = () => {
-    currentChannel.pollResult(poll);
+  const onPollEnd = () => {
+    onPollEndHandler({
+      activePoll: lastActivePoll,
+      channel: currentChannel,
+      defaultErrorAction: () => ui.setRoute(`/${Routes.Polls}`),
+    });
   };
 
   switch (pollStatus) {
     case IPollStatus.New:
       return (
-        <Button variant="submit" onClick={onPollStart} data-qa="startPoll">
+        <Button variant="primary" fullWidth className={classes.actionButton} onClick={onPollStart} data-qa="startPoll">
           <FormattedMessage id="startPoll" />
         </Button>
       );
     case IPollStatus.InProgress:
       return (
-        <Button variant="submit" onClick={onPollEnd} data-qa="completePoll">
+        <Button
+          variant="contained"
+          fullWidth
+          className={classes.actionButton}
+          onClick={onPollEnd}
+          data-qa="completePoll"
+        >
           <FormattedMessage id="completePoll" />
         </Button>
       );
     case IPollStatus.Done:
       return (
         <Button
-          variant="submit"
-          onClick={() => (poll.isOpenEnded ? goRoutePollDetail() : onPollResult())}
+          variant="contained"
+          fullWidth
+          className={classes.actionButton}
+          onClick={goRoutePollDetail}
           data-qa="seeResults"
         >
           <FormattedMessage id="seeResults" />

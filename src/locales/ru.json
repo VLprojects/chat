@@ -19,7 +19,7 @@
   "dontHaveAccount": "У вас нет аккаунта?",
   "signUp": "Зарегистрироваться",
   "enterPassword": "Введите пароль",
-  "signUpinTheChat": "Зарегистрироваться в чате",
+  "signUpInTheChat": "Зарегистрироваться в чате",
   "alreadyHaveAccount": "У вас уже есть аккаунт?",
   "name": "Имя",
   "password": "Пароль",
@@ -82,5 +82,12 @@
   "edit": "Редактировать",
   "delete": "Удалить",
   "templates": "Шаблоны",
-  "addOptionsNumber": "Вы можете добавить еще {number, plural, =5 {# опций} =4 {# опции} one {# опцию} other {# опции}}"
+  "join": "Присоединиться",
+  "addOptionsNumber": "Вы можете добавить еще {number, plural, =5 {# опций} =4 {# опции} one {# опцию} other {# опции}}",
+  "poll.answers": "{number, plural, =1 {# ответ} =2 {# ответа} =3 {# ответа} =4 {# ответа} other {# ответов}}",
+  "your.reply": "Ваш ответ",
+  "poll.results": "Результат голосования",
+  "done": "Done",
+  "in_progress": "In Progress",
+  "new": "New"
 }

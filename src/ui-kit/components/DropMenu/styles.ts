@@ -20,6 +20,8 @@ export default makeStyles((theme: Theme) => ({
     },
   },
   menuItem: {
+    paddingTop: 8,
+    paddingBottom: 8,
     fontSize: 13,
     lineHeight: '15px',
     color: COLOURS.BLACK_01,

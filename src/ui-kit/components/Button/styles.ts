@@ -16,6 +16,14 @@ export default makeStyles(
         letterSpacing: '0.01em',
         backgroundColor: 'transparent',
         transition: 'all 0.1s ease-in-out',
+        '&:hover': {
+          background: COLOURS.LIGHT_03,
+          color: COLOURS.BLACK_01,
+        },
+        // '&:focus': {
+        //   background: COLOURS.LIGHT_05,
+        //   color: COLOURS.BLACK_01,
+        // },
       },
       large: { height: 48, lineHeight: '48px' },
       medium: { fontSize: 14, lineHeight: '18px', padding: 15 },
@@ -28,23 +36,20 @@ export default makeStyles(
         borderRadius: 4,
       },
       contained: {
-        borderRadius: 4,
-        transition: 'transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out',
-        boxShadow: '0 1px 5px rgba(0, 0, 0, 0.2)',
-        background: 'linear-gradient(to bottom, #eeeeee 0%, #eeeeee 100%)',
-        filter:
-          "progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 )",
-        textTransform: 'uppercase',
-        color: '#000',
-        '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
+        borderRadius: 10,
+        background: COLOURS.LIGHT_04,
+        color: COLOURS.BLACK_01,
+        '&[disabled]': {
+          color: COLOURS.LIGHT_02,
+        },
       },
       outlined: {
         borderRadius: 10,
-        color: COLOURS.BLUE_01,
+        color: COLOURS.BLACK_01,
         fontWeight: 700,
         boxShadow: '0px 0px 18px rgba(0, 0, 0, 0.07)',
         '&:hover': {
-          color: COLOURS.BLUE_01,
+          color: COLOURS.BLACK_01,
         },
         '&:active': { transform: 'translateY(1px)', boxShadow: 'none' },
       },
@@ -88,6 +93,8 @@ export default makeStyles(
 
         '&:hover, &:focus, &:active, &:active:focus': {
           color: COLOURS.BLACK_01,
+          backgroundColor: 'inherit',
+          textDecoration: 'underline',
         },
 
         '&:disabled': {
@@ -96,7 +103,7 @@ export default makeStyles(
       },
       primary: {
         borderRadius: 10,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: COLOURS.BLUE_02,
         '&:hover': {
           filter: 'brightness(85%)',
         },

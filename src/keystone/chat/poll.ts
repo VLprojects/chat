@@ -1,5 +1,5 @@
-import { Model, model, prop, rootRef } from 'mobx-keystone';
-import { IServerPollOption } from '../../containers/CreatePollPage/types';
+import { Model, model, modelAction, prop, rootRef } from 'mobx-keystone';
+import { IServerPollOption, IServerPollVote } from '../../containers/CreatePollPage/types';
 import { IPollStatus } from '../../types/types';
 
 @model('Poll')
@@ -12,8 +12,16 @@ export default class Poll extends Model({
   options: prop<IServerPollOption[]>(() => []),
   validOptions: prop<string[]>(() => []),
   templateId: prop<number | undefined | null>(),
-  status: prop<IPollStatus>(() => IPollStatus.New),
-}) {}
+  createdAt: prop<string>(),
+  stoppedAt: prop<string>(),
+  status: prop<IPollStatus>(() => IPollStatus.New).withSetter(),
+  votes: prop<IServerPollVote[]>(),
+}) {
+  @modelAction
+  changeStatus(status: IPollStatus): void {
+    this.setStatus(status);
+  }
+}
 
 export const pollRef = rootRef<Poll>('PollRef', {
   getId(maybePoll) {

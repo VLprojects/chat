@@ -19,7 +19,7 @@
   "dontHaveAccount": "Don't have an account?",
   "signUp": "Sign up",
   "enterPassword": "Enter password",
-  "signUpinTheChat": "Sign up in the chat",
+  "signUpInTheChat": "Sign up in the chat",
   "alreadyHaveAccount": "Already have an account?",
   "name": "Name",
   "password": "Password",
@@ -83,5 +83,12 @@
   "edit": "Edit",
   "delete": "Delete",
   "templates": "Templates",
-  "addOptionsNumber": "You can add {number} more options"
+  "join": "Join",
+  "addOptionsNumber": "You can add {number} more options",
+  "poll.answers": "{number, plural, =1 {# answer} other {# answers}}",
+  "your.reply": "Your reply",
+  "poll.results": "Result Poll",
+  "done": "Done",
+  "in_progress": "In Progress",
+  "new": "New"
 }
