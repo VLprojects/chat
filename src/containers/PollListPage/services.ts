@@ -21,11 +21,13 @@ export const getPollById = async (pollId: number): Promise<IServerPoll | undefin
   }
 };
 
-export const deletePoll = async (pollId: number): Promise<void | undefined> => {
+export const deletePoll = async (pollId: number): Promise<boolean> => {
   try {
     await DELETE(`polls/${pollId}`);
+    return true;
   } catch (e) {
     Sentry.captureException(e);
+    return false;
   }
 };
 
@@ -82,7 +84,8 @@ export const onPollStartHandler = async (props: IOnPollStart) => {
 
   const response: IServerPoll | undefined = await startPoll(templatePoll?.id);
   if (response) {
-    const pollModel = channel?.addPoll(response);
-    channel?.startPoll(pollModel);
+    const pollModel = channel.addPoll(response);
+    channel.startPoll(pollModel);
   }
 };
+

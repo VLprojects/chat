@@ -1,5 +1,14 @@
 import { computed } from 'mobx';
-import { model, Model, onSnapshot, prop, registerRootStore } from 'mobx-keystone';
+import {
+  isRootStore,
+  model,
+  Model,
+  modelAction,
+  onSnapshot,
+  prop,
+  registerRootStore,
+  unregisterRootStore,
+} from 'mobx-keystone';
 import { createContext, useContext } from 'react';
 import Auth from './auth';
 import Chat from './chat';
@@ -19,16 +28,22 @@ export class Root extends Model({
   get currentChannel() {
     return this.chat.channels.get(this.ui.params.id as string);
   }
+
+  @modelAction
+  init() {
+    if (isRootStore(this)) {
+      unregisterRootStore(this);
+    }
+    this.chat = new Chat({});
+    this.auth = new Auth({});
+    this.socket = new SocketStore({});
+    this.ui = new UI({});
+    this.settings = new Settings({});
+    registerRootStore(this);
+  }
 }
 
-export const createRootStore = (): Root => {
-  const store = new Root({});
-  registerRootStore(store);
-
-  return store;
-};
-
-const rootStore = createRootStore();
+const rootStore = new Root({});
 const context = createContext(rootStore);
 const useKeystone = (): Root => useContext(context);
 

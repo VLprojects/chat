@@ -18,7 +18,7 @@ const PollTypeCard: React.FC<IPropsCard> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const clickHandler = () => {
-    ref.current?.scrollIntoView();
+    // ref.current?.scrollIntoView();
     onClickFromProps();
   };
   const opacity = active ? '1' : '0.5';

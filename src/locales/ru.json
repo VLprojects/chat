@@ -87,7 +87,9 @@
   "poll.answers": "{number, plural, =1 {# ответ} =2 {# ответа} =3 {# ответа} =4 {# ответа} other {# ответов}}",
   "your.reply": "Ваш ответ",
   "poll.results": "Результат голосования",
-  "done": "Done",
-  "in_progress": "In Progress",
-  "new": "New"
+  "done": "Завершен",
+  "in_progress": "Запущен",
+  "new": "Черновик",
+  "areYouSure": "Вы уверены?",
+  "anotherPollInProgress": "Другое голосование в этом канале сейчас запущено. Запустить это все равно?"
 }

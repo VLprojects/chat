@@ -3,7 +3,7 @@ import { onPollEndHandler, onPollStartHandler } from 'containers/PollListPage/se
 import Channel from 'keystone/chat/channel';
 import Poll from 'keystone/chat/poll';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { IPollStatus } from 'types/types';
 import Button from 'ui-kit/components/Button';
 
@@ -15,8 +15,13 @@ interface IProps {
 
 const ActionButton: React.FC<IProps> = (props) => {
   const { currentChannel, templatePoll, activePoll } = props;
+  const intl = useIntl();
 
   const onPollStart = () => {
+    if (currentChannel?.isPollsInProgress && !confirm(intl.formatMessage({ id: 'anotherPollInProgress' }))) {
+      return;
+    }
+
     onPollStartHandler({ channel: currentChannel, templatePoll });
   };
 

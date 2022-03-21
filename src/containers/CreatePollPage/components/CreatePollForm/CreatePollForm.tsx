@@ -143,9 +143,10 @@ const CreatePollForm: FC<IProps> = (props) => {
                                   }
                                 />
                               )}
-                              {selectedPollType === PollTypeEnum.MultipleAnswer && (
+                              {/* temporarily removed option to propose multiple correct answers */}
+                              {/* {selectedPollType === PollTypeEnum.MultipleAnswer && (
                                 <Field name={`validOptions.${idx}`} type="checkbox" component={CheckboxField} />
-                              )}
+                              )} */}
                               <Grid item xs>
                                 <Field
                                   name={`${field}`}
@@ -158,13 +159,11 @@ const CreatePollForm: FC<IProps> = (props) => {
                                   }}
                                 />
                               </Grid>
-                              <IconButton
-                                onClick={() => {
-                                  if (values.options.length > 2) fields.remove(idx);
-                                }}
-                              >
-                                <CloseIcon />
-                              </IconButton>
+                              {values.options.length > 2 && (
+                                <IconButton onClick={() => fields.remove(idx)}>
+                                  <CloseIcon />
+                                </IconButton>
+                              )}
                             </Grid>
                           ))}
                           {MAX_ADDED_OPTIONS - values.options.length !== 0 && (

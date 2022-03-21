@@ -17,7 +17,7 @@ import useStyles from './styles';
 const PollPortal: FC = () => {
   const classes = useStyles();
   const root = useKeystone();
-  const { ui, chat, auth } = root;
+  const { auth } = root;
 
   const ref = useRef<HTMLElement | null>(null);
 
@@ -35,8 +35,6 @@ const PollPortal: FC = () => {
   const isVoted = poll.options.find((option) => option.isVoted) || poll.isVoted;
 
   const onClose = () => currentChannel.closePollPortal();
-
-  if (auth.isModerator) return null;
 
   return (
     <Portal container={ref.current}>

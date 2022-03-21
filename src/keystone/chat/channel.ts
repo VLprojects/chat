@@ -79,19 +79,6 @@ export default class Channel extends Model({
   @modelAction
   startPoll(poll?: Poll): void {
     if (!poll) return;
-    // if (poll) {
-    //   let find = false;
-
-    //   this.polls.forEach((p) => {
-    //     if (p.id === poll.id) {
-    //       // poll exist
-    //       p.changeStatus(poll.status);
-    //       find = true;
-    //     }
-    //   });
-
-    //   if (!find) this.polls.push(poll);
-    // }
 
     this.setActivePoll(pollRef(poll));
   }
@@ -224,6 +211,11 @@ export default class Channel extends Model({
   @computed
   get getActivePoll(): Poll | undefined {
     return this.activePoll?.maybeCurrent;
+  }
+
+  @computed
+  get isPollsInProgress(): boolean {
+    return Boolean(this.polls.find(({ status }) => status === IPollStatus.InProgress));
   }
 
   @computed

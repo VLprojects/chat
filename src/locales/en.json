@@ -90,5 +90,7 @@
   "poll.results": "Result Poll",
   "done": "Done",
   "in_progress": "In Progress",
-  "new": "New"
+  "new": "Template",
+  "areYouSure": "Are you sure?",
+  "anotherPollInProgress": "Another poll is still in progress. Start this one anyway?"
 }

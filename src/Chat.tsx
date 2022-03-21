@@ -42,6 +42,9 @@ export const Chat: FC<IChatProps> = observer((props) => {
   useEffect(() => {
     // Load global app settings first
     (async () => {
+      setIsReady(false);
+      root.init();
+
       const { apiUrlFromAttr, appIdFromAttr, channelIdFromAttr } = findAppInitialData();
       root.auth.setAppId(appIdFromAttr || appId || '');
       initializeApi(apiUrlFromAttr || apiUrl || process.env.REACT_APP_API_BASEURL || '');
@@ -60,7 +63,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
         setIsReady(true);
       }
     })();
-  }, []);
+  }, [channelId, appId, apiUrl, userToken]);
 
   return (
     <RawIntlProvider value={intl}>

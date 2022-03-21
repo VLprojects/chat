@@ -3,17 +3,22 @@ import useKeystone from 'keystone';
 import Poll from 'keystone/chat/poll';
 import { observer } from 'mobx-react';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import PollCard from '../PollCard';
 
 const TemplateList: React.FC = () => {
   const root = useKeystone();
+  const intl = useIntl();
 
   const currentChannel = root.currentChannel;
   const pollTemplates = currentChannel?.getPollTemplates;
 
-  const onDeletePoll = (poll: Poll) => {
-    deletePoll(+poll.id);
-    currentChannel?.deletePoll(poll);
+  const onDeletePoll = async (poll: Poll) => {
+    if (confirm(intl.formatMessage({ id: 'areYouSure' }))) {
+      if (await deletePoll(+poll.id)) {
+        currentChannel?.deletePoll(poll);
+      }
+    }
   };
 
   return (
