@@ -78,14 +78,10 @@ interface IOnPollStart {
   templatePoll?: Poll;
   channel?: Channel;
 }
-export const onPollStartHandler = async (props: IOnPollStart) => {
+export const onPollStartHandler = (props: IOnPollStart) => {
   const { templatePoll, channel } = props;
   if (!templatePoll || !channel) return;
 
-  const response: IServerPoll | undefined = await startPoll(templatePoll?.id);
-  if (response) {
-    const pollModel = channel.addPoll(response);
-    channel.startPoll(pollModel);
-  }
+  startPoll(templatePoll?.id);
 };
 

@@ -30,7 +30,7 @@ export interface IRChannel {
   name: string;
   externalId: string;
   type: ChannelTypeEnum;
-  userIds: string[];
+  users?: IRUser[]; // directs has users;
   messages: IRChannelMessage[];
   polls: IServerPoll[];
 }

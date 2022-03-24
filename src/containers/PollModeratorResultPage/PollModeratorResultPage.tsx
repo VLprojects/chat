@@ -27,13 +27,6 @@ const PollModeratorResultPage: React.FC = () => {
   const lastRunningPoll = polls![0];
   const { question, status } = lastRunningPoll;
 
-  /*
-    эта бесполезная херь, заставляет тригерится компонент, когда мы запускаем или тормозим голосование,
-    и мы получаем обновление в channel.polls[idx].status
-    я не понимаю как должен работать этот е*ый mobx
-  */
-  const myVar = currentChannel?.getPollList;
-
   if (!lastRunningPoll) return null;
 
   return (

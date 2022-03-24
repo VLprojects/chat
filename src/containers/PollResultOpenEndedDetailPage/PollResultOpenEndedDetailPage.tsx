@@ -45,7 +45,7 @@ const PollResultOpenEndedDetailPage: FC = () => {
           <FormattedMessage id={getPollType(poll)} />
         </Typography>
         {poll?.votes.map((vote) => (
-          <Paper sx={{ backgroundColor: COLOURS.LIGHT_04, margin: '0px 12px 13px' }} elevation={0}>
+          <Paper key={vote.id} sx={{ backgroundColor: COLOURS.LIGHT_04, margin: '0px 12px 13px' }} elevation={0}>
             <Grid container justifyContent="space-between" padding="16px 12px">
               <Typography variant="h4">{vote.user.displayName}</Typography>
               <Typography variant="subtitle2" color={alpha(COLOURS.BLACK_01, 0.5)}>

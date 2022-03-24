@@ -2,6 +2,7 @@ import { compareAsc } from 'date-fns';
 import { computed } from 'mobx';
 import { getRoot, model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
 import { sortPollDesc } from 'utils/helper';
+
 import { IServerPoll, IServerPollOption } from '../../containers/CreatePollPage/types';
 import { ChannelTypeEnum, MessageTypeEnum } from '../../types/enums';
 import { IRChannelMessage, IRPinnedMessage } from '../../types/serverResponses';
@@ -19,7 +20,7 @@ export default class Channel extends Model({
   externalId: prop<string>(''),
   type: prop<ChannelTypeEnum>(ChannelTypeEnum.Public),
   messages: prop(() => objectMap<Message>()),
-  users: prop(() => objectMap<Ref<User>>()),
+  directUsersOnly: prop<User[]>(() => []),
   polls: prop<Poll[]>(() => []),
   activePoll: prop<Ref<Poll> | undefined>(() => undefined).withSetter(),
   pinnedMessages: prop<PinnedMessage[]>(() => []),
@@ -58,8 +59,7 @@ export default class Channel extends Model({
 
   @modelAction
   setPollList(items: IServerPoll[]): void {
-    const serverPolls = items.map(convertServerPollToModel).filter((item) => !this.polls.find((x) => x.id === item.id));
-    this.polls = [...serverPolls, ...this.polls];
+    this.polls = items.map(convertServerPollToModel);
   }
 
   @modelAction
@@ -162,18 +162,17 @@ export default class Channel extends Model({
     });
   }
 
-  @modelAction
   getLastPollByTemplateId(templateId?: string) {
     if (!templateId) return undefined;
 
     return this.polls.filter((p) => p.templateId === +templateId).sort(sortPollDesc)![0];
   }
-  @modelAction
+
   findPollById(pollId?: string) {
     if (!pollId) return undefined;
     return this.polls.find((p) => p.id === pollId);
   }
-  @modelAction
+
   getPollListByTemplateId(templatePoll?: Poll) {
     if (!templatePoll) return undefined;
 
@@ -201,11 +200,6 @@ export default class Channel extends Model({
   @computed
   get messagesCount(): number {
     return this.messages.size;
-  }
-
-  @computed
-  get userList(): User[] {
-    return Array.from(this.users.values()).map((ref) => ref.current);
   }
 
   @computed

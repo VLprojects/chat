@@ -1,15 +1,16 @@
 import Centrifuge from 'centrifuge';
-import { observable, runInAction } from 'mobx';
-import { chunkProcessor, IDisposer } from 'mobx-utils';
+import { getDirectsList } from 'components/DirectList/service';
 import { getPinnedMessages } from 'containers/ChannelPage/service';
+import { observable, runInAction } from 'mobx';
 import { getRoot, model, Model, prop } from 'mobx-keystone';
-import { MIN_SOCKET_RECONNECT_TIME } from 'utils/consts';
-import { IServerPoll } from '../containers/CreatePollPage/types';
-import CentrifugeEventsEnum from '../types/centrifugeEvents';
+import { chunkProcessor, IDisposer } from 'mobx-utils';
 import { IRChannel, IRChannelMessage, ISEMessage } from 'types/serverResponses';
+import { MIN_SOCKET_RECONNECT_TIME } from 'utils/consts';
+import { IServerPoll, IServerPollVotesUser } from '../containers/CreatePollPage/types';
+import { Root } from '.';
+import CentrifugeEventsEnum from '../types/centrifugeEvents';
 import SocketEventsEnum from '../types/socketEvents';
 import { convertServerPollToModel } from '../utils/common';
-import { Root } from './index';
 import { joinChannel } from './service';
 
 // has "Store" in name to not confuse with Socket instance
@@ -76,8 +77,9 @@ export default class SocketStore extends Model({
       runInAction(() => this.messageChunk.push({ channelId, message }));
     };
 
-    const onNewDirect = (channel: IRChannel): void => {
-      joinChannel(root, channel.id);
+    const onNewDirect = async (channel: IRChannel): Promise<void> => {
+      await joinChannel(root, channel.id);
+      getDirectsList(root);
     };
 
     const onPollStart = (poll: IServerPoll & { channelId: number }) => {
@@ -101,6 +103,18 @@ export default class SocketStore extends Model({
       if (!channel || !pollOptionsIds) return;
       channel.updateVotesCounter(pollOptionsIds);
     };
+
+    const onPollVoteOpenEnded = (data: { id: number, channelId: number; pollId: number; answer: string; user: IServerPollVotesUser }) => {
+      const { id, answer, channelId, pollId, user } = data;
+      const channel = root.chat.channels.get(`${channelId}`);
+      if (!channel) return;
+
+      const poll = channel.findPollById(String(pollId));
+      if (poll) {
+        poll.addVote({ id, answer, user });
+      }
+    };
+
 
     const onMessagePinned = (data: { channelId: string }) => {
       const { channelId } = data;
@@ -145,6 +159,7 @@ export default class SocketStore extends Model({
 
     centrifuge.on(CentrifugeEventsEnum.Publish, (ctx) => {
       const { event, payload } = ctx.data;
+
       switch (event) {
         case SocketEventsEnum.SystemMessage:
         case SocketEventsEnum.Message:
@@ -161,6 +176,9 @@ export default class SocketStore extends Model({
           break;
         case SocketEventsEnum.PollVote:
           onPollVote(payload);
+          break;
+        case SocketEventsEnum.PollVoteOpenEnded:
+          onPollVoteOpenEnded(payload);
           break;
         case SocketEventsEnum.UserUpdateProfile:
           onUpdateProfile(payload);

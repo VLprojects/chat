@@ -5,6 +5,7 @@ import { doVote } from '../../services';
 import CheckboxGroup from '../CheckboxGroup';
 import OpenEnded from '../OpenEnded';
 import RadioGroup from '../RadioGroup';
+import Sentry from 'sentry';
 
 interface IProps {
   poll: Poll;
@@ -15,23 +16,23 @@ const PollVariant: FC<IProps> = (props) => {
   const { poll, channel } = props;
 
   const voteHandler = async (payload: string[]) => {
-    const responseOptions = await doVote(poll, payload);
-    channel.setPollVoted(payload, responseOptions);
-  };
-
-  const renderVariant = (poll: Poll) => {
-    if (poll.isOpenEnded) {
-      return <OpenEnded voteHandler={voteHandler} />;
-    }
-
-    if (poll.withAnswer) {
-      return <RadioGroup poll={poll} voteHandler={voteHandler} />;
-    } else {
-      return <CheckboxGroup poll={poll} voteHandler={voteHandler} />;
+    try {
+      const responseOptions = await doVote(poll, payload);
+      channel.setPollVoted(payload, responseOptions);
+    } catch (e) {
+      Sentry.captureException(e);
     }
   };
 
-  return renderVariant(poll);
+  if (poll.isOpenEnded) {
+    return <OpenEnded voteHandler={voteHandler} />;
+  }
+
+  if (poll.withAnswer) {
+    return <RadioGroup poll={poll} voteHandler={voteHandler} />;
+  }
+
+  return <CheckboxGroup poll={poll} voteHandler={voteHandler} />;
 };
 
 export default PollVariant;

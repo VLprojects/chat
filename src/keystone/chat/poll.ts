@@ -21,6 +21,11 @@ export default class Poll extends Model({
   changeStatus(status: IPollStatus): void {
     this.setStatus(status);
   }
+
+  @modelAction
+  addVote(vote: IServerPollVote) {
+    this.votes.push(vote);
+  }
 }
 
 export const pollRef = rootRef<Poll>('PollRef', {

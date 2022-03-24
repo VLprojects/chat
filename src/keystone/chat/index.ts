@@ -1,7 +1,9 @@
 import { POST } from 'api';
+import { createUserFactory } from 'keystone/factory';
 import { computed, observable } from 'mobx';
 import { model, Model, modelAction, objectMap, prop, Ref } from 'mobx-keystone';
 import { chunkProcessor, IDisposer } from 'mobx-utils';
+
 import { ChannelTypeEnum } from '../../types/enums';
 import { IRChannel, IRPub, IRUser } from '../../types/serverResponses';
 import Channel from './channel';
@@ -89,16 +91,10 @@ export default class Chat extends Model({
   }
 
   @modelAction
-  addUsers(users: IRUser[]): void {
+  addUsers(users?: IRUser[]): void {
+    if (!users) return;
     users.forEach((user) => {
-      const userModel = new User({
-        id: String(user.id),
-        username: user.username,
-        displayName: user.displayName,
-        avatarUrl: user.avatarUrl,
-        role: user.role,
-      });
-
+      const userModel = createUserFactory(user);
       this.users.set(user.id, userModel);
     });
   }
@@ -112,14 +108,21 @@ export default class Chat extends Model({
         name: channel.name,
         type: channel.type,
         externalId: channel.externalId,
+        directUsersOnly: channel.users?.map((user) => createUserFactory(user)) || [],
       });
 
       this.channels.set(channel.id, channelModel);
       channelModel.addMessages(channel.messages);
-      polls.forEach((poll) => {
-        const pollModel = channelModel.addPoll(poll);
-        channelModel.startPoll(pollModel);
-      });
+
+      if (channel.type === ChannelTypeEnum.Direct) {
+        this.addUsers(channel.users);
+      }
+      if (channel.type === ChannelTypeEnum.Public) {
+        polls.forEach((poll) => {
+          const pollModel = channelModel.addPoll(poll);
+          channelModel.startPoll(pollModel);
+        });
+      }
     });
   }
 

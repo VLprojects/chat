@@ -1,7 +1,8 @@
 import useKeystone from 'keystone';
 import Poll from 'keystone/chat/poll';
+import { observer } from 'mobx-react-lite';
 import React, { FC } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Routes from 'routes';
 import { IPollStatus } from 'types/types';
 import { Button } from 'ui-kit';
@@ -19,7 +20,6 @@ const PollAction: FC<IProps> = (props) => {
   const root = useKeystone();
   const { ui } = root;
   const classes = useStyles();
-  const intl = useIntl();
 
   const currentChannel = root.currentChannel;
 
@@ -30,10 +30,6 @@ const PollAction: FC<IProps> = (props) => {
   };
 
   const onPollStart = () => {
-    if (currentChannel?.isPollsInProgress && !confirm(intl.formatMessage({ id: 'anotherPollInProgress' }))) {
-      return;
-    }
-
     onPollStartHandler({ channel: currentChannel, templatePoll: templatePoll });
   };
 
@@ -46,12 +42,24 @@ const PollAction: FC<IProps> = (props) => {
   };
 
   switch (pollStatus) {
-    case IPollStatus.New:
+    case IPollStatus.New: {
+      if (currentChannel?.isPollsInProgress) {
+        return null;
+      }
+
       return (
-        <Button variant="primary" fullWidth className={classes.actionButton} onClick={onPollStart} data-qa="startPoll">
+        <Button
+          variant="primary"
+          disabled={currentChannel?.isPollsInProgress}
+          fullWidth
+          className={classes.actionButton}
+          onClick={onPollStart}
+          data-qa="startPoll"
+        >
           <FormattedMessage id="startPoll" />
         </Button>
       );
+    }
     case IPollStatus.InProgress:
       return (
         <Button
@@ -81,4 +89,4 @@ const PollAction: FC<IProps> = (props) => {
   }
 };
 
-export default PollAction;
+export default observer(PollAction);

@@ -24,7 +24,7 @@ const OptionRowOpenEnded: React.FC<IProps> = (props) => {
 
   return (
     <IOptionRowWrapper>
-      <Button variant="link" marginLeft="6px" onClick={goOpenEndedPollDetail} disabled={!disabled}>
+      <Button variant="link" onClick={goOpenEndedPollDetail} disabled={!disabled}>
         <Grid container wrap="nowrap" alignItems="center" columnGap="6px">
           <PollMessageIcon />
           <Typography variant="subtitle2">

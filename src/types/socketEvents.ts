@@ -7,6 +7,7 @@ enum SocketEventsEnum {
   PollStart = 'poll-start',
   PollStop = 'poll-stop',
   PollVote = 'poll-vote',
+  PollVoteOpenEnded = 'poll-vote-open-ended',
   UserUpdateProfile = 'user-update-profile',
   MessagePinned = 'message-pinned',
   DeleteMessages = 'delete-messages',

@@ -1,24 +1,29 @@
-import { Root } from 'keystone/index';
+import { getDirectsList } from 'components/DirectList/service';
+import { Root } from 'keystone';
+import Sentry from 'sentry';
+
 import { POST } from '../../api';
 import Channel from '../../keystone/chat/channel';
 import User from '../../keystone/chat/user';
 import { joinChannel } from '../../keystone/service';
 import Routes from '../../routes';
 import { IRChannel } from '../../types/serverResponses';
-import Sentry from 'sentry';
 
 export const createNewDirectChannel = async (root: Root, chatWithUser: User): Promise<IRChannel | undefined> => {
   try {
-    return (await POST(`channels/create-direct`, {
+    const channel = (await POST(`channels/create-direct`, {
       userId: chatWithUser.id,
     })) as IRChannel;
+    await getDirectsList(root);
+
+    return channel;
   } catch (e) {
     Sentry.captureException(e);
   }
 };
 export const searchDirectChannelWithUser = (root: Root, chatWithUser: User): Channel | undefined => {
   const directChannels = root.chat.directChannelsList;
-  return directChannels.find((channel) => channel.userList.find((u) => u.id === chatWithUser.id));
+  return directChannels.find((channel) => channel.directUsersOnly.find((u) => u.id === chatWithUser.id));
 };
 
 export const createOrOpenDirectChat = async (root: Root, chatWithUser: User): Promise<void> => {

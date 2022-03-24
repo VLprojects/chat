@@ -4,6 +4,7 @@ import PinnedMessageList from 'components/PinnedMessageList';
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect } from 'react';
+
 import { ChannelTypeEnum, UserRoleEnum } from '../../types/enums';
 import PollPortal from '../PollPortal';
 import ChannelPageHeader from './components/ChannelPageHeader';

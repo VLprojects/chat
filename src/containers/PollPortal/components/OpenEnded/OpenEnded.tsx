@@ -21,12 +21,12 @@ const OpenEnded: FC<IProps> = (props) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const val = (event.target as HTMLInputElement).value;
 
-    if (val.length < MIN_INPUT_LENGTH) {
+    if (val.trim().length < MIN_INPUT_LENGTH) {
       setValidationErrorText(
         intl.formatMessage({ id: 'pollValidateAnswerLongerLetters' }, { length: MIN_INPUT_LENGTH }),
       );
       setIsValidInput(false);
-    } else if (val.length > MAX_INPUT_LENGTH) {
+    } else if (val.trim().length > MAX_INPUT_LENGTH) {
       setValidationErrorText(
         intl.formatMessage({ id: 'pollValidateAnswerNotLongerLetters' }, { length: MAX_INPUT_LENGTH }),
       );
