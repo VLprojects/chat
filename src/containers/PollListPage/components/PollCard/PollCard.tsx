@@ -17,6 +17,7 @@ import { FormattedMessage } from 'react-intl';
 import { COLOURS } from 'theme/consts';
 import { IPollStatus } from 'types/types';
 import { getPollType } from 'utils/helper';
+
 import PollAction from '../PollAction';
 import useStyles from './styles';
 
@@ -82,7 +83,7 @@ const PollCard: FC<IProps> = (props) => {
           </MenuItem>
         </Menu>
         <CardContent>
-          <Typography variant="h4" sx={{ wordBreak: 'break-all' }}>
+          <Typography variant="h4" sx={{ wordBreak: 'break-word' }}>
             {templatePoll.question}
           </Typography>
           <Typography variant="body2" color={alpha(COLOURS.BLACK_02, 0.6)} marginTop="9px" marginBottom="23px">

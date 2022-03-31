@@ -1,16 +1,16 @@
 import PersonIcon from '@mui/icons-material/Person';
-import { IconButton, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import useKeystone from 'keystone';
+import User from 'keystone/chat/user';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { COLOURS } from 'theme/consts';
 import { Input } from 'ui-kit';
 import SearchIcon from 'ui-kit/icons/SearchIcon';
-import useKeystone from '../../../../keystone';
-import User from '../../../../keystone/chat/user';
-import { COLOURS } from '../../../../theme/consts';
+
 import { createOrOpenDirectChat } from '../../services';
 import UserRow from '../UserRow';
-import useStyles from './styles';
 
 type Props = {
   users: User[];
@@ -18,7 +18,6 @@ type Props = {
 
 const UserList: FC<Props> = (props) => {
   const intl = useIntl();
-  const classes = useStyles();
 
   const root = useKeystone();
   const { settings } = root;
@@ -35,23 +34,25 @@ const UserList: FC<Props> = (props) => {
   const openNewChat = (chatWithUser: User) => createOrOpenDirectChat(root, chatWithUser);
 
   return (
-    <div className={classes.root}>
-      <div className={classes.inputSearch}>
-        <Input placeholder={intl.formatMessage({ id: 'search' })} onChange={setSearch} value={search} />
-        <IconButton>
-          <SearchIcon fill={COLOURS.BLACK_01} />
-        </IconButton>
-      </div>
-      <div className={classes.userCounter}>
+    <Grid container wrap="nowrap" direction="column" marginTop="20px" marginBottom="20px" overflow="hidden">
+      <Grid item padding="0 12px">
+        <Input
+          placeholder={intl.formatMessage({ id: 'search' })}
+          onChange={setSearch}
+          value={search}
+          rightIcon={<SearchIcon fill={COLOURS.BLACK_01} />}
+        />
+      </Grid>
+      <Grid item container marginTop="20px" marginBottom="20px" padding="0 12px">
         <PersonIcon fill={COLOURS.BLACK_01} />
         <Typography style={{ marginLeft: 8 }}>{filteredUsers.length}</Typography>
-      </div>
-      <div className={classes.userListWrapper}>
+      </Grid>
+      <Grid item container wrap="nowrap" direction="column" overflow="auto">
         {filteredUsers.map((user) => (
           <UserRow key={user.id} user={user} displayDirect={settings.displayDirect} openNewChat={openNewChat} />
         ))}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 };
 

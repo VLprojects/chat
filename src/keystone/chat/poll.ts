@@ -1,4 +1,5 @@
 import { Model, model, modelAction, prop, rootRef } from 'mobx-keystone';
+
 import { IServerPollOption, IServerPollVote } from '../../containers/CreatePollPage/types';
 import { IPollStatus } from '../../types/types';
 
@@ -15,7 +16,7 @@ export default class Poll extends Model({
   createdAt: prop<string>(),
   stoppedAt: prop<string>(),
   status: prop<IPollStatus>(() => IPollStatus.New).withSetter(),
-  votes: prop<IServerPollVote[]>(),
+  votes: prop<IServerPollVote[]>(() => []),
 }) {
   @modelAction
   changeStatus(status: IPollStatus): void {

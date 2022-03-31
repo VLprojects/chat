@@ -52,6 +52,7 @@ export const COLOURS = {
   GREEN: '#23BE33',
   ORANGE: '#EFA20B',
   ERROR: '#FC2F2F',
+  ACTIVE: '#163498',
 
   [AvatarColorEnum.AVATAR1_BURGUNDY]: '#6B0C22',
   [AvatarColorEnum.AVATAR2_RED]: '#D9042B',

@@ -3,7 +3,7 @@ import React from 'react';
 
 const IOptionRowWrapper: React.FC = (props) => {
   return (
-    <Grid container padding="16px 12px" alignItems="center">
+    <Grid container alignItems="center">
       {props.children}
     </Grid>
   );

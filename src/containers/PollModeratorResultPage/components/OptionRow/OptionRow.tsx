@@ -5,6 +5,7 @@ import { IServerPollOption } from 'containers/CreatePollPage/types';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { COLOURS } from 'theme/consts';
+
 import IOptionRowWrapper from '../OptionRowWrapper';
 
 interface IOptionRowProps {
@@ -22,7 +23,7 @@ const IOptionRow: React.FC<IOptionRowProps> = (props) => {
         component={Typography}
         variant="subtitle2"
         color={option.valid ? COLOURS.GREEN : COLOURS.BLACK_01}
-        sx={{ wordBreak: 'break-all' }}
+        sx={{ wordBreak: 'break-word' }}
       >
         {option.option}
       </Grid>

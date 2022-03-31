@@ -1,16 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Grid,
-  IconButton,
-  Input as InputMui,
-  Radio,
-  Typography,
-} from '@mui/material';
+import { Box, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, Radio, SvgIcon, Typography } from '@mui/material';
 import arrayMutators from 'final-form-arrays';
 import FieldHOC from 'hoc/FieldHOC';
 import useKeystone from 'keystone';
@@ -19,8 +7,9 @@ import React, { FC } from 'react';
 import { Field, Form } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button } from 'ui-kit';
+import { Button, Input } from 'ui-kit';
 import CloseIcon from 'ui-kit/icons/CloseIcon';
+
 import { createPoll } from '../../services';
 import { ICreatePollForm, PollTypeEnum } from '../../types';
 import SelectPollType from '../SelectPollType';
@@ -31,7 +20,7 @@ interface IProps {
   channel: Channel;
 }
 
-const InputField = FieldHOC(InputMui);
+const InputField = FieldHOC(Input);
 const CheckboxField = FieldHOC(Checkbox);
 
 const MAX_ADDED_OPTIONS = 8;
@@ -83,9 +72,10 @@ const CreatePollForm: FC<IProps> = (props) => {
             <SelectPollType form={form} selectedPollType={selectedPollType} />
             <Box paddingRight="24px">
               <FormControl component="fieldset" fullWidth>
-                <FormLabel component="legend" style={{ marginBottom: 4 }}>
+                <Typography marginBottom={3}>
                   <FormattedMessage id="pollQuestion" />
-                </FormLabel>
+                </Typography>
+
                 <FormGroup>
                   <FormControlLabel
                     sx={{ m: 0 }}
@@ -93,18 +83,18 @@ const CreatePollForm: FC<IProps> = (props) => {
                       <Field
                         name="question"
                         component={InputField}
-                        rows={3}
+                        rows={5}
                         multiline
+                        fullWidth
                         data-qa="enterYourQuestion"
                         placeholder={intl.formatMessage({ id: 'enterYourQuestion' })}
-                        classes={{ root: classes.textInput }}
-                        disableUnderline
                         inputProps={{ maxLength: MAX_NUMBER_OF_QUESTION_LENGTH }}
                       />
                     }
                     label=""
                   />
                 </FormGroup>
+
                 <Typography variant="body2" mt={1} color="text.light02">
                   {values.question?.length || 0} / {MAX_NUMBER_OF_QUESTION_LENGTH}
                 </Typography>
@@ -123,15 +113,7 @@ const CreatePollForm: FC<IProps> = (props) => {
                       <>
                         <Grid container rowGap={2} justifyContent="center">
                           {fields.map((field, idx) => (
-                            <Grid
-                              item
-                              xs={12}
-                              container
-                              wrap="nowrap"
-                              className={classes.textInput}
-                              alignItems="center"
-                              key={idx}
-                            >
+                            <Grid item xs={12} container wrap="nowrap" alignItems="center" key={idx}>
                               {selectedPollType === PollTypeEnum.OneAnswer && (
                                 <Radio
                                   checked={!!values.validOptions[idx]}
@@ -147,23 +129,24 @@ const CreatePollForm: FC<IProps> = (props) => {
                               {/* {selectedPollType === PollTypeEnum.MultipleAnswer && (
                                 <Field name={`validOptions.${idx}`} type="checkbox" component={CheckboxField} />
                               )} */}
-                              <Grid item xs>
-                                <Field
-                                  name={`${field}`}
-                                  component={InputField}
-                                  data-qa={`enterOption-${idx}`}
-                                  placeholder={intl.formatMessage({ id: 'enterOption' })}
-                                  disableUnderline
-                                  inputProps={{
-                                    maxLength: MAX_NUMBER_OF_QUESTION_LENGTH,
-                                  }}
-                                />
-                              </Grid>
-                              {values.options.length > 2 && (
-                                <IconButton onClick={() => fields.remove(idx)}>
-                                  <CloseIcon />
-                                </IconButton>
-                              )}
+
+                              <Field
+                                name={`${field}`}
+                                component={InputField}
+                                data-qa={`enterOption-${idx}`}
+                                placeholder={intl.formatMessage({ id: 'enterOption' })}
+                                fullWidth
+                                inputProps={{
+                                  maxLength: MAX_NUMBER_OF_QUESTION_LENGTH,
+                                }}
+                                rightIcon={
+                                  values.options.length > 2 && (
+                                    <SvgIcon onClick={() => fields.remove(idx)}>
+                                      <CloseIcon />
+                                    </SvgIcon>
+                                  )
+                                }
+                              />
                             </Grid>
                           ))}
                           {MAX_ADDED_OPTIONS - values.options.length !== 0 && (

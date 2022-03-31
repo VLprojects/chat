@@ -1,21 +1,58 @@
 import { Grid } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import useKeystone from 'keystone';
 import { observer } from 'mobx-react-lite';
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Routes from 'routes';
 
 import DirectListRow from './components/DirectListRow';
 import { getChatWithUser, getDirectChannelName, getDirectsList } from './service';
 
+const SkeletonPage: React.FC = () => {
+  return (
+    <Stack spacing={1} flexGrow={1} padding="20px 12px" rowGap={2}>
+      <Grid item container wrap="nowrap" columnGap={1}>
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="text" width="200px" />
+      </Grid>
+      <Grid item container wrap="nowrap" columnGap={1}>
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="text" width="200px" />
+      </Grid>
+      <Grid item container wrap="nowrap" columnGap={1}>
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="text" width="200px" />
+      </Grid>
+      <Grid item container wrap="nowrap" columnGap={1}>
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="text" width="200px" />
+      </Grid>
+    </Stack>
+  );
+};
+
 const DirectList: FC = () => {
   const root = useKeystone();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getDirectsList(root);
+    const load = async () => {
+      try {
+        setLoading(true);
+        await getDirectsList(root);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, []);
 
   const clickRowHandler = useCallback((channelId: string) => root.ui.setRoute(`${Routes.Channels}/${channelId}`), []);
   const channels = root.chat.directChannelsList;
+
+  if (loading && !channels.length) return <SkeletonPage />;
 
   return (
     <Grid container direction="column" flexGrow={1}>

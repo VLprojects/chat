@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import { COLOURS } from 'theme/consts';
 import { formatDate } from 'utils/date';
 import { getPollType } from 'utils/helper';
+
 import SubHeader from '../../components/SubHeader';
 import useKeystone from '../../keystone';
 import HeaderTitle from '../../ui-kit/HeaderTitle';
@@ -31,7 +32,7 @@ const PollResultOpenEndedDetailPage: FC = () => {
           <FormattedMessage id="poll.answers" values={{ number: poll?.votes.length }} />
         </Grid>
         <PollStatusBadge status={poll?.status} alignSelf="start" marginTop="49px" mb="12px" marginLeft="16px" />
-        <Typography variant="h2" alignSelf="start" margin="0px 20px" sx={{ wordBreak: 'break-all' }}>
+        <Typography variant="h2" alignSelf="start" margin="0px 20px" sx={{ wordBreak: 'break-word' }}>
           {poll?.question}
         </Typography>
         <Typography

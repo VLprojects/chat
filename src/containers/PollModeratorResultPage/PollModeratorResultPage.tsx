@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl';
 import { COLOURS } from 'theme/consts';
 import HeaderTitle from 'ui-kit/HeaderTitle';
 import { getPollType } from 'utils/helper';
+
 import ActionButton from './components/ActionButton';
 import PollModeratorResultCard from './components/PollModeratorResultCard';
 
@@ -40,7 +41,7 @@ const PollModeratorResultPage: React.FC = () => {
         </Typography>
         <PollStatusBadge status={status} alignSelf="start" marginTop="49px" mb="12px" marginLeft="16px" />
 
-        <Typography variant="h2" alignSelf="start" margin="0px 20px" sx={{ wordBreak: 'break-all' }}>
+        <Typography variant="h2" alignSelf="start" margin="0px 20px" sx={{ wordBreak: 'break-word' }}>
           {question}
         </Typography>
         <Typography

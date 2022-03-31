@@ -27,43 +27,6 @@ export default {
       color: inherit
     }
 
-    input {
-      padding: 0;
-      ::placeholder {
-        opacity: 1;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 13px;
-        line-height: 16px;
-        letter-spacing: 0.01em;
-      }
-    }
-
-    textarea {
-      font-size: 16px;
-      line-height: 20px;
-      letter-spacing: 0.01em;
-      font-family: 'PTRootUIWebRegular';
-      border: none;
-      resize: none;
-      padding: 0;
-      width: 100%;
-      ::placeholder {
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.01em;
-      }
-      :disabled {
-        background-color: inherit;
-      }
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      overflow-y: scroll;
-      ::-webkit-scrollbar {
-        display: none;
-      }
-    }
-
     html {
       letter-spacing: 0.01em;
       * {

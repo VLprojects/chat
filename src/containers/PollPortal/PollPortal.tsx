@@ -7,6 +7,7 @@ import React, { FC, useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import CloseCircleIcon from 'ui-kit/icons/CloseCircleIcon';
 import { getPollType } from 'utils/helper';
+
 import useKeystone from '../../keystone';
 import { POLL_CONTAINER } from '../../types/const';
 import { IPollStatus } from '../../types/types';
@@ -40,7 +41,7 @@ const PollPortal: FC = () => {
     <Portal container={ref.current}>
       <div className={classes.root}>
         <Box position="relative">
-          <Typography variant="h2" sx={{ wordBreak: 'break-all', marginRight: '5px' }}>
+          <Typography variant="h2" sx={{ wordBreak: 'break-word', marginRight: '5px' }}>
             {poll?.question}
           </Typography>
 

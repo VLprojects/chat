@@ -12,6 +12,7 @@ function FieldHOC<T>(
   return (props) => {
     const {
       input,
+      meta,
       // meta: { touched, error },
       helperText,
       margin,
@@ -25,6 +26,7 @@ function FieldHOC<T>(
         // checked={!!input.value}
         onChange={input.onChange}
         onBlur={input.onBlur}
+        error={meta.error}
         // error={touched && !!error}
       />
     );

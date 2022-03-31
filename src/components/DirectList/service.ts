@@ -1,11 +1,16 @@
 import { GET } from 'api';
 import { Root } from 'keystone';
 import User from 'keystone/chat/user';
+import Sentry from 'sentry';
 import { IRChannel } from 'types/serverResponses';
 
 export const getDirectsList = async (root: Root) => {
-  const directs = (await GET('channels/directs')) as IRChannel[];
-  root.chat.addChannels(directs);
+  try {
+    const directs = (await GET('channels/directs')) as IRChannel[];
+    root.chat.addChannels(directs);
+  } catch (e) {
+    Sentry.captureException(e);
+  }
 };
 
 export const getDirectChannelName = (root: Root, channelId: string): string => {

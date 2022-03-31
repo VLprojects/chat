@@ -9,6 +9,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { COLOURS } from 'theme/consts';
 import { formatDate, getPreparedDate } from 'utils/date';
+
 import IOptionRow from '../OptionRow';
 import OptionRowOpenEnded from '../OptionRowOpenEnded';
 
@@ -36,10 +37,13 @@ const PollModeratorResultCard: React.FC<IProps> = (props) => {
           </Typography>
         </Grid>
         <Divider />
-        {poll.options.map((option) => (
-          <IOptionRow key={option.id} option={option} />
-        ))}
-        {poll.isOpenEnded && <OptionRowOpenEnded length={poll.votes?.length || 0} pollId={poll.id} />}
+        <Grid item container padding="13px 14px" rowGap={3}>
+          {poll.options.map((option) => (
+            <IOptionRow key={option.id} option={option} />
+          ))}
+
+          {poll.isOpenEnded && <OptionRowOpenEnded length={poll.votes?.length || 0} pollId={poll.id} />}
+        </Grid>
       </Paper>
     </Grid>
   );

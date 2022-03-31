@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@mui/styles';
 import { observer } from 'mobx-react';
 import React, { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import useKeystone from '../../../../keystone';
 import Poll from '../../../../keystone/chat/poll';
 import { COLOURS } from '../../../../theme/consts';
@@ -64,8 +65,10 @@ const PollVariant: FC<IProps> = () => {
               return COLOURS.GREEN;
             } else if (option.isVoted) {
               return COLOURS[auth.me.getAvatarColor];
-            } else {
+            } else if (option.votesCount > 0) {
               return COLOURS.LIGHT;
+            } else {
+              return COLOURS.WHITE;
             }
           };
 
@@ -99,7 +102,13 @@ const PollVariant: FC<IProps> = () => {
                 minHeight="100%"
                 borderRadius="10px"
               ></Box>
-              <Typography component="span" variant="body2" position="absolute" right="10px">
+              <Typography
+                component="span"
+                variant="body2"
+                position="absolute"
+                right="10px"
+                color={option.isVoted || option.valid ? lighten(COLOURS.WHITE, 0.5) : COLOURS.BLACK_01}
+              >
                 {option.votesCount}
               </Typography>
             </Grid>

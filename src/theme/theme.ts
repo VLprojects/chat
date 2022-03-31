@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+
 import { COLOURS, zINDEX } from './consts';
 import MuiCssBaseline from './muicssbaseline';
 
@@ -68,17 +69,6 @@ const themeOptions = {
   typography,
   spacing: 4,
   components: {
-    MuiFormLabel: {
-      styleOverrides: {
-        root: {
-          fontSize: 14,
-          color: COLOURS.BLACK_01,
-          '&.Mui-focused': {
-            color: COLOURS.BLACK_01,
-          },
-        },
-      },
-    },
     MuiCheckbox: {
       styleOverrides: {
         root: {
@@ -102,16 +92,6 @@ const themeOptions = {
         },
       },
     },
-    MuiInput: {
-      styleOverrides: {
-        input: {
-          padding: 0,
-          fontSize: '15px',
-          lineHeight: '19px',
-          color: COLOURS.BLACK_01,
-        },
-      },
-    },
     MuiCard: {
       styleOverrides: {
         root: {
@@ -122,7 +102,7 @@ const themeOptions = {
     MuiCardHeader: {
       styleOverrides: {
         root: {
-          wordBreak: 'break-all' as const,
+          wordBreak: 'break-word' as const,
           padding: 0,
           marginBottom: 12,
         },

@@ -24,7 +24,7 @@ const OptionBox: React.FC<IProps> = (props) => {
       sx={{
         '&:hover': { backgroundColor: COLOURS.LIGHT_04 },
         backgroundColor: checked ? COLOURS.LIGHT : '',
-        wordBreak: 'break-all',
+        wordBreak: 'break-word',
       }}
       onClick={onChange}
     >
