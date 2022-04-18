@@ -133,10 +133,10 @@ export default class SocketStore extends Model({
       channel?.cleanAllMessages();
     };
 
-    const onUpdateProfile = (payload: { value: string; userId: number }) => {
-      const { value, userId } = payload;
+    const onUpdateProfile = (payload: { displayName?: string; userId: number }) => {
+      const { displayName, userId } = payload;
 
-      return root.chat.updateUser({ userId, name: value });
+      return root.chat.updateUser({ userId, displayName });
     };
 
     const centrifuge = new Centrifuge(socketUrl);

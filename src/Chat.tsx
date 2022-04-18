@@ -12,11 +12,12 @@ import useKeystone from './keystone';
 import theme from './theme/theme';
 import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
-import { IEvents, ListenerEventEnum } from './utils/eventBus/types';
+import { EventBusEventEnum, IEvents, ListenerEventEnum } from './utils/eventBus/types';
 import intl from './utils/intl';
 import { initializeApi } from './api';
 import { getSettings } from './keystone/service';
 import LoadingStatus from './components/LoadingStatus';
+import eventBus from 'utils/eventBus';
 
 export interface IChatProps {
   apiUrl?: string;
@@ -61,6 +62,9 @@ export const Chat: FC<IChatProps> = observer((props) => {
         }
 
         setIsReady(true);
+        eventBus.emit(ListenerEventEnum.App, {
+          event: EventBusEventEnum.ChatLoaded,
+        });
       }
     })();
   }, [channelId, appId, apiUrl, userToken]);
