@@ -39,6 +39,7 @@ const UserMessageDisplayName: FC<IProps> = (props) => {
       fontWeight={600}
       onClick={openNewChat}
       className={cls({ [classes.link]: directMessageConditions })}
+      noWrap
     >
       {user?.displayName}
     </Typography>

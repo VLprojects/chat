@@ -1,18 +1,18 @@
-import { Box, ClickAwayListener, Grid, Typography } from '@mui/material';
 import cls from 'classnames';
-import useKeystone from 'keystone';
-import Message from 'keystone/chat/message';
-import User from 'keystone/chat/user';
 import Linkify from 'linkify-react';
-import React, { FC, useState } from 'react';
-import { COLOURS } from 'theme/consts';
-import { ChannelTypeEnum } from 'types/enums';
-import { Avatar } from 'ui-kit';
-import MoreHoriz from 'ui-kit/icons/MoreHoriz';
-import { formatDate, getPreparedDate } from 'utils/date';
+import Message from 'keystone/chat/message';
 import MessageActions from '../MessageActions';
+import MoreHoriz from 'ui-kit/icons/MoreHoriz';
+import React, { FC, useState } from 'react';
+import useKeystone from 'keystone';
+import User from 'keystone/chat/user';
+import UserMessageAvatar from './components/UserMessageAvatar';
 import UserMessageDisplayName from './components/UserMessageDisplayName';
 import useStyles from './styles';
+import { Box, ClickAwayListener, Grid, Typography } from '@mui/material';
+import { ChannelTypeEnum } from 'types/enums';
+import { COLOURS } from 'theme/consts';
+import { formatDate, getPreparedDate } from 'utils/date';
 
 export interface IProps {
   index: number;
@@ -54,15 +54,8 @@ const UserMessage: FC<IProps> = (props) => {
           direction={own ? 'row-reverse' : 'row'}
           paddingTop={index ? '24px' : '10px'}
         >
-          <Grid
-            item
-            component={Avatar}
-            name={user.displayName}
-            src={user.avatarUrl}
-            size="lg"
-            avatarColor={user?.getAvatarColor}
-          />
-          <Grid item marginLeft="8px" marginRight="12px">
+          <UserMessageAvatar user={user} />
+          <Grid item marginLeft="8px" marginRight="12px" zeroMinWidth>
             <UserMessageDisplayName user={user} own={own} />
           </Grid>
         </Grid>
