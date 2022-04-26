@@ -1,6 +1,6 @@
 import { Input, Typography } from '@mui/material';
 import React, { ChangeEvent, FC, useState } from 'react';
-import intl from 'utils/intl';
+import { useIntl } from 'react-intl';
 import SubmitPollButton from '../SubmitPollButton';
 import useStyles from './styles';
 
@@ -14,6 +14,7 @@ const MAX_INPUT_LENGTH = 200;
 const OpenEnded: FC<IProps> = (props) => {
   const { voteHandler } = props;
   const classes = useStyles();
+  const intl = useIntl();
   const [value, setValue] = useState('');
   const [isValidInput, setIsValidInput] = useState<boolean>(false);
   const [validationErrorText, setValidationErrorText] = useState('');

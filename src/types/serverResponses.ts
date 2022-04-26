@@ -8,6 +8,7 @@ export interface IRUser {
   role: UserRoleEnum;
   username: string;
   displayName: string;
+  lang: string | null;
 }
 
 export interface IRChannelMessage {

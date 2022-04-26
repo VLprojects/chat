@@ -133,8 +133,11 @@ export default class SocketStore extends Model({
       channel?.cleanAllMessages();
     };
 
-    const onUpdateProfile = (payload: { displayName?: string; avatarUrl?: string; userId: number }) => {
-      const { displayName, avatarUrl, userId } = payload;
+    const onUpdateProfile = (payload: { displayName?: string; avatarUrl?: string; userId: number, lang?: string }) => {
+      const { displayName, avatarUrl, userId, lang } = payload;
+      if (lang) {
+        root.ui.setLang(lang);
+      }
 
       return root.chat.updateUser({ userId, displayName, avatarUrl });
     };

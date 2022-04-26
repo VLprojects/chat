@@ -1,14 +1,16 @@
 import { differenceInDays, format, isThisYear, isToday, isYesterday, parseISO } from 'date-fns';
 import { enGB, ru } from 'date-fns/locale';
+import useKeystone from 'keystone';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import intl from './intl';
 
 export const formatDate = (date?: string | null, formatString: string = 'HH:mm') => {
+  const root = useKeystone();
+  const { lang } = root.ui;
   if (!date) return '';
 
   return format(parseISO(date), formatString, {
-    locale: intl.locale === 'ru' ? ru : enGB,
+    locale:  lang === 'ru' ? ru : enGB,
   });
 };
 

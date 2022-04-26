@@ -14,6 +14,7 @@ export const getInitialData = async (root: Root): Promise<void> => {
     root.chat.addChannels(channels);
     root.chat.addPubs(publics);
     root.auth.setMe(user);
+    user.lang && root.ui.setLang(user.lang);
   } catch (e) {
     Sentry.captureException(e);
   }

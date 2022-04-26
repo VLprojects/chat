@@ -5,7 +5,7 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import { createGenerateClassName, StylesProvider } from '@mui/styles';
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
-import { RawIntlProvider, FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 import App from './App';
 import useEventHook from './hooks/useEventHook';
 import useKeystone from './keystone';
@@ -13,11 +13,11 @@ import theme from './theme/theme';
 import { getStoredAccessToken } from './utils/auth';
 import { findAppInitialData } from './utils/common';
 import { EventBusEventEnum, IEvents, ListenerEventEnum } from './utils/eventBus/types';
-import intl from './utils/intl';
 import { initializeApi } from './api';
 import { getSettings } from './keystone/service';
 import LoadingStatus from './components/LoadingStatus';
 import eventBus from 'utils/eventBus';
+import locale from 'locales';
 
 export interface IChatProps {
   apiUrl?: string;
@@ -32,6 +32,8 @@ export const Chat: FC<IChatProps> = observer((props) => {
   const [isReady, setIsReady] = useState(false);
 
   const root = useKeystone();
+  const { lang } = root.ui;
+
   if (onEvent) {
     useEventHook(ListenerEventEnum.App, onEvent);
   }
@@ -70,24 +72,26 @@ export const Chat: FC<IChatProps> = observer((props) => {
   }, [channelId, appId, apiUrl, userToken]);
 
   return (
-    <RawIntlProvider value={intl}>
+
       <ErrorBoundary fallback={() => <FormattedMessage id="globalError" />}>
         <StyledEngineProvider injectFirst>
           <StylesProvider generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
+              <IntlProvider locale={lang} messages={locale[lang as 'en' | 'ru']} >
               {isReady ? (
-                <App />
-              ) : (
-                <>
+                  <App />
+                  ) : (
+                    <>
                   <LinearProgress color="secondary" />
                   <LoadingStatus intlId="loadingSettings" />
                 </>
               )}
+              </IntlProvider>
             </ThemeProvider>
           </StylesProvider>
         </StyledEngineProvider>
       </ErrorBoundary>
-    </RawIntlProvider>
+
   );
 });

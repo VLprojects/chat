@@ -1,10 +1,10 @@
 import SubHeader from 'components/SubHeader';
 import useKeystone from 'keystone';
 import React from 'react';
+import { useIntl } from 'react-intl';
 import Routes from 'routes';
 import { Button } from 'ui-kit';
 import HeaderTitle from 'ui-kit/HeaderTitle';
-import intl from 'utils/intl';
 import { IProps as IParentProps } from '../../Channels';
 import useStyles from './styles';
 
@@ -13,7 +13,7 @@ interface IProps extends IParentProps {}
 const ChannelsHeader: React.FC<IProps> = (props) => {
   const { channelTabType } = props;
   const classes = useStyles();
-
+  const intl = useIntl();
   const { ui, settings } = useKeystone();
 
   const showBackButton = channelTabType === Routes.Direct && !settings.displayChannelList;

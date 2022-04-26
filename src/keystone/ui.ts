@@ -10,6 +10,7 @@ interface IParams {
 export default class UI extends Model({
   route: prop<string>(''),
   channelId: prop<string>('').withSetter(),
+  lang: prop<string>(navigator.language || 'en').withSetter(),
   params: prop<IParams>(() => ({})).withSetter(),
 }) {
   jumpToMessage: (index: number) => void = () => undefined;

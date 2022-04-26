@@ -1,6 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import PollModeratorResultPage from 'containers/PollModeratorResultPage';
 import PollResultOpenEndedDetailPage from 'containers/PollResultOpenEndedDetailPage';
+import useKeystone from 'keystone';
 import { SnackbarProvider } from 'notistack';
 import React, { FC, useEffect } from 'react';
 import { Router } from './components/Router';
@@ -46,6 +47,8 @@ const getPortalElement = () => {
 
 const App: FC = () => {
   const classes = useStyles();
+  const root = useKeystone();
+  const { lang } = root.ui;
 
   useEffect(() => {
     const el = document.getElementById(POLL_CONTAINER);

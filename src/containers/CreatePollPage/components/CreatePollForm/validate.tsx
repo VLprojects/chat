@@ -1,4 +1,4 @@
-import intl from 'utils/intl';
+import { useIntl } from 'react-intl';
 import { ICreatePollForm } from '../../types';
 
 const MIN_NUMBER_OF_VALID_OPTIONS = 1;
@@ -32,6 +32,7 @@ interface IReturnProps {
 }
 
 export default (values: ICreatePollForm): IReturnProps => {
+  const intl = useIntl();
   const errors: IReturnProps = {
     all: [],
   };

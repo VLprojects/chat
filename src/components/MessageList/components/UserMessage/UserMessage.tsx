@@ -53,6 +53,7 @@ const UserMessage: FC<IProps> = (props) => {
           alignItems="center"
           direction={own ? 'row-reverse' : 'row'}
           paddingTop={index ? '24px' : '10px'}
+          wrap="nowrap"
         >
           <UserMessageAvatar user={user} />
           <Grid item marginLeft="8px" marginRight="12px" zeroMinWidth>
