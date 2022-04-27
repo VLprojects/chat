@@ -135,7 +135,7 @@ export default class SocketStore extends Model({
 
     const onUpdateProfile = (payload: { displayName?: string; avatarUrl?: string; userId: number, lang?: string }) => {
       const { displayName, avatarUrl, userId, lang } = payload;
-      if (lang) {
+      if (lang && +root.auth.me.id === +userId) {
         root.ui.setLang(lang);
       }
 
