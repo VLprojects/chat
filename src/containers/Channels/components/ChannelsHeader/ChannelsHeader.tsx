@@ -40,6 +40,7 @@ const ChannelsHeader: React.FC<IProps> = (props) => {
           <HeaderTitle title={intl.formatMessage({ id: 'direct' })} active={channelTabType === Routes.Direct} />
         </Button>
       )}
+
     </SubHeader>
   );
 };

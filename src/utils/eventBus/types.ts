@@ -5,6 +5,7 @@ export enum ListenerEventEnum {
 export enum EventBusEventEnum {
   MessageSent = 'MessageSent',
   ChatLoaded = 'ChatLoaded',
+  ChatClose = 'ChatClose',
 }
 
 export interface IEvents {

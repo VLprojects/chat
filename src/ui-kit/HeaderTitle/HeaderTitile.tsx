@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import useStyles from './styles';
 
 interface IProps {
-  title?: string;
+  title?: string | React.ReactNode;
   active?: boolean;
   sx?: Record<string, string>;
 }

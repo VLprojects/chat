@@ -35,7 +35,7 @@ const ChannelPageHeader: FC<IProps> = (props) => {
   const channelName =
     currentChannel.type === ChannelTypeEnum.Direct
       ? getDirectChannelName(root, currentChannel.id)
-      : currentChannel?.name;
+      : <FormattedMessage id="channelPage.chat" />;
 
   const goBack = useCallback(() => {
     ui.back();

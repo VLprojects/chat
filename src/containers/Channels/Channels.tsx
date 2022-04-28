@@ -38,7 +38,7 @@ const Channels: React.FC<IProps> = (props) => {
       )}
 
       {channelTabType === Routes.Direct && <DirectList />}
-      {settings.displayFooter && <Footer />}
+      {settings.displayFooter && channelTabType !== Routes.Direct && <Footer />}
     </>
   );
 };
