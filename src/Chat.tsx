@@ -78,7 +78,7 @@ export const Chat: FC<IChatProps> = observer((props) => {
           <StylesProvider generateClassName={generateClassName}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <IntlProvider locale={lang} messages={locale[lang as 'en' | 'ru']} >
+              <IntlProvider locale={lang} messages={locale[lang as 'en' | 'ru']} defaultLocale="en" >
               {isReady ? (
                   <App />
                   ) : (
